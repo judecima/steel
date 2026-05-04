@@ -1,19 +1,34 @@
 # Validation Report
 
+## Global Tests
+Last run: 2026-05-02
+Command: npm run test:global
+Result: Passed
+
 ## Regression Tests
-Last run: Not executed
+Last run: 2026-05-02
 Command: npm run test:regression
-Result: Unknown
+Result: Passed
 
 ## Intelligence Tests
-Last run: Not executed
+Last run: 2026-05-02
 Command: npm run test:intelligence
+Result: Passed
+
+## Structural Tests
+Last run: 2026-05-02
+Command: npm run test:structural
+Result: Passed (9/9)
+
+## Render Tests
+Last run: Not executed
+Command: npm run test:render
 Result: Unknown
 
 ## Known Validation Gaps
-- Global planning tests not implemented yet
-- Structural validation not implemented yet
-- CIRSOC checks not implemented yet
+- Global planning tests implemented and passing
+- Preliminary structural validation implemented and passing
+- No final CIRSOC compliance yet
 
 ## Current Certification Level
-Base engine approved for Phase 2 implementation.
+**Phase 3 preliminary structural layer certified**.

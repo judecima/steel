@@ -5,9 +5,15 @@ import { runPrecheck } from './modules/validation/precheck';
 import { generateGeometry } from './modules/geometry/engine';
 import { panelizeHouse } from './modules/construction/engine';
 import { calculateBOM } from './modules/materials/engine';
+import { generateCandidates } from './modules/intelligence/candidate-generator';
+import { validateCandidate } from './modules/intelligence/candidate-validator';
+import { scoreCandidate } from './modules/intelligence/candidate-scorer';
+import { GlobalArbiter } from './modules/global-planning/global-arbiter';
+import { ENGINE_CONFIG } from './core/config';
+import { PanelizationCandidate } from './modules/intelligence/types';
 
 async function main() {
-  console.log("--- PROJECT STEEL FRAME - PHASE 0 FOUNDATION ---");
+  console.log("--- PROJECT STEEL FRAME - PHASE 2 FOUNDATION ---");
 
   // 1. Define sample input
   const input: HouseInput = {
@@ -24,7 +30,6 @@ async function main() {
 
   // 2. Run Precheck
   const precheck = runPrecheck(input);
-  
   if (!precheck.passed) {
     console.error("Critical Errors found in input:");
     precheck.errors.forEach(e => console.error(`- ${e}`));
@@ -34,13 +39,36 @@ async function main() {
   // 3. Generate Geometry
   const house = generateGeometry(input);
 
-  // 4. Construction Logic
-  const constructionResult = panelizeHouse(house);
+  // 4. Local Intelligence: Generate candidates for each wall
+  logger.log('LOCAL_INTELLIGENCE_STARTED', 'house', 'Evaluating local wall candidates');
+  const localCandidatesPerWall = new Map<string, PanelizationCandidate[]>();
+  
+  for (const wall of house.walls) {
+      const candidates = generateCandidates(wall.id, wall.length, wall.openings);
+      const context = { wallRole: wall.role };
+      candidates.forEach(lc => {
+         validateCandidate(lc, wall.length, wall.openings);
+         if (lc.valid) scoreCandidate(lc, context, wall.openings);
+      });
+      // Sort and keep valid
+      const validCandidates = candidates
+        .filter(c => c.valid)
+        .sort((a, b) => (b.score?.total || 0) - (a.score?.total || 0));
+        
+      localCandidatesPerWall.set(wall.id, validCandidates);
+  }
 
-  // 5. Materials & BOM
+  // 5. Global Planning
+  logger.log('GLOBAL_PLANNING_STARTED', 'house', 'Selecting best global combination');
+  const { winner: globalPlanWinner, telemetry: plannerTelemetry } = GlobalArbiter.planHouse(house, localCandidatesPerWall, ENGINE_CONFIG.planning);
+
+  // 6. Construction Logic
+  const constructionResult = panelizeHouse(house, globalPlanWinner, plannerTelemetry);
+
+  // 7. Materials & BOM
   const bom = calculateBOM(constructionResult.panels);
 
-  // 6. Final Result Assembly
+  // 8. Final Result Assembly
   const result: ProjectResult = {
     input,
     house,
@@ -52,13 +80,14 @@ async function main() {
     warnings: precheck.warnings
   };
 
-  // 7. Output Summary
+  // 9. Output Summary
   console.log("\n--- GENERATION SUMMARY ---");
   console.log(`Status: ${result.status}`);
   console.log(`Walls generated: ${result.house.walls.length}`);
   console.log(`Panels generated: ${result.construction.panels.length}`);
-  console.log(`Global Winner Strategy: ${result.construction.metadata?.globalWinner?.score.total} pts (${result.construction.metadata?.globalWinner?.id})`);
-  console.log(`Planning Time: ${result.construction.metadata?.telemetry?.totalPlanningTimeMs} ms`);
+  console.log(`Global Winner Score: ${globalPlanWinner.score.total} pts`);
+  console.log(`Planning Time: ${plannerTelemetry.planningTimeMs} ms`);
+  console.log(`States Generated: ${plannerTelemetry.generatedStates}`);
   console.log(`BOM Profile Types: ${result.bom.aggregated.length}`);
   
   console.log("\n--- AGGREGATED BOM ---");
@@ -66,20 +95,8 @@ async function main() {
     console.log(`- ${item.profileType}: ${item.totalLinearMeters} m`);
   });
 
-  console.log("\n--- WARNINGS ---");
-  if (result.warnings.length > 0) {
-    result.warnings.forEach(w => console.warn(`[!] ${w}`));
-  } else {
-    console.log("No warnings.");
-  }
-
-  console.log("\n--- SAMPLE DECISION LOGS ---");
-  result.logs.slice(0, 5).forEach(log => {
-    console.log(`[${log.event}] ${log.entityId}: ${log.reason}`);
-  });
-
   console.log("\n--- VALIDATION ---");
-  console.log("Phase 0 complete. Foundational architecture is ready for Phase 1 (Structural Engineering).");
+  console.log("Phase 2 complete. Global planning integration is operational.");
 }
 
 main().catch(err => {

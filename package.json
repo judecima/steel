@@ -7,8 +7,11 @@
     "start": "npx ts-node src/index.ts",
     "test:regression": "npx ts-node scripts/regression_tests.ts",
     "test:intelligence": "npx ts-node scripts/intelligence_tests.ts",
-    "test:global": "npx ts-node scripts/phase2_tests.ts",
-    "test:all": "npm run test:intelligence && npm run test:regression",
+    "test:global": "npx ts-node scripts/global_planning_tests.ts",
+    "test:structural": "npx ts-node scripts/structural_tests.ts",
+    "test:render": "npx ts-node scripts/render_tests.ts",
+    "render:export": "npx ts-node scripts/export_render_scene.ts",
+    "test:all": "npm run test:regression && npm run test:intelligence && npm run test:global && npm run test:structural && npm run test:render",
     "audit:state": "node scripts/print_project_state.js",
     "phase:detect": "npx ts-node scripts/detect_phase.ts",
     "build": "tsc"

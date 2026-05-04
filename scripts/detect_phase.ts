@@ -85,14 +85,14 @@ const phases: PhaseDef[] = [
         id: "Phase 2",
         name: "Phase 2 — Global Planning",
         requirements: [
-            { name: "global-candidate-generator exists", check: () => fileExists(['src/modules/planner/candidate-generator.ts', 'src/modules/planner/global-candidate-generator.ts']) },
-            { name: "global-validator exists", check: () => fileExists(['src/modules/planner/validator.ts', 'src/modules/planner/global-validator.ts']) },
-            { name: "global-scorer exists", check: () => fileExists(['src/modules/planner/scoring.ts', 'src/modules/planner/global-scorer.ts']) },
-            { name: "global-arbiter exists", check: () => fileExists(['src/modules/planner/arbiter.ts', 'src/modules/planner/global-arbiter.ts']) },
-            { name: "wall-priority-resolver exists", check: () => fileExists(['src/modules/planner/priority-resolver.ts', 'src/modules/planner/wall-priority-resolver.ts']) },
+            { name: "global-candidate-generator exists", check: () => fileExists(['src/modules/global-planning/global-candidate-generator.ts', 'src/modules/planner/candidate-generator.ts', 'src/modules/planner/global-candidate-generator.ts']) },
+            { name: "global-validator exists", check: () => fileExists(['src/modules/global-planning/global-validator.ts', 'src/modules/planner/validator.ts', 'src/modules/planner/global-validator.ts']) },
+            { name: "global-scorer exists", check: () => fileExists(['src/modules/global-planning/global-scorer.ts', 'src/modules/planner/scoring.ts', 'src/modules/planner/global-scorer.ts']) },
+            { name: "global-arbiter exists", check: () => fileExists(['src/modules/global-planning/global-arbiter.ts', 'src/modules/planner/arbiter.ts', 'src/modules/planner/global-arbiter.ts']) },
+            { name: "wall-priority-resolver exists", check: () => fileExists(['src/modules/global-planning/wall-priority-resolver.ts', 'src/modules/planner/priority-resolver.ts', 'src/modules/planner/wall-priority-resolver.ts']) },
             { name: "beam search exists", check: () => scanForTerm(/beam search/i) },
             { name: "planner telemetry exists", check: () => scanForTerm(/telemetry/i) },
-            { name: "global tests exist", check: () => fileExists(['scripts/phase2_tests.ts', 'scripts/global_tests.ts']) }
+            { name: "global tests exist", check: () => fileExists(['scripts/global_planning_tests.ts', 'scripts/phase2_tests.ts', 'scripts/global_tests.ts']) }
         ]
     },
     {

@@ -4,8 +4,7 @@ import { applyStudLayout } from './stud-layout';
 import { applyOpeningReinforcements } from './openings';
 import { applyJunctions } from './junctions';
 import { PanelizationCandidate } from '../intelligence/types';
-import { GlobalArbiter } from '../planner/arbiter';
-import { GlobalPlanCandidate, PlannerTelemetry } from '../planner/types';
+import { GlobalPlanCandidate, PlannerTelemetry } from '../global-planning/types';
 import { ENGINE_CONFIG } from '../../core/config';
 
 export type ConstructionResult = {
@@ -17,14 +16,10 @@ export type ConstructionResult = {
     }
 };
 
-export function panelizeHouse(house: HouseModel): ConstructionResult {
-  logger.log('HOUSE_PLANNING_STARTED', 'house', 'Starting global house planning');
-
-  // 1. Run the Global Strategic Planner
-  const { winner, telemetry } = GlobalArbiter.planHouse(house, ENGINE_CONFIG.planning);
+export function panelizeHouse(house: HouseModel, winner: GlobalPlanCandidate, telemetry?: PlannerTelemetry): ConstructionResult {
+  logger.log('HOUSE_PANELIZATION_STARTED', 'house', 'Starting materialization of global winner');
 
   const allPanels: Panel[] = [];
-  const allCandidates: Record<string, PanelizationCandidate> = {};
 
   // 2. Materialize the winning global plan
   Object.keys(winner.wallSelections).forEach(wallId => {

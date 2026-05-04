@@ -1,4 +1,4 @@
-import { PanelizationCandidate, CandidateScore, StrategicContext } from './types';
+import { PanelizationCandidate, CandidateScore, StrategicContext, CandidateStrategy } from './types';
 import { Opening } from '../../core/types';
 import { getPanelizationRules } from '../rules/panelization';
 import { round } from '../../utils/math';
@@ -43,6 +43,15 @@ export function scoreCandidate(candidate: PanelizationCandidate, context: Strate
   }
   if (candidate.panelCount <= 2) {
       bonuses.push('BONUS_SIMPLE_WALL');
+      modifier += 5;
+  }
+  
+  // Explicit Strategy Alignment Bonus
+  if (context.preferredBias === 'fewer_panels' && candidate.strategy === CandidateStrategy.MIN_PANELS) {
+      bonuses.push('BONUS_STRATEGIC_ALIGNMENT');
+      modifier += 5;
+  } else if (context.preferredBias === 'balanced' && candidate.strategy === CandidateStrategy.BALANCED) {
+      bonuses.push('BONUS_STRATEGIC_ALIGNMENT');
       modifier += 5;
   }
 
