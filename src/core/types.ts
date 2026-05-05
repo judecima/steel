@@ -20,12 +20,19 @@ export enum PanelRole {
 
 export enum StudRole {
   COMMON = 'common',
-  KING = 'king',
-  JACK = 'jack',
-  CRIPPLE_TOP = 'cripple_top',
-  CRIPPLE_BOTTOM = 'cripple_bottom',
+  MONTANTE_PRINCIPAL = 'montante_principal',
+  MONTANTE_APOYO = 'montante_apoyo',
+  MONTANTE_CORTO_SUPERIOR = 'montante_corto_superior',
+  MONTANTE_CORTO_INFERIOR = 'montante_corto_inferior',
   CORNER = 'corner',
-  JUNCTION = 'junction'
+  JUNCTION = 'junction',
+  SOLERA_VENTANA = 'solera_ventana',
+  // Legacy aliases
+  KING = 'montante_principal',
+  JACK = 'montante_apoyo',
+  CRIPPLE_TOP = 'montante_corto_superior',
+  CRIPPLE_BOTTOM = 'montante_corto_inferior',
+  SILL = 'solera_ventana'
 }
 
 export enum JunctionType {
@@ -50,16 +57,17 @@ export type HouseInput = {
   openings?: OpeningInput[];
 };
 
-export type OpeningInput = {
+export type AberturaInput = {
   wallId: string;
-  type: 'window' | 'door';
+  type: 'ventana' | 'puerta' | 'window' | 'door'; // Legacy allowed
   width: number;
   height: number;
   position: number; // distance from wall start
   sillHeight?: number; // for windows
 };
+export type OpeningInput = AberturaInput;
 
-export type Wall = {
+export type Muro = {
   id: string;
   role: WallRole;
   start: { x: number; y: number };
@@ -67,24 +75,27 @@ export type Wall = {
   length: number;
   heightStart: number;
   heightEnd: number;
-  openings: Opening[];
+  aberturas: Abertura[]; // Renamed from openings
 };
+export type Wall = Muro;
 
-export type Opening = {
+export type Abertura = {
   id: string;
-  type: 'window' | 'door';
+  type: 'ventana' | 'puerta' | 'window' | 'door';
   width: number;
   height: number;
   position: number;
   sillHeight: number;
-  header?: Header;
+  dintel?: Dintel; // Renamed from header
 };
+export type Opening = Abertura;
 
-export type Header = {
+export type Dintel = {
   strategy: HeaderStrategy;
   span: number;
   requiresStructuralValidation: boolean;
 };
+export type Header = Dintel;
 
 export type Panel = {
   id: string;
@@ -94,7 +105,7 @@ export type Panel = {
   height: number;
   offset: number;
   studs: Stud[];
-  openings: Opening[];
+  aberturas: Abertura[]; // Renamed from openings
   junctions: Junction[];
   previousPanelId?: string;
   nextPanelId?: string;
@@ -106,6 +117,7 @@ export type Stud = {
   position: number; // position within panel
   height: number;
   profileType: string; // e.g., PGC 100x0.9
+  yOffset?: number; // vertical offset from bottom track
 };
 
 export type Junction = {
@@ -158,7 +170,7 @@ export type ProjectResult = {
 };
 
 export type HouseModel = {
-  walls: Wall[];
+  muros: Muro[]; // Renamed from walls
   roof: RoofMetadata;
 };
 

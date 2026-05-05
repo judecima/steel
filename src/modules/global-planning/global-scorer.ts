@@ -1,16 +1,16 @@
 import { PartialGlobalPlan, GlobalPlanCandidate, PartialGlobalScore, GlobalPlanScore } from './types';
-import { Wall } from '../../core/types';
+import { Muro } from '../../core/types';
 import { resolvePanelFamilyKey } from './panel-family-key';
 
-export function scorePartialGlobalPlan(plan: PartialGlobalPlan, walls: Wall[]): PartialGlobalScore {
+export function scorePartialGlobalPlan(plan: PartialGlobalPlan, muros: Muro[]): PartialGlobalScore {
     let localAccumulated = 0;
     
     for (const [wallId, candidate] of Object.entries(plan.wallSelections)) {
         localAccumulated += candidate.score?.total || 0;
     }
 
-    // Calculate partial continuity
-    const partialContinuity = 10; // Base score, could be dynamic
+    // Calcular continuidad parcial
+    const partialContinuity = 10;
     const partialOpeningSafety = 10;
     const partialConstructability = 10;
 
@@ -30,7 +30,7 @@ export function scorePartialGlobalPlan(plan: PartialGlobalPlan, walls: Wall[]): 
     };
 }
 
-export function scoreFinalGlobalPlan(candidate: GlobalPlanCandidate, walls: Wall[]): GlobalPlanScore {
+export function scoreFinalGlobalPlan(candidate: GlobalPlanCandidate, muros: Muro[]): GlobalPlanScore {
     let localQuality = 0;
     const penalties: string[] = [];
     const bonuses: string[] = [];
@@ -40,26 +40,25 @@ export function scoreFinalGlobalPlan(candidate: GlobalPlanCandidate, walls: Wall
     for (const [wallId, localCandidate] of Object.entries(candidate.wallSelections)) {
         localQuality += localCandidate.score?.total || 0;
         
-        const wall = walls.find(w => w.id === wallId);
-        if (wall) {
-            const key = resolvePanelFamilyKey(wall, localCandidate);
+        const muro = muros.find(w => w.id === wallId);
+        if (muro) {
+            const key = resolvePanelFamilyKey(muro, localCandidate);
             families.set(key, (families.get(key) || 0) + 1);
         }
     }
 
-    // Repetition benefit
+    // Beneficio por repetición (estandarización)
     let repetitionBenefit = 0;
     for (const [key, count] of families.entries()) {
         if (count > 1) {
-            repetitionBenefit += count * 5; // 5 pts per repeated family
+            repetitionBenefit += count * 5; // 5 pts por familia repetida
         }
     }
 
     if (repetitionBenefit > 0) {
-        bonuses.push(`Standardization bonus applied: ${repetitionBenefit} pts`);
+        bonuses.push(`Bono por estandarización aplicado: ${repetitionBenefit} pts`);
     }
 
-    // Other global factors
     const continuity = 15;
     const jointAlignment = 10;
     const openingSafetyGlobal = 10;
@@ -67,8 +66,6 @@ export function scoreFinalGlobalPlan(candidate: GlobalPlanCandidate, walls: Wall
     const transportSuitability = 10;
 
     let total = localQuality + continuity + jointAlignment + openingSafetyGlobal + constructabilityGlobal + transportSuitability + repetitionBenefit;
-
-    // Apply soft penalties from somewhere if passed, for now we just use the raw score
     
     return {
         total,

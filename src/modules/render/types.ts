@@ -14,16 +14,18 @@ export type RenderMaterial = {
 };
 
 export type RenderObjectType = 
-  | 'house'
-  | 'wall'
+  | 'casa' | 'house'
+  | 'muro' | 'wall'
   | 'panel'
-  | 'stud'
-  | 'track'
-  | 'opening'
-  | 'header'
-  | 'roof'
-  | 'anchor'
-  | 'warning_marker'
+  | 'montante' | 'stud'
+  | 'solera' | 'track'
+  | 'solera_ventana' | 'antepecho' | 'sill'
+  | 'abertura' | 'puerta' | 'opening'
+  | 'dintel' | 'header'
+  | 'techo' | 'roof'
+  | 'anclaje' | 'anchor'
+  | 'fundacion' | 'foundation'
+  | 'advertencia' | 'warning_marker'
   | 'label_anchor';
 
 export type RenderObject = {
@@ -72,12 +74,7 @@ export type CameraPreset = {
 };
 
 export type RenderSceneMetadata = {
-  projectId: string;
-  generatedAt: string;
-  units: string;
-  sourcePhase: string;
-  objectCount: number;
-  warningCount: number;
+  [key: string]: any;
 };
 
 export type RenderSceneDTO = {

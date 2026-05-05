@@ -1,4 +1,4 @@
-import { Wall, Panel, HouseModel, PanelRole } from '../../core/types';
+import { Muro, Panel, HouseModel, PanelRole } from '../../core/types';
 import { logger } from '../../utils/logger';
 import { applyStudLayout } from './stud-layout';
 import { applyOpeningReinforcements } from './openings';
@@ -17,43 +17,43 @@ export type ConstructionResult = {
 };
 
 export function panelizeHouse(house: HouseModel, winner: GlobalPlanCandidate, telemetry?: PlannerTelemetry): ConstructionResult {
-  logger.log('HOUSE_PANELIZATION_STARTED', 'house', 'Starting materialization of global winner');
+  logger.log('HOUSE_PANELIZATION_STARTED', 'house', 'Iniciando materialización del ganador global');
 
   const allPanels: Panel[] = [];
 
-  // 2. Materialize the winning global plan
+  // 2. Materializar el plan global ganador
   Object.keys(winner.wallSelections).forEach(wallId => {
-    const wall = house.walls.find(w => w.id === wallId)!;
+    const muro = house.muros.find(w => w.id === wallId)!;
     const winningCandidate = winner.wallSelections[wallId];
     
-    // Process local candidate to materialize and refine panels
+    // Procesar candidato local para materializar y refinar paneles
     const wallPanels: Panel[] = [];
     let currentOffset = 0;
     
     winningCandidate.splits.forEach((width, index) => {
-      // Create actual Panel objects
+      // Crear objetos Panel reales
       const panel: Panel = {
         id: `panel_${wallId}_${index}`,
         wallId: wallId,
-        role: PanelRole.STRUCTURAL, // Default to structural for now
+        role: PanelRole.STRUCTURAL,
         width: width,
-        height: Math.max(wall.heightStart, wall.heightEnd),
+        height: Math.max(muro.heightStart, muro.heightEnd),
         offset: currentOffset,
         studs: [],
-        openings: wall.openings.filter(op => op.position >= currentOffset - 0.01 && op.position + op.width <= currentOffset + width + 0.01),
+        aberturas: muro.aberturas.filter(op => op.position >= currentOffset - 0.01 && op.position + op.width <= currentOffset + width + 0.01),
         junctions: [],
         previousPanelId: index > 0 ? wallPanels[index - 1].id : undefined
       };
 
       if (index > 0) wallPanels[index - 1].nextPanelId = panel.id;
 
-      // Apply refinements
-      applyStudLayout(panel, wall.role);
+      // Aplicar refinamientos
+      applyStudLayout(panel, muro.role);
       applyOpeningReinforcements(panel);
       
       const isFirst = index === 0;
       const isLast = index === winningCandidate.splits.length - 1;
-      applyJunctions(panel, wall.role, isFirst, isLast);
+      applyJunctions(panel, muro.role, isFirst, isLast);
 
       wallPanels.push(panel);
       currentOffset += width;
@@ -62,7 +62,7 @@ export function panelizeHouse(house: HouseModel, winner: GlobalPlanCandidate, te
     allPanels.push(...wallPanels);
   });
 
-  logger.log('HOUSE_PANELIZED', 'house', 'Global planning and materialization complete', { totalPanels: allPanels.length });
+  logger.log('HOUSE_PANELIZED', 'house', 'Planificación global y materialización completas', { totalPanels: allPanels.length });
 
   return {
     panels: allPanels,

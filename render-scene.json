@@ -2,9 +2,61 @@
   "units": "m",
   "objects": [
     {
-      "id": "render_header_op_abeecdvf0",
-      "type": "header",
-      "sourceId": "op_abeecdvf0",
+      "id": "render_anchor_placeholder",
+      "type": "advertencia",
+      "sourceId": "house_anchors",
+      "position": {
+        "x": 2,
+        "y": 0.1,
+        "z": 2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.3,
+        "y": 0.3,
+        "z": 0.3
+      },
+      "material": "mat_warn_rev",
+      "layer": "layer_anclajes",
+      "visible": true,
+      "metadata": {
+        "Nota": "Marcador de posición para anclajes faltantes"
+      }
+    },
+    {
+      "id": "render_foundation_slab",
+      "type": "fundacion",
+      "sourceId": "house_foundation",
+      "position": {
+        "x": 2,
+        "y": -0.1,
+        "z": 2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 4,
+        "y": 0.2,
+        "z": 4
+      },
+      "material": "mat_foundation",
+      "layer": "layer_fundaciones",
+      "visible": true,
+      "metadata": {
+        "Nota": "Losa de referencia visual únicamente"
+      }
+    },
+    {
+      "id": "render_header_abertura_k1yvoh4me",
+      "type": "dintel",
+      "sourceId": "abertura_k1yvoh4me",
       "position": {
         "x": 1.5,
         "y": 2.1,
@@ -21,21 +73,53 @@
         "z": 0.1
       },
       "material": "mat_header",
-      "layer": "layer_headers",
+      "layer": "layer_dinteles",
       "visible": true,
       "metadata": {
-        "strategy": "provisional_boxed_header",
-        "span": 1,
-        "panelId": "panel_wall_north_0"
+        "Etiqueta": "Dintel (Luz: 1.00m)",
+        "ID Técnico": "dintel_abertura_k1yvoh4me",
+        "Estrategia": "Dintel Cajón Provisional",
+        "Luz": 1,
+        "ID de panel": "panel_wall_north_0"
       }
     },
     {
-      "id": "render_opening_op_abeecdvf0",
-      "type": "opening",
-      "sourceId": "op_abeecdvf0",
+      "id": "render_header_abertura_mzikzkckx",
+      "type": "dintel",
+      "sourceId": "abertura_mzikzkckx",
+      "position": {
+        "x": 2.05,
+        "y": 2.2,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.9,
+        "y": 0.2,
+        "z": 0.1
+      },
+      "material": "mat_header",
+      "layer": "layer_dinteles",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Dintel (Luz: 0.90m)",
+        "ID Técnico": "dintel_abertura_mzikzkckx",
+        "Estrategia": "Dintel Cajón Provisional",
+        "Luz": 0.9,
+        "ID de panel": "panel_wall_south_0"
+      }
+    },
+    {
+      "id": "render_opening_abertura_k1yvoh4me",
+      "type": "abertura",
+      "sourceId": "abertura_k1yvoh4me",
       "position": {
         "x": 1.5,
-        "y": 1,
+        "y": 1.5,
         "z": 0
       },
       "rotation": {
@@ -49,12 +133,44 @@
         "z": 0.11000000000000001
       },
       "material": "mat_opening",
-      "layer": "layer_openings",
+      "layer": "layer_aberturas",
       "visible": true,
       "metadata": {
-        "type": "window",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
+        "Etiqueta": "Ventana 1.00x1.00",
+        "ID Técnico": "abertura_k1yvoh4me",
+        "Tipo": "Ventana",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_opening_abertura_mzikzkckx",
+      "type": "puerta",
+      "sourceId": "abertura_mzikzkckx",
+      "position": {
+        "x": 2.05,
+        "y": 1.05,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.9,
+        "y": 2.1,
+        "z": 0.11000000000000001
+      },
+      "material": "mat_opening",
+      "layer": "layer_aberturas",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Puerta 0.90x2.10",
+        "ID Técnico": "abertura_mzikzkckx",
+        "Tipo": "Puerta",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
       }
     },
     {
@@ -62,13 +178,13 @@
       "type": "panel",
       "sourceId": "panel_wall_east_0",
       "position": {
-        "x": 2,
+        "x": 4,
         "y": 1.3,
-        "z": 0
+        "z": 2
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -77,11 +193,13 @@
         "z": 0.1
       },
       "material": "mat_panel",
-      "layer": "layer_panels",
+      "layer": "layer_paneles",
       "visible": false,
       "metadata": {
-        "wallId": "wall_east",
-        "role": "structural"
+        "Etiqueta": "Panel Este 1",
+        "ID Técnico": "panel_wall_east_0",
+        "ID de muro": "wall_east",
+        "Rol": "Estructural"
       }
     },
     {
@@ -104,11 +222,13 @@
         "z": 0.1
       },
       "material": "mat_panel",
-      "layer": "layer_panels",
+      "layer": "layer_paneles",
       "visible": false,
       "metadata": {
-        "wallId": "wall_north",
-        "role": "structural"
+        "Etiqueta": "Panel Norte 1",
+        "ID Técnico": "panel_wall_north_0",
+        "ID de muro": "wall_north",
+        "Rol": "Estructural"
       }
     },
     {
@@ -118,11 +238,11 @@
       "position": {
         "x": 2,
         "y": 1.3,
-        "z": 0
+        "z": 4
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -3.141592653589793,
         "z": 0
       },
       "dimensions": {
@@ -131,11 +251,13 @@
         "z": 0.1
       },
       "material": "mat_panel",
-      "layer": "layer_panels",
+      "layer": "layer_paneles",
       "visible": false,
       "metadata": {
-        "wallId": "wall_south",
-        "role": "structural"
+        "Etiqueta": "Panel Sur 1",
+        "ID Técnico": "panel_wall_south_0",
+        "ID de muro": "wall_south",
+        "Rol": "Estructural"
       }
     },
     {
@@ -143,13 +265,13 @@
       "type": "panel",
       "sourceId": "panel_wall_west_0",
       "position": {
-        "x": 2,
+        "x": 0,
         "y": 1.3,
-        "z": 0
+        "z": 2
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": 1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -158,20 +280,22 @@
         "z": 0.1
       },
       "material": "mat_panel",
-      "layer": "layer_panels",
+      "layer": "layer_paneles",
       "visible": false,
       "metadata": {
-        "wallId": "wall_west",
-        "role": "structural"
+        "Etiqueta": "Panel Oeste 1",
+        "ID Técnico": "panel_wall_west_0",
+        "ID de muro": "wall_west",
+        "Rol": "Estructural"
       }
     },
     {
       "id": "render_roof_volume",
-      "type": "roof",
+      "type": "techo",
       "sourceId": "house",
       "position": {
         "x": 2,
-        "y": 3.1,
+        "y": 2.7,
         "z": 2
       },
       "rotation": {
@@ -180,473 +304,25 @@
         "z": 0
       },
       "dimensions": {
-        "x": 4.5,
-        "y": 1,
-        "z": 4.5
+        "x": 4.6,
+        "y": 0.2,
+        "z": 4.6
       },
       "material": "mat_roof",
-      "layer": "layer_roof",
+      "layer": "layer_techo",
       "visible": true,
       "metadata": {
-        "type": "one_slope",
-        "slope": 0
+        "Tipo": "Techo a un agua",
+        "Pendiente": 0
       }
     },
     {
-      "id": "render_stud_corner_1dbljk19u",
-      "type": "stud",
-      "sourceId": "corner_1dbljk19u",
-      "position": {
-        "x": 3.9,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_corner_2bo2u01dh",
-      "type": "stud",
-      "sourceId": "corner_2bo2u01dh",
-      "position": {
-        "x": 0.05,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_corner_3bgdfnec2",
-      "type": "stud",
-      "sourceId": "corner_3bgdfnec2",
-      "position": {
-        "x": 3.95,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_corner_3e0or9we9",
-      "type": "stud",
-      "sourceId": "corner_3e0or9we9",
-      "position": {
-        "x": 0.1,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_corner_ansqgh34y",
-      "type": "stud",
-      "sourceId": "corner_ansqgh34y",
-      "position": {
-        "x": 0.05,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_corner_bfasy2wlm",
-      "type": "stud",
-      "sourceId": "corner_bfasy2wlm",
-      "position": {
-        "x": 0.1,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_corner_bm4fbpptw",
-      "type": "stud",
-      "sourceId": "corner_bm4fbpptw",
-      "position": {
-        "x": 3.95,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_corner_cv3nlj3fy",
-      "type": "stud",
-      "sourceId": "corner_cv3nlj3fy",
-      "position": {
-        "x": 3.9,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_corner_h7x8snljh",
-      "type": "stud",
-      "sourceId": "corner_h7x8snljh",
-      "position": {
-        "x": 3.9,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_corner_l3gt95rda",
-      "type": "stud",
-      "sourceId": "corner_l3gt95rda",
-      "position": {
-        "x": 3.9,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_corner_ny6feb40m",
-      "type": "stud",
-      "sourceId": "corner_ny6feb40m",
-      "position": {
-        "x": 3.95,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_corner_pg8v7vmgy",
-      "type": "stud",
-      "sourceId": "corner_pg8v7vmgy",
-      "position": {
-        "x": 0.05,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_corner_raunreacc",
-      "type": "stud",
-      "sourceId": "corner_raunreacc",
-      "position": {
-        "x": 3.95,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_corner_ylquzr27e",
-      "type": "stud",
-      "sourceId": "corner_ylquzr27e",
-      "position": {
-        "x": 0.05,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_corner_ysjvg9qbt",
-      "type": "stud",
-      "sourceId": "corner_ysjvg9qbt",
-      "position": {
-        "x": 0.1,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_corner_zrm4jkbgy",
-      "type": "stud",
-      "sourceId": "corner_zrm4jkbgy",
-      "position": {
-        "x": 0.1,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "corner",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_cripple_ylwvxbep7",
-      "type": "stud",
-      "sourceId": "cripple_ylwvxbep7",
+      "id": "render_sill_solera_ventana_5m0b35ubg",
+      "type": "antepecho",
+      "sourceId": "solera_ventana_5m0b35ubg",
       "position": {
         "x": 1.5,
-        "y": 0.8,
+        "y": 1,
         "z": 0
       },
       "rotation": {
@@ -655,26 +331,538 @@
         "z": 0
       },
       "dimensions": {
+        "x": 1,
+        "y": 0.04,
+        "z": 0.1
+      },
+      "material": "mat_track",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Solera de Ventana",
+        "ID Técnico": "solera_ventana_5m0b35ubg",
+        "Rol": "Solera de Ventana",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_corner_0tn5elt7u",
+      "type": "montante",
+      "sourceId": "corner_0tn5elt7u",
+      "position": {
+        "x": 3.95,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
         "x": 0.04,
-        "y": 1.6,
+        "y": 2.6,
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "cripple_top",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_0tn5elt7u",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
       }
     },
     {
-      "id": "render_stud_jack_188r4u5ac",
-      "type": "stud",
-      "sourceId": "jack_188r4u5ac",
+      "id": "render_stud_corner_2cin8rezc",
+      "type": "montante",
+      "sourceId": "corner_2cin8rezc",
+      "position": {
+        "x": 3.95,
+        "y": 1.3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_2cin8rezc",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_corner_2no7xwv06",
+      "type": "montante",
+      "sourceId": "corner_2no7xwv06",
+      "position": {
+        "x": 0.1,
+        "y": 1.3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_2no7xwv06",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_corner_5zmjzfouq",
+      "type": "montante",
+      "sourceId": "corner_5zmjzfouq",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 0.10000000000000009
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_5zmjzfouq",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_corner_aedxvjqzd",
+      "type": "montante",
+      "sourceId": "corner_aedxvjqzd",
+      "position": {
+        "x": 0.04999999999999982,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_aedxvjqzd",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_corner_bmf5wamdx",
+      "type": "montante",
+      "sourceId": "corner_bmf5wamdx",
+      "position": {
+        "x": 3.9,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_bmf5wamdx",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_corner_ek1t237hd",
+      "type": "montante",
+      "sourceId": "corner_ek1t237hd",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_ek1t237hd",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_corner_gbp9949wm",
+      "type": "montante",
+      "sourceId": "corner_gbp9949wm",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 3.9
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_gbp9949wm",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_corner_grg563kxy",
+      "type": "montante",
+      "sourceId": "corner_grg563kxy",
+      "position": {
+        "x": 3.9,
+        "y": 1.3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_grg563kxy",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_corner_hz9nqaxj1",
+      "type": "montante",
+      "sourceId": "corner_hz9nqaxj1",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 3.95
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_hz9nqaxj1",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_corner_igao9895c",
+      "type": "montante",
+      "sourceId": "corner_igao9895c",
+      "position": {
+        "x": 0.05,
+        "y": 1.3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_igao9895c",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_corner_muvr5udv2",
+      "type": "montante",
+      "sourceId": "corner_muvr5udv2",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 0.04999999999999982
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_muvr5udv2",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_corner_rjdttvgrm",
+      "type": "montante",
+      "sourceId": "corner_rjdttvgrm",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 3.95
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_rjdttvgrm",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_corner_rp4ip2mqn",
+      "type": "montante",
+      "sourceId": "corner_rp4ip2mqn",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 3.9
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_rp4ip2mqn",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_corner_uvvwfcgeu",
+      "type": "montante",
+      "sourceId": "corner_uvvwfcgeu",
+      "position": {
+        "x": 0.10000000000000009,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_uvvwfcgeu",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_corner_va27phrgq",
+      "type": "montante",
+      "sourceId": "corner_va27phrgq",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 0.1
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Esquina",
+        "ID Técnico": "corner_va27phrgq",
+        "Rol": "Esquina",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_montante_apoyo_haby9ddjp",
+      "type": "montante",
+      "sourceId": "montante_apoyo_haby9ddjp",
+      "position": {
+        "x": 1.6,
+        "y": 1.05,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.1,
+        "z": 0.1
+      },
+      "material": "mat_stud_jack",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante de Apoyo",
+        "ID Técnico": "montante_apoyo_haby9ddjp",
+        "Rol": "Montante de Apoyo",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_montante_apoyo_o0a4hg5gt",
+      "type": "montante",
+      "sourceId": "montante_apoyo_o0a4hg5gt",
       "position": {
         "x": 1,
-        "y": 0.5,
+        "y": 1,
         "z": 0
       },
       "rotation": {
@@ -684,24 +872,176 @@
       },
       "dimensions": {
         "x": 0.04,
-        "y": 1,
+        "y": 2,
         "z": 0.1
       },
       "material": "mat_stud_jack",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "jack",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
+        "Etiqueta": "Montante de Apoyo",
+        "ID Técnico": "montante_apoyo_o0a4hg5gt",
+        "Rol": "Montante de Apoyo",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_jack_b75rdphcb",
-      "type": "stud",
-      "sourceId": "jack_b75rdphcb",
+      "id": "render_stud_montante_apoyo_vp0zhfjgo",
+      "type": "montante",
+      "sourceId": "montante_apoyo_vp0zhfjgo",
+      "position": {
+        "x": 2.5,
+        "y": 1.05,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.1,
+        "z": 0.1
+      },
+      "material": "mat_stud_jack",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante de Apoyo",
+        "ID Técnico": "montante_apoyo_vp0zhfjgo",
+        "Rol": "Montante de Apoyo",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_montante_apoyo_ze6o4o5sr",
+      "type": "montante",
+      "sourceId": "montante_apoyo_ze6o4o5sr",
       "position": {
         "x": 2,
+        "y": 1,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2,
+        "z": 0.1
+      },
+      "material": "mat_stud_jack",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante de Apoyo",
+        "ID Técnico": "montante_apoyo_ze6o4o5sr",
+        "Rol": "Montante de Apoyo",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_montante_corto_09c67z0yv",
+      "type": "montante",
+      "sourceId": "montante_corto_09c67z0yv",
+      "position": {
+        "x": 1.6,
+        "y": 2.4000000000000004,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 0.3999999999999999,
+        "z": 0.1
+      },
+      "material": "mat_stud_cripple",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Corto Superior",
+        "ID Técnico": "montante_corto_09c67z0yv",
+        "Rol": "Montante Corto Superior",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_montante_corto_4r6owyer5",
+      "type": "montante",
+      "sourceId": "montante_corto_4r6owyer5",
+      "position": {
+        "x": 1.2000000000000002,
+        "y": 2.4000000000000004,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 0.3999999999999999,
+        "z": 0.1
+      },
+      "material": "mat_stud_cripple",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Corto Superior",
+        "ID Técnico": "montante_corto_4r6owyer5",
+        "Rol": "Montante Corto Superior",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_montante_corto_73m0uyj90",
+      "type": "montante",
+      "sourceId": "montante_corto_73m0uyj90",
+      "position": {
+        "x": 2,
+        "y": 2.45,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 0.2999999999999998,
+        "z": 0.1
+      },
+      "material": "mat_stud_cripple",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Corto Superior",
+        "ID Técnico": "montante_corto_73m0uyj90",
+        "Rol": "Montante Corto Superior",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_montante_corto_a0256nyq4",
+      "type": "montante",
+      "sourceId": "montante_corto_a0256nyq4",
+      "position": {
+        "x": 1.2000000000000002,
         "y": 0.5,
         "z": 0
       },
@@ -715,19 +1055,81 @@
         "y": 1,
         "z": 0.1
       },
-      "material": "mat_stud_jack",
-      "layer": "layer_framing",
+      "material": "mat_stud_cripple",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "jack",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
+        "Etiqueta": "Montante Corto Inferior",
+        "ID Técnico": "montante_corto_a0256nyq4",
+        "Rol": "Montante Corto Inferior",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_king_43bug8gvk",
-      "type": "stud",
-      "sourceId": "king_43bug8gvk",
+      "id": "render_stud_montante_corto_camr61nhn",
+      "type": "montante",
+      "sourceId": "montante_corto_camr61nhn",
+      "position": {
+        "x": 2.4,
+        "y": 2.45,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 0.2999999999999998,
+        "z": 0.1
+      },
+      "material": "mat_stud_cripple",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Corto Superior",
+        "ID Técnico": "montante_corto_camr61nhn",
+        "Rol": "Montante Corto Superior",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_montante_corto_wrxn925tl",
+      "type": "montante",
+      "sourceId": "montante_corto_wrxn925tl",
+      "position": {
+        "x": 1.6,
+        "y": 0.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 1,
+        "z": 0.1
+      },
+      "material": "mat_stud_cripple",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Corto Inferior",
+        "ID Técnico": "montante_corto_wrxn925tl",
+        "Rol": "Montante Corto Inferior",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_montante_principal_9njx7cffx",
+      "type": "montante",
+      "sourceId": "montante_principal_9njx7cffx",
       "position": {
         "x": 2.05,
         "y": 1.3,
@@ -744,18 +1146,20 @@
         "z": 0.1
       },
       "material": "mat_stud_king",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "king",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
+        "Etiqueta": "Montante Principal",
+        "ID Técnico": "montante_principal_9njx7cffx",
+        "Rol": "Montante Principal",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_king_9tleosmas",
-      "type": "stud",
-      "sourceId": "king_9tleosmas",
+      "id": "render_stud_montante_principal_d5toxb9f2",
+      "type": "montante",
+      "sourceId": "montante_principal_d5toxb9f2",
       "position": {
         "x": 0.95,
         "y": 1.3,
@@ -772,26 +1176,88 @@
         "z": 0.1
       },
       "material": "mat_stud_king",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "king",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
+        "Etiqueta": "Montante Principal",
+        "ID Técnico": "montante_principal_d5toxb9f2",
+        "Rol": "Montante Principal",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_stud_13qirpovq",
-      "type": "stud",
-      "sourceId": "stud_13qirpovq",
+      "id": "render_stud_montante_principal_hoz28qhc0",
+      "type": "montante",
+      "sourceId": "montante_principal_hoz28qhc0",
       "position": {
-        "x": 3.5999999999999996,
+        "x": 1.5500000000000003,
         "y": 1.3,
-        "z": 0
+        "z": 4
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_king",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Principal",
+        "ID Técnico": "montante_principal_hoz28qhc0",
+        "Rol": "Montante Principal",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_montante_principal_ks7usnyz6",
+      "type": "montante",
+      "sourceId": "montante_principal_ks7usnyz6",
+      "position": {
+        "x": 2.55,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_king",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Principal",
+        "ID Técnico": "montante_principal_ks7usnyz6",
+        "Rol": "Montante Principal",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_stud_1f2fjiad2",
+      "type": "montante",
+      "sourceId": "stud_1f2fjiad2",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 1.2000000000000002
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -800,46 +1266,20 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_1f2fjiad2",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
       }
     },
     {
-      "id": "render_stud_stud_172md8nw5",
-      "type": "stud",
-      "sourceId": "stud_172md8nw5",
-      "position": {
-        "x": 4,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_stud_22qe5mnch",
-      "type": "stud",
-      "sourceId": "stud_22qe5mnch",
+      "id": "render_stud_stud_2fjtp50x5",
+      "type": "montante",
+      "sourceId": "stud_2fjtp50x5",
       "position": {
         "x": 0.8,
         "y": 1.3,
@@ -856,18 +1296,320 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_2fjtp50x5",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_stud_3f6gz6c7e",
-      "type": "stud",
-      "sourceId": "stud_3f6gz6c7e",
+      "id": "render_stud_stud_3jn7l3vg6",
+      "type": "montante",
+      "sourceId": "stud_3jn7l3vg6",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 2.4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_3jn7l3vg6",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_46kc1r4z4",
+      "type": "montante",
+      "sourceId": "stud_46kc1r4z4",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 0.8000000000000003
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_46kc1r4z4",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_stud_4u25tkkui",
+      "type": "montante",
+      "sourceId": "stud_4u25tkkui",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_4u25tkkui",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_stud_54n571mw4",
+      "type": "montante",
+      "sourceId": "stud_54n571mw4",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 1.6
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_54n571mw4",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_6ytb776ju",
+      "type": "montante",
+      "sourceId": "stud_6ytb776ju",
+      "position": {
+        "x": 2.4,
+        "y": 1.3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_6ytb776ju",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_stud_7bkrhwb9c",
+      "type": "montante",
+      "sourceId": "stud_7bkrhwb9c",
+      "position": {
+        "x": 0.40000000000000036,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_7bkrhwb9c",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_stud_7ojc4gev9",
+      "type": "montante",
+      "sourceId": "stud_7ojc4gev9",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_7ojc4gev9",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_7z8vcmsed",
+      "type": "montante",
+      "sourceId": "stud_7z8vcmsed",
+      "position": {
+        "x": 3.5999999999999996,
+        "y": 1.3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_7z8vcmsed",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
+      }
+    },
+    {
+      "id": "render_stud_stud_7zq6r8hwf",
+      "type": "montante",
+      "sourceId": "stud_7zq6r8hwf",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 2
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_7zq6r8hwf",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_a3brk9kkb",
+      "type": "montante",
+      "sourceId": "stud_a3brk9kkb",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 3.6
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_a3brk9kkb",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_stud_csj0p1f9g",
+      "type": "montante",
+      "sourceId": "stud_csj0p1f9g",
       "position": {
         "x": 0.4,
         "y": 1.3,
@@ -884,77 +1626,323 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_csj0p1f9g",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_stud_3fwx0q1cw",
-      "type": "stud",
-      "sourceId": "stud_3fwx0q1cw",
-      "position": {
-        "x": 2,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_stud_4lehp6l54",
-      "type": "stud",
-      "sourceId": "stud_4lehp6l54",
-      "position": {
-        "x": 0,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_stud_4s8qvvrtm",
-      "type": "stud",
-      "sourceId": "stud_4s8qvvrtm",
+      "id": "render_stud_stud_dmx47i2pt",
+      "type": "montante",
+      "sourceId": "stud_dmx47i2pt",
       "position": {
         "x": 4,
         "y": 1.3,
+        "z": 3.5999999999999996
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_dmx47i2pt",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_e4233ql9b",
+      "type": "montante",
+      "sourceId": "stud_e4233ql9b",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 0.4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_e4233ql9b",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_eqvfe191v",
+      "type": "montante",
+      "sourceId": "stud_eqvfe191v",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 2.8
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_eqvfe191v",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_stud_i386k9skx",
+      "type": "montante",
+      "sourceId": "stud_i386k9skx",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 2.4
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_i386k9skx",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_stud_i7g9fpn3i",
+      "type": "montante",
+      "sourceId": "stud_i7g9fpn3i",
+      "position": {
+        "x": 3.2,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_i7g9fpn3i",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_stud_ih7l2nf7s",
+      "type": "montante",
+      "sourceId": "stud_ih7l2nf7s",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 0.40000000000000036
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_ih7l2nf7s",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_stud_j3pep7dmi",
+      "type": "montante",
+      "sourceId": "stud_j3pep7dmi",
+      "position": {
+        "x": 3.6,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_j3pep7dmi",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_stud_mneglh4n6",
+      "type": "montante",
+      "sourceId": "stud_mneglh4n6",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 2.8
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_mneglh4n6",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_niupibgc4",
+      "type": "montante",
+      "sourceId": "stud_niupibgc4",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 0.8
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_niupibgc4",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_pj4gs6xmn",
+      "type": "montante",
+      "sourceId": "stud_pj4gs6xmn",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_pj4gs6xmn",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_stud_pvt4ip5tw",
+      "type": "montante",
+      "sourceId": "stud_pvt4ip5tw",
+      "position": {
+        "x": 3.1999999999999997,
+        "y": 1.3,
         "z": 0
       },
       "rotation": {
@@ -968,26 +1956,118 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_pvt4ip5tw",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_stud_5e4iiiqlh",
-      "type": "stud",
-      "sourceId": "stud_5e4iiiqlh",
+      "id": "render_stud_stud_qtwu2jw33",
+      "type": "montante",
+      "sourceId": "stud_qtwu2jw33",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_qtwu2jw33",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_stud_rufagnnhj",
+      "type": "montante",
+      "sourceId": "stud_rufagnnhj",
+      "position": {
+        "x": 0,
+        "y": 1.3,
+        "z": 1.6
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_rufagnnhj",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_stud_rwkqrnj6g",
+      "type": "montante",
+      "sourceId": "stud_rwkqrnj6g",
+      "position": {
+        "x": 2.8,
+        "y": 1.3,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": -3.141592653589793,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_rwkqrnj6g",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
+      }
+    },
+    {
+      "id": "render_stud_stud_sqslly084",
+      "type": "montante",
+      "sourceId": "stud_sqslly084",
       "position": {
         "x": 1.2000000000000002,
         "y": 1.3,
-        "z": 0
+        "z": 4
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -3.141592653589793,
         "z": 0
       },
       "dimensions": {
@@ -996,20 +2076,82 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_sqslly084",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
       }
     },
     {
-      "id": "render_stud_stud_5pfi1yg15",
-      "type": "stud",
-      "sourceId": "stud_5pfi1yg15",
+      "id": "render_stud_stud_tj72e940n",
+      "type": "montante",
+      "sourceId": "stud_tj72e940n",
       "position": {
-        "x": 3.1999999999999997,
+        "x": 0,
+        "y": 1.3,
+        "z": 3.2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_tj72e940n",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
+      }
+    },
+    {
+      "id": "render_stud_stud_tve40k89q",
+      "type": "montante",
+      "sourceId": "stud_tve40k89q",
+      "position": {
+        "x": 4,
+        "y": 1.3,
+        "z": 3.1999999999999997
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "dimensions": {
+        "x": 0.04,
+        "y": 2.6,
+        "z": 0.1
+      },
+      "material": "mat_stud_common",
+      "layer": "layer_estructura",
+      "visible": true,
+      "metadata": {
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_tve40k89q",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
+      }
+    },
+    {
+      "id": "render_stud_stud_u7hrk47ct",
+      "type": "montante",
+      "sourceId": "stud_u7hrk47ct",
+      "position": {
+        "x": 0,
         "y": 1.3,
         "z": 0
       },
@@ -1024,20 +2166,22 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_u7hrk47ct",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_stud_6202371dr",
-      "type": "stud",
-      "sourceId": "stud_6202371dr",
+      "id": "render_stud_stud_vdnfzmn74",
+      "type": "montante",
+      "sourceId": "stud_vdnfzmn74",
       "position": {
-        "x": 1.2000000000000002,
+        "x": 2.8,
         "y": 1.3,
         "z": 0
       },
@@ -1052,26 +2196,28 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_vdnfzmn74",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_stud_65gbmlmoc",
-      "type": "stud",
-      "sourceId": "stud_65gbmlmoc",
+      "id": "render_stud_stud_vkk5d8zun",
+      "type": "montante",
+      "sourceId": "stud_vkk5d8zun",
       "position": {
-        "x": 3.5999999999999996,
+        "x": 0.8000000000000003,
         "y": 1.3,
-        "z": 0
+        "z": 4
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -3.141592653589793,
         "z": 0
       },
       "dimensions": {
@@ -1080,26 +2226,28 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_vkk5d8zun",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_south_0",
+        "ID de muro": "wall_south"
       }
     },
     {
-      "id": "render_stud_stud_77btdecj3",
-      "type": "stud",
-      "sourceId": "stud_77btdecj3",
+      "id": "render_stud_stud_vl9vd7gzq",
+      "type": "montante",
+      "sourceId": "stud_vl9vd7gzq",
       "position": {
-        "x": 1.2000000000000002,
+        "x": 0,
         "y": 1.3,
-        "z": 0
+        "z": 4
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": 1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -1108,26 +2256,28 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_vl9vd7gzq",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
       }
     },
     {
-      "id": "render_stud_stud_8rap1oyw8",
-      "type": "stud",
-      "sourceId": "stud_8rap1oyw8",
+      "id": "render_stud_stud_xzwc31ljb",
+      "type": "montante",
+      "sourceId": "stud_xzwc31ljb",
       "position": {
-        "x": 2,
+        "x": 4,
         "y": 1.3,
         "z": 0
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -1136,102 +2286,20 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_xzwc31ljb",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
       }
     },
     {
-      "id": "render_stud_stud_9bfdkk5ua",
-      "type": "stud",
-      "sourceId": "stud_9bfdkk5ua",
-      "position": {
-        "x": 3.5999999999999996,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_stud_afzp446xv",
-      "type": "stud",
-      "sourceId": "stud_afzp446xv",
-      "position": {
-        "x": 1.6,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_stud_amkta3fbm",
-      "type": "stud",
-      "sourceId": "stud_amkta3fbm",
-      "position": {
-        "x": 3.1999999999999997,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_stud_c2x50qmgd",
-      "type": "stud",
-      "sourceId": "stud_c2x50qmgd",
+      "id": "render_stud_stud_z1zol0ezk",
+      "type": "montante",
+      "sourceId": "stud_z1zol0ezk",
       "position": {
         "x": 4,
         "y": 1.3,
@@ -1248,18 +2316,20 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_z1zol0ezk",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_north_0",
+        "ID de muro": "wall_north"
       }
     },
     {
-      "id": "render_stud_stud_di6lxkvj2",
-      "type": "stud",
-      "sourceId": "stud_di6lxkvj2",
+      "id": "render_stud_stud_ziarlpcty",
+      "type": "montante",
+      "sourceId": "stud_ziarlpcty",
       "position": {
         "x": 0,
         "y": 1.3,
@@ -1267,7 +2337,7 @@
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": 1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -1276,54 +2346,28 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_ziarlpcty",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_west_0",
+        "ID de muro": "wall_west"
       }
     },
     {
-      "id": "render_stud_stud_f8hs978um",
-      "type": "stud",
-      "sourceId": "stud_f8hs978um",
-      "position": {
-        "x": 2.4,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_stud_g3x29i4jb",
-      "type": "stud",
-      "sourceId": "stud_g3x29i4jb",
+      "id": "render_stud_stud_zrtgw071m",
+      "type": "montante",
+      "sourceId": "stud_zrtgw071m",
       "position": {
         "x": 4,
         "y": 1.3,
-        "z": 0
+        "z": 1.2000000000000002
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -1332,614 +2376,28 @@
         "z": 0.1
       },
       "material": "mat_stud_common",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_g5m5ir4j5",
-      "type": "stud",
-      "sourceId": "stud_g5m5ir4j5",
-      "position": {
-        "x": 3.5999999999999996,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_stud_jfui8klkj",
-      "type": "stud",
-      "sourceId": "stud_jfui8klkj",
-      "position": {
-        "x": 0,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_stud_kk30jtojl",
-      "type": "stud",
-      "sourceId": "stud_kk30jtojl",
-      "position": {
-        "x": 3.1999999999999997,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_mb7amgrf0",
-      "type": "stud",
-      "sourceId": "stud_mb7amgrf0",
-      "position": {
-        "x": 2.8,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_stud_n6zwwbs23",
-      "type": "stud",
-      "sourceId": "stud_n6zwwbs23",
-      "position": {
-        "x": 2.4,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_stud_nqg91vya2",
-      "type": "stud",
-      "sourceId": "stud_nqg91vya2",
-      "position": {
-        "x": 0.8,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_stud_nsslrxc30",
-      "type": "stud",
-      "sourceId": "stud_nsslrxc30",
-      "position": {
-        "x": 0.4,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_stud_o4l3x86jd",
-      "type": "stud",
-      "sourceId": "stud_o4l3x86jd",
-      "position": {
-        "x": 2,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_pj7wfc972",
-      "type": "stud",
-      "sourceId": "stud_pj7wfc972",
-      "position": {
-        "x": 0.8,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_qczjzx73o",
-      "type": "stud",
-      "sourceId": "stud_qczjzx73o",
-      "position": {
-        "x": 0.4,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_qfdignprk",
-      "type": "stud",
-      "sourceId": "stud_qfdignprk",
-      "position": {
-        "x": 0.4,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_stud_u06tnqc2l",
-      "type": "stud",
-      "sourceId": "stud_u06tnqc2l",
-      "position": {
-        "x": 2.4,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_unx9m9g9z",
-      "type": "stud",
-      "sourceId": "stud_unx9m9g9z",
-      "position": {
-        "x": 1.6,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_east_0",
-        "wallId": "wall_east"
-      }
-    },
-    {
-      "id": "render_stud_stud_w3w0ncmuf",
-      "type": "stud",
-      "sourceId": "stud_w3w0ncmuf",
-      "position": {
-        "x": 2.8,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_stud_x9vim6avp",
-      "type": "stud",
-      "sourceId": "stud_x9vim6avp",
-      "position": {
-        "x": 0,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_xbu84oel1",
-      "type": "stud",
-      "sourceId": "stud_xbu84oel1",
-      "position": {
-        "x": 1.6,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_xrz0u79li",
-      "type": "stud",
-      "sourceId": "stud_xrz0u79li",
-      "position": {
-        "x": 2.8,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_stud_xua74x9u8",
-      "type": "stud",
-      "sourceId": "stud_xua74x9u8",
-      "position": {
-        "x": 3.1999999999999997,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_north_0",
-        "wallId": "wall_north"
-      }
-    },
-    {
-      "id": "render_stud_stud_yxmcekyj3",
-      "type": "stud",
-      "sourceId": "stud_yxmcekyj3",
-      "position": {
-        "x": 2.8,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_south_0",
-        "wallId": "wall_south"
-      }
-    },
-    {
-      "id": "render_stud_stud_z2tksah1e",
-      "type": "stud",
-      "sourceId": "stud_z2tksah1e",
-      "position": {
-        "x": 0.8,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
-      }
-    },
-    {
-      "id": "render_stud_stud_zp6i4epmj",
-      "type": "stud",
-      "sourceId": "stud_zp6i4epmj",
-      "position": {
-        "x": 2.4,
-        "y": 1.3,
-        "z": 0
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "dimensions": {
-        "x": 0.04,
-        "y": 2.6,
-        "z": 0.1
-      },
-      "material": "mat_stud_common",
-      "layer": "layer_framing",
-      "visible": true,
-      "metadata": {
-        "role": "common",
-        "panelId": "panel_wall_west_0",
-        "wallId": "wall_west"
+        "Etiqueta": "Montante Común",
+        "ID Técnico": "stud_zrtgw071m",
+        "Rol": "Montante Común",
+        "ID de panel": "panel_wall_east_0",
+        "ID de muro": "wall_east"
       }
     },
     {
       "id": "render_track_bottom_panel_wall_east_0",
-      "type": "track",
+      "type": "solera",
       "sourceId": "panel_wall_east_0",
       "position": {
-        "x": 2,
+        "x": 4,
         "y": 0.02,
-        "z": 0
+        "z": 2
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -1948,16 +2406,18 @@
         "z": 0.1
       },
       "material": "mat_track",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "bottom_track",
-        "panelId": "panel_wall_east_0"
+        "Etiqueta": "Solera Inferior",
+        "ID Técnico": "track_bottom_panel_wall_east_0",
+        "Rol": "Solera Inferior",
+        "ID de panel": "panel_wall_east_0"
       }
     },
     {
       "id": "render_track_bottom_panel_wall_north_0",
-      "type": "track",
+      "type": "solera",
       "sourceId": "panel_wall_north_0",
       "position": {
         "x": 2,
@@ -1975,25 +2435,27 @@
         "z": 0.1
       },
       "material": "mat_track",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "bottom_track",
-        "panelId": "panel_wall_north_0"
+        "Etiqueta": "Solera Inferior",
+        "ID Técnico": "track_bottom_panel_wall_north_0",
+        "Rol": "Solera Inferior",
+        "ID de panel": "panel_wall_north_0"
       }
     },
     {
       "id": "render_track_bottom_panel_wall_south_0",
-      "type": "track",
+      "type": "solera",
       "sourceId": "panel_wall_south_0",
       "position": {
         "x": 2,
         "y": 0.02,
-        "z": 0
+        "z": 4
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -3.141592653589793,
         "z": 0
       },
       "dimensions": {
@@ -2002,25 +2464,27 @@
         "z": 0.1
       },
       "material": "mat_track",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "bottom_track",
-        "panelId": "panel_wall_south_0"
+        "Etiqueta": "Solera Inferior",
+        "ID Técnico": "track_bottom_panel_wall_south_0",
+        "Rol": "Solera Inferior",
+        "ID de panel": "panel_wall_south_0"
       }
     },
     {
       "id": "render_track_bottom_panel_wall_west_0",
-      "type": "track",
+      "type": "solera",
       "sourceId": "panel_wall_west_0",
       "position": {
-        "x": 2,
+        "x": 0,
         "y": 0.02,
-        "z": 0
+        "z": 2
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": 1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -2029,25 +2493,27 @@
         "z": 0.1
       },
       "material": "mat_track",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "bottom_track",
-        "panelId": "panel_wall_west_0"
+        "Etiqueta": "Solera Inferior",
+        "ID Técnico": "track_bottom_panel_wall_west_0",
+        "Rol": "Solera Inferior",
+        "ID de panel": "panel_wall_west_0"
       }
     },
     {
       "id": "render_track_top_panel_wall_east_0",
-      "type": "track",
+      "type": "solera",
       "sourceId": "panel_wall_east_0",
       "position": {
-        "x": 2,
+        "x": 4,
         "y": 2.58,
-        "z": 0
+        "z": 2
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -2056,16 +2522,18 @@
         "z": 0.1
       },
       "material": "mat_track",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "top_track",
-        "panelId": "panel_wall_east_0"
+        "Etiqueta": "Solera Superior",
+        "ID Técnico": "track_top_panel_wall_east_0",
+        "Rol": "Solera Superior",
+        "ID de panel": "panel_wall_east_0"
       }
     },
     {
       "id": "render_track_top_panel_wall_north_0",
-      "type": "track",
+      "type": "solera",
       "sourceId": "panel_wall_north_0",
       "position": {
         "x": 2,
@@ -2083,25 +2551,27 @@
         "z": 0.1
       },
       "material": "mat_track",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "top_track",
-        "panelId": "panel_wall_north_0"
+        "Etiqueta": "Solera Superior",
+        "ID Técnico": "track_top_panel_wall_north_0",
+        "Rol": "Solera Superior",
+        "ID de panel": "panel_wall_north_0"
       }
     },
     {
       "id": "render_track_top_panel_wall_south_0",
-      "type": "track",
+      "type": "solera",
       "sourceId": "panel_wall_south_0",
       "position": {
         "x": 2,
         "y": 2.58,
-        "z": 0
+        "z": 4
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -3.141592653589793,
         "z": 0
       },
       "dimensions": {
@@ -2110,25 +2580,27 @@
         "z": 0.1
       },
       "material": "mat_track",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "top_track",
-        "panelId": "panel_wall_south_0"
+        "Etiqueta": "Solera Superior",
+        "ID Técnico": "track_top_panel_wall_south_0",
+        "Rol": "Solera Superior",
+        "ID de panel": "panel_wall_south_0"
       }
     },
     {
       "id": "render_track_top_panel_wall_west_0",
-      "type": "track",
+      "type": "solera",
       "sourceId": "panel_wall_west_0",
       "position": {
-        "x": 2,
+        "x": 0,
         "y": 2.58,
-        "z": 0
+        "z": 2
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": 1.5707963267948966,
         "z": 0
       },
       "dimensions": {
@@ -2137,16 +2609,18 @@
         "z": 0.1
       },
       "material": "mat_track",
-      "layer": "layer_framing",
+      "layer": "layer_estructura",
       "visible": true,
       "metadata": {
-        "role": "top_track",
-        "panelId": "panel_wall_west_0"
+        "Etiqueta": "Solera Superior",
+        "ID Técnico": "track_top_panel_wall_west_0",
+        "Rol": "Solera Superior",
+        "ID de panel": "panel_wall_west_0"
       }
     },
     {
       "id": "render_wall_wall_east",
-      "type": "wall",
+      "type": "muro",
       "sourceId": "wall_east",
       "position": {
         "x": 4,
@@ -2155,24 +2629,26 @@
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -1.5707963267948966,
         "z": 0
       },
       "dimensions": {
-        "x": 0.1,
+        "x": 4,
         "y": 2.6,
-        "z": 4
+        "z": 0.1
       },
       "material": "mat_wall",
-      "layer": "layer_walls",
+      "layer": "layer_muros",
       "visible": false,
       "metadata": {
-        "role": "external_loadbearing"
+        "Etiqueta": "Muro Este",
+        "ID Técnico": "wall_east",
+        "Rol": "Muro Portante Exterior"
       }
     },
     {
       "id": "render_wall_wall_north",
-      "type": "wall",
+      "type": "muro",
       "sourceId": "wall_north",
       "position": {
         "x": 2,
@@ -2190,15 +2666,17 @@
         "z": 0.1
       },
       "material": "mat_wall",
-      "layer": "layer_walls",
+      "layer": "layer_muros",
       "visible": false,
       "metadata": {
-        "role": "external_loadbearing"
+        "Etiqueta": "Muro Norte",
+        "ID Técnico": "wall_north",
+        "Rol": "Muro Portante Exterior"
       }
     },
     {
       "id": "render_wall_wall_south",
-      "type": "wall",
+      "type": "muro",
       "sourceId": "wall_south",
       "position": {
         "x": 2,
@@ -2207,7 +2685,7 @@
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": -3.141592653589793,
         "z": 0
       },
       "dimensions": {
@@ -2216,15 +2694,17 @@
         "z": 0.1
       },
       "material": "mat_wall",
-      "layer": "layer_walls",
+      "layer": "layer_muros",
       "visible": false,
       "metadata": {
-        "role": "external_loadbearing"
+        "Etiqueta": "Muro Sur",
+        "ID Técnico": "wall_south",
+        "Rol": "Muro Portante Exterior"
       }
     },
     {
       "id": "render_wall_wall_west",
-      "type": "wall",
+      "type": "muro",
       "sourceId": "wall_west",
       "position": {
         "x": 0,
@@ -2233,161 +2713,200 @@
       },
       "rotation": {
         "x": 0,
-        "y": 0,
+        "y": 1.5707963267948966,
         "z": 0
       },
       "dimensions": {
-        "x": 0.1,
+        "x": 4,
         "y": 2.6,
-        "z": 4
+        "z": 0.1
       },
       "material": "mat_wall",
-      "layer": "layer_walls",
+      "layer": "layer_muros",
       "visible": false,
       "metadata": {
-        "role": "external_loadbearing"
+        "Etiqueta": "Muro Oeste",
+        "ID Técnico": "wall_west",
+        "Rol": "Muro Portante Exterior"
       }
     }
   ],
   "labels": [
     {
-      "id": "label_opening_op_abeecdvf0",
-      "sourceId": "op_abeecdvf0",
-      "text": "WINDOW 1x1",
+      "id": "label_opening_abertura_k1yvoh4me",
+      "sourceId": "abertura_k1yvoh4me",
+      "text": "Ventana 1.00x1.00",
       "position": {
         "x": 1.5,
         "y": 1,
-        "z": 0.15000000000000002
+        "z": 0.3
       },
-      "layer": "layer_labels",
+      "layer": "layer_etiquetas",
       "metadata": {
-        "type": "opening_desc"
+        "Tipo": "Desc. Abertura",
+        "ID Técnico": "abertura_k1yvoh4me"
+      }
+    },
+    {
+      "id": "label_opening_abertura_mzikzkckx",
+      "sourceId": "abertura_mzikzkckx",
+      "text": "Puerta 0.90x2.10",
+      "position": {
+        "x": 2.05,
+        "y": 1.05,
+        "z": 3.7
+      },
+      "layer": "layer_etiquetas",
+      "metadata": {
+        "Tipo": "Desc. Abertura",
+        "ID Técnico": "abertura_mzikzkckx"
       }
     },
     {
       "id": "label_panel_panel_wall_east_0",
       "sourceId": "panel_wall_east_0",
-      "text": "panel_wall_east_0 (structural)",
+      "text": "Panel Este 1",
       "position": {
-        "x": 2,
+        "x": 3.85,
         "y": 2.9,
-        "z": 0
+        "z": 2
       },
-      "layer": "layer_labels",
+      "layer": "layer_etiquetas",
       "metadata": {
-        "type": "panel_id"
+        "Tipo": "ID de Panel",
+        "Etiqueta": "Panel Este 1",
+        "ID Técnico": "panel_wall_east_0"
       }
     },
     {
       "id": "label_panel_panel_wall_north_0",
       "sourceId": "panel_wall_north_0",
-      "text": "panel_wall_north_0 (structural)",
+      "text": "Panel Norte 1",
       "position": {
         "x": 2,
         "y": 2.9,
-        "z": 0
+        "z": 0.15
       },
-      "layer": "layer_labels",
+      "layer": "layer_etiquetas",
       "metadata": {
-        "type": "panel_id"
+        "Tipo": "ID de Panel",
+        "Etiqueta": "Panel Norte 1",
+        "ID Técnico": "panel_wall_north_0"
       }
     },
     {
       "id": "label_panel_panel_wall_south_0",
       "sourceId": "panel_wall_south_0",
-      "text": "panel_wall_south_0 (structural)",
+      "text": "Panel Sur 1",
       "position": {
         "x": 2,
         "y": 2.9,
-        "z": 0
+        "z": 3.85
       },
-      "layer": "layer_labels",
+      "layer": "layer_etiquetas",
       "metadata": {
-        "type": "panel_id"
+        "Tipo": "ID de Panel",
+        "Etiqueta": "Panel Sur 1",
+        "ID Técnico": "panel_wall_south_0"
       }
     },
     {
       "id": "label_panel_panel_wall_west_0",
       "sourceId": "panel_wall_west_0",
-      "text": "panel_wall_west_0 (structural)",
+      "text": "Panel Oeste 1",
       "position": {
-        "x": 2,
+        "x": 0.15,
         "y": 2.9,
-        "z": 0
+        "z": 2
       },
-      "layer": "layer_labels",
+      "layer": "layer_etiquetas",
       "metadata": {
-        "type": "panel_id"
+        "Tipo": "ID de Panel",
+        "Etiqueta": "Panel Oeste 1",
+        "ID Técnico": "panel_wall_west_0"
       }
     }
   ],
   "layers": [
     {
-      "id": "layer_foundation",
-      "name": "Foundation",
+      "id": "layer_fundaciones",
+      "name": "Fundación",
       "visibleByDefault": true,
-      "description": "Base foundation markers"
+      "description": "Marcadores base de fundacion"
     },
     {
-      "id": "layer_walls",
-      "name": "Walls",
+      "id": "layer_muros",
+      "name": "Muros",
       "visibleByDefault": false,
-      "description": "Transparent wall volumes"
+      "description": "Volumenes transparentes de muros"
     },
     {
-      "id": "layer_panels",
-      "name": "Panels",
+      "id": "layer_paneles",
+      "name": "Paneles",
       "visibleByDefault": false,
-      "description": "Panel bounding volumes"
+      "description": "Volumenes de paneles"
     },
     {
-      "id": "layer_framing",
-      "name": "Framing",
+      "id": "layer_estructura",
+      "name": "Entramado",
       "visibleByDefault": true,
-      "description": "Studs and tracks"
+      "description": "Montantes y soleras"
     },
     {
-      "id": "layer_openings",
-      "name": "Openings",
+      "id": "layer_aberturas",
+      "name": "Aberturas",
       "visibleByDefault": true,
-      "description": "Transparent voids for doors and windows"
+      "description": "Vacios transparentes de puertas y ventanas"
     },
     {
-      "id": "layer_headers",
-      "name": "Headers",
+      "id": "layer_dinteles",
+      "name": "Dinteles",
       "visibleByDefault": true,
-      "description": "Header markers over openings"
+      "description": "Marcadores de dinteles sobre aberturas"
     },
     {
-      "id": "layer_roof",
-      "name": "Roof",
+      "id": "layer_techo",
+      "name": "Techo",
       "visibleByDefault": true,
-      "description": "Roof geometry"
+      "description": "Geometria del techo"
     },
     {
-      "id": "layer_anchors",
-      "name": "Anchors",
+      "id": "layer_anclajes",
+      "name": "Anclajes",
       "visibleByDefault": true,
-      "description": "Foundation anchor markers"
+      "description": "Marcadores de anclajes de fundacion"
     },
     {
-      "id": "layer_labels",
-      "name": "Labels",
+      "id": "layer_etiquetas",
+      "name": "Etiquetas",
       "visibleByDefault": true,
-      "description": "Text labels"
+      "description": "Textos y etiquetas"
     },
     {
-      "id": "layer_warnings",
-      "name": "Warnings",
+      "id": "layer_advertencias",
+      "name": "Advertencias",
       "visibleByDefault": true,
-      "description": "Structural overlay warnings"
+      "description": "Advertencias estructurales"
     }
   ],
-  "warnings": [],
+  "warnings": [
+    {
+      "id": "render_warn_anchors_pending",
+      "sourceId": "house_anchors",
+      "severity": "warning",
+      "message": "Diseño de anclajes no generado aún — pendiente Fase 4B / datos estructurales de anclajes",
+      "position": {
+        "x": 2,
+        "y": 0.1,
+        "z": 2
+      },
+      "layer": "layer_anclajes"
+    }
+  ],
   "cameraPresets": [
     {
       "id": "cam_iso",
-      "name": "Isometric",
+      "name": "Isométrica",
       "position": {
         "x": 10,
         "y": 10,
@@ -2401,7 +2920,7 @@
     },
     {
       "id": "cam_top",
-      "name": "Top",
+      "name": "Superior",
       "position": {
         "x": 0,
         "y": 15,
@@ -2415,7 +2934,7 @@
     },
     {
       "id": "cam_front",
-      "name": "Front",
+      "name": "Frontal",
       "position": {
         "x": 0,
         "y": 2,
@@ -2429,11 +2948,11 @@
     }
   ],
   "metadata": {
-    "projectId": "project_1777703550621",
-    "generatedAt": "2026-05-02T06:32:30.621Z",
-    "units": "m",
-    "sourcePhase": "Phase 4A",
-    "objectCount": 81,
-    "warningCount": 0
+    "ID de proyecto": "project_1777939432074",
+    "Fecha de generación": "2026-05-05T00:03:52.074Z",
+    "Unidades": "m",
+    "Fase de origen": "Fase 4A",
+    "Cantidad de objetos": 92,
+    "Cantidad de advertencias": 1
   }
 }

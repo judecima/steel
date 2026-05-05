@@ -7,6 +7,8 @@ import { buildStudMeshes } from './stud-mesh-builder';
 import { buildOpeningMeshes } from './opening-mesh-builder';
 import { buildHeaderMeshes } from './header-mesh-builder';
 import { buildRoofMeshes } from './roof-mesh-builder';
+import { buildFoundationMeshes } from './foundation-builder';
+import { buildAnchorMeshes } from './anchors-builder';
 import { buildLabels } from './labels-builder';
 
 export class SceneBuilder {
@@ -17,14 +19,18 @@ export class SceneBuilder {
       ...buildPanelMeshes(projectResult),
       ...buildStudMeshes(projectResult),
       ...buildOpeningMeshes(projectResult),
-      ...buildHeaderMeshes(projectResult)
+      ...buildHeaderMeshes(projectResult),
+      ...buildFoundationMeshes(projectResult)
     ];
 
     const roofData = buildRoofMeshes(projectResult);
     objects.push(...roofData.objects);
 
+    const anchorData = buildAnchorMeshes(projectResult);
+    objects.push(...anchorData.objects);
+
     const labels: RenderLabel[] = buildLabels(projectResult);
-    const warnings: RenderWarning[] = [...roofData.warnings];
+    const warnings: RenderWarning[] = [...roofData.warnings, ...anchorData.warnings];
 
     // 2. Sort deterministically (by ID)
     objects.sort((a, b) => a.id.localeCompare(b.id));
@@ -45,12 +51,12 @@ export class SceneBuilder {
       warnings,
       cameraPresets: RENDER_CONFIG.camera.defaultPresets,
       metadata: {
-        projectId: 'project_' + Date.now(), // Real project ID should be passed if available
-        generatedAt: new Date().toISOString(),
-        units: RENDER_CONFIG.units,
-        sourcePhase: 'Phase 4A',
-        objectCount: objects.length,
-        warningCount: warnings.length
+        'ID de proyecto': 'project_' + Date.now(),
+        'Fecha de generación': new Date().toISOString(),
+        'Unidades': RENDER_CONFIG.units,
+        'Fase de origen': 'Fase 4A',
+        'Cantidad de objetos': objects.length,
+        'Cantidad de advertencias': warnings.length
       }
     };
   }

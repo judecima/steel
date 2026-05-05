@@ -1,12 +1,14 @@
 import { 
   StructuralAnalysisResult, MemberCheckResult, HeaderCheckResult, 
   RoofStructuralCheckResult, AnchorCheckResult, StructuralStatus, 
-  StructuralCertificationLevel, CodeReference 
+  StructuralCertificationLevel, CodeReference, ResultadoDisenoDintelAbertura
 } from './types';
+import { generarDesgloseDinteles } from './generador-reporte-dintel';
 
 export function buildStructuralReport(
   memberChecks: MemberCheckResult[],
-  headerChecks: HeaderCheckResult[],
+  dintelChecks: HeaderCheckResult[],
+  disenosDintel: ResultadoDisenoDintelAbertura[],
   roofCheck: RoofStructuralCheckResult,
   anchorCheck: AnchorCheckResult,
   missingDataFromEngine: string[]
@@ -14,39 +16,39 @@ export function buildStructuralReport(
   
   const allMissingData = [...missingDataFromEngine];
   const allWarnings = [
-    'SAFETY BOUNDARY: This is a PRELIMINARY structural check only.',
-    'DO NOT use this report for construction. Professional engineer approval is mandatory.'
+    'LIMITE DE SEGURIDAD: Este es solo un chequeo estructural PRELIMINAR.',
+    'NO utilice este reporte para la construcción. La aprobación de un ingeniero profesional es obligatoria.'
   ];
   const criticalItems: string[] = [];
   const codeRefsMap = new Map<string, CodeReference>();
 
   let overallStatus: StructuralStatus = 'preliminary_pass';
 
-  // Aggregate Anchor Check
+  // Agregar Chequeo de Anclaje
   if (anchorCheck.status === 'insufficient_data') {
-    allMissingData.push(...anchorCheck.requiredData.map(d => `Anchor data: ${d}`));
+    allMissingData.push(...anchorCheck.requiredData.map(d => `Datos de anclaje: ${d}`));
     overallStatus = downgradeStatus(overallStatus, 'insufficient_data');
   } else if (anchorCheck.status === 'requires_engineer_review') {
-    criticalItems.push('Anchors require engineer review.');
+    criticalItems.push('Los anclajes requieren revisión de ingeniería.');
     overallStatus = downgradeStatus(overallStatus, 'requires_engineer_review');
   }
   allWarnings.push(...anchorCheck.warnings);
 
-  // Aggregate Roof Check
+  // Agregar Chequeo de Techo
   if (roofCheck.status === 'requires_engineer_review') {
-    criticalItems.push(`Roof span (${roofCheck.span}m) requires truss design.`);
+    criticalItems.push(`La luz del techo (${roofCheck.span}m) requiere diseño de cercha/reticulado.`);
     overallStatus = downgradeStatus(overallStatus, 'requires_engineer_review');
   } else if (roofCheck.status === 'insufficient_data') {
     overallStatus = downgradeStatus(overallStatus, 'insufficient_data');
   }
   allWarnings.push(...roofCheck.warnings);
 
-  // Aggregate Headers
-  for (const hc of headerChecks) {
+  // Agregar Dinteles
+  for (const hc of dintelChecks) {
     if (hc.status === 'insufficient_data') {
       overallStatus = downgradeStatus(overallStatus, 'insufficient_data');
     } else if (hc.status === 'requires_engineer_review') {
-      criticalItems.push(`Header at ${hc.openingId} span ${hc.span}m requires review (${hc.recommendation})`);
+      criticalItems.push(`El dintel en ${hc.aberturaId} luz ${hc.span}m requiere revisión (${hc.recommendation})`);
       overallStatus = downgradeStatus(overallStatus, 'requires_engineer_review');
     } else if (hc.status === 'preliminary_fail') {
       overallStatus = downgradeStatus(overallStatus, 'preliminary_fail');
@@ -55,7 +57,7 @@ export function buildStructuralReport(
     hc.codeReferences.forEach(ref => codeRefsMap.set(ref.code, ref));
   }
 
-  // Aggregate Members
+  // Agregar Miembros
   let hasIncompleteMemberData = false;
   let hasCompleteMemberData = false;
 
@@ -70,39 +72,57 @@ export function buildStructuralReport(
     if (mc.status === 'requires_engineer_review') {
       overallStatus = downgradeStatus(overallStatus, 'requires_engineer_review');
     } else if (mc.status === 'preliminary_fail') {
-      criticalItems.push(`Member ${mc.memberId} failed preliminary check (UR: ${mc.utilizationRatio?.toFixed(2)})`);
+      criticalItems.push(`El miembro ${mc.memberId} falló el chequeo preliminar (UR: ${mc.utilizationRatio?.toFixed(2)})`);
       overallStatus = downgradeStatus(overallStatus, 'preliminary_fail');
     }
     allWarnings.push(...mc.warnings);
     mc.codeReferences.forEach(ref => codeRefsMap.set(ref.code, ref));
   }
 
-  // Mixed Data Completeness Rule (Test 9)
-  if (hasCompleteMemberData && hasIncompleteMemberData) {
-    overallStatus = downgradeStatus(overallStatus, 'requires_engineer_review');
-    criticalItems.push('Mixed data completeness: Some members lacked data while others were checked. Full verification required.');
+  // Determinar nivel de certificación
+  let certificationLevel: StructuralCertificationLevel = 'preliminary_structural_checks';
+  if (overallStatus === 'insufficient_data' || overallStatus === 'requires_engineer_review' || overallStatus === 'preliminary_fail') {
+    certificationLevel = 'engineer_review_required';
   }
 
-  // Determine Certification Level
-  let certificationLevel: StructuralCertificationLevel = 'preliminary_structural_checks';
-  if (overallStatus === 'insufficient_data' || overallStatus === 'requires_engineer_review') {
-    certificationLevel = 'engineer_review_required';
-  } else if (overallStatus === 'preliminary_fail') {
-    certificationLevel = 'engineer_review_required'; // Failures mean it must be engineered
+  // Generar Resumen
+  let summary = `## REPORTE ESTRUCTURAL PRELIMINAR\n\n`;
+  summary += `**Estado General**: ${overallStatus.toUpperCase()}\n`;
+  summary += `**Nivel de Certificación**: ${certificationLevel.replace(/_/g, ' ')}\n\n`;
+  
+  summary += `> [!WARNING]\n`;
+  summary += `> Este es un reporte generado automáticamente para validación técnica preliminar.\n`;
+  summary += `> NO constituye una aprobación final ni reemplaza la firma de un ingeniero matriculado.\n`;
+  summary += `> Toda abertura de gran luz o componente crítico REQUIERE revisión profesional.\n\n`;
+
+  summary += `### Resumen de Componentes\n`;
+  summary += `- Montantes y Perfiles: ${memberChecks.length} verificados\n`;
+  summary += `- Dinteles: ${dintelChecks.length} verificados\n`;
+  summary += `- Techo: ${roofCheck.status}\n`;
+  summary += `- Anclajes: ${anchorCheck.status}\n\n`;
+
+  // Insertar desglose detallado de dinteles
+  summary += generarDesgloseDinteles(disenosDintel);
+
+  if (allMissingData.length > 0) {
+    summary += `### Datos Faltantes para Certificación\n`;
+    Array.from(new Set(allMissingData)).forEach(d => summary += `- ${d}\n`);
+    summary += `\n`;
   }
 
   return {
     status: overallStatus,
     certificationLevel,
     memberChecks,
-    headerChecks,
+    dintelChecks,
+    disenosDintel,
     roofCheck,
     anchorCheck,
     criticalItems: Array.from(new Set(criticalItems)),
     missingData: Array.from(new Set(allMissingData)),
     warnings: Array.from(new Set(allWarnings)),
     codeReferences: Array.from(codeRefsMap.values()),
-    summary: `Preliminary status: ${overallStatus}. ${criticalItems.length} critical items.`
+    summary
   };
 }
 

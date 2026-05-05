@@ -8,11 +8,11 @@ export function checkRoof(projectResult: ProjectResult): RoofStructuralCheckResu
   const span = projectResult.input.width;
 
   let status: StructuralStatus = 'preliminary_pass';
-  let recommendation = 'preliminary_simple_rafter';
+  let recommendation = 'tirante_simple_preliminar';
 
   if (span > STRUCTURAL_ASSUMPTIONS.thresholds.roof_span_truss_requirement) {
     status = 'requires_engineer_review';
-    recommendation = 'requires_truss_design';
+    recommendation = 'requiere_diseno_de_cercha';
   }
 
   return {
@@ -21,6 +21,6 @@ export function checkRoof(projectResult: ProjectResult): RoofStructuralCheckResu
     roofType: roof.type,
     slope: roof.slope,
     recommendation,
-    warnings: ['Roof checker does not design trusses. Only preliminary span evaluation.']
+    warnings: ['El verificador de techo no diseña cerchas. Solo evaluación preliminar de luz.']
   };
 }

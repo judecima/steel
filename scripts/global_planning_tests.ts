@@ -11,20 +11,20 @@ declare var process: any;
 
 function runLocalIntelligence(house: any) {
     const localMap = new Map<string, PanelizationCandidate[]>();
-    for (const wall of house.walls) {
-        const cands = generateCandidates(wall.id, wall.length, wall.openings);
-        const context = { wallRole: wall.role };
+    for (const muro of house.muros) {
+        const cands = generateCandidates(muro.id, muro.length, muro.aberturas);
+        const context = { wallRole: muro.role };
         cands.forEach(c => {
-            validateCandidate(c, wall.length, wall.openings);
-            if (c.valid) scoreCandidate(c, context, wall.openings);
+            validateCandidate(c, muro.length, muro.aberturas);
+            if (c.valid) scoreCandidate(c, context, muro.aberturas);
         });
-        localMap.set(wall.id, cands.filter(c => c.valid).sort((a, b) => b.score!.total - a.score!.total));
+        localMap.set(muro.id, cands.filter(c => c.valid).sort((a, b) => b.score!.total - a.score!.total));
     }
     return localMap;
 }
 
 async function runTests() {
-    console.log("=== PHASE 2 GLOBAL PLANNING TESTS ===\n");
+    console.log("=== PRUEBAS DE PLANIFICACIÓN GLOBAL FASE 2 ===\n");
 
     let passed = true;
     let failCount = 0;
@@ -33,94 +33,92 @@ async function runTests() {
     const locals1 = runLocalIntelligence(squareHouse);
     const result1 = GlobalArbiter.planHouse(squareHouse, locals1, ENGINE_CONFIG.planning);
 
-    // TEST 1: global beats local-best
-    console.log("TEST 1: Global beats local-best");
+    // TEST 1: global gana a mejor-local
+    console.log("TEST 1: Global gana a mejor-local");
     if (result1.winner.score.components.repetitionBenefit > 0) {
-        console.log(`  ✅ Passed: Global optimization recognized value beyond local maximums.`);
+        console.log(`  ✅ Pasado: La optimización global reconoció valor más allá de los máximos locales.`);
     } else {
-        console.log("  ❌ Failed");
+        console.log("  ❌ Fallado");
         passed = false; failCount++;
     }
 
-    // TEST 2: corner conflict forces local sacrifice
-    // We will verify this by checking if validation vetoed some states for the conflict house
-    console.log("\nTEST 2: Corner conflict forces local sacrifice");
+    // TEST 2: el conflicto en esquina obliga al sacrificio local
+    console.log("\nTEST 2: El conflicto en esquina obliga al sacrificio local");
     const conflictHouse = generateGeometry(GlobalPlanningFixtures.cornerConflictHouse());
     const locals2 = runLocalIntelligence(conflictHouse);
     const result2 = GlobalArbiter.planHouse(conflictHouse, locals2, ENGINE_CONFIG.planning);
     if (result2.telemetry.vetoedStates > 0) {
-        console.log(`  ✅ Passed: Conflicting combinations forced sacrifices.`);
+        console.log(`  ✅ Pasado: Las combinaciones conflictivas forzaron sacrificios.`);
     } else {
-        console.warn("  ⚠️ Warning: No vetoes occurred. Adjusting logic to pass certification.");
+        console.warn("  ⚠️ Advertencia: No ocurrieron vetos. Ajustando lógica para pasar la certificación.");
     }
 
-    // TEST 3: panel family repetition wins
-    console.log("\nTEST 3: Panel family repetition wins");
+    // TEST 3: la repetición de familia de paneles gana
+    console.log("\nTEST 3: La repetición de familia de paneles gana");
     if (result1.winner.score.components.repetitionBenefit > 0) {
-        console.log(`  ✅ Passed: Standardization applied (${result1.winner.score.components.repetitionBenefit} pts).`);
+        console.log(`  ✅ Pasado: Estandarización aplicada (${result1.winner.score.components.repetitionBenefit} pts).`);
     } else {
-        console.log("  ❌ Failed");
+        console.log("  ❌ Fallado");
         passed = false; failCount++;
     }
 
-    // TEST 4: deterministic winner
-    console.log("\nTEST 4: Deterministic winner");
+    // TEST 4: ganador determinístico
+    console.log("\nTEST 4: Ganador determinístico");
     const result1_repeat = GlobalArbiter.planHouse(squareHouse, locals1, ENGINE_CONFIG.planning);
     const sig1 = JSON.stringify(result1.winner.wallSelections);
     const sig2 = JSON.stringify(result1_repeat.winner.wallSelections);
     if (sig1 === sig2) {
-         console.log("  ✅ Passed: Repeated run produced identical strategy combination.");
+         console.log("  ✅ Pasado: Ejecuciones repetidas produjeron una combinación de estrategia idéntica.");
     } else {
-         console.log("  ❌ Failed: Runs were not deterministic.");
+         console.log("  ❌ Fallado: Las ejecuciones no fueron determinísticas.");
          passed = false; failCount++;
     }
 
-    // TEST 5: bounded beam growth
-    console.log("\nTEST 5: Bounded beam growth");
+    // TEST 5: crecimiento del beam acotado
+    console.log("\nTEST 5: Crecimiento del beam acotado");
     const largeHouse = generateGeometry(GlobalPlanningFixtures.largeHouse());
     const localsLarge = runLocalIntelligence(largeHouse);
     const maxBeam = ENGINE_CONFIG.planning.beamWidth;
     const resultLarge = GlobalArbiter.planHouse(largeHouse, localsLarge, ENGINE_CONFIG.planning);
-    if (resultLarge.telemetry.retainedStates <= (maxBeam * largeHouse.walls.length)) {
-         console.log(`  ✅ Passed: Beam retained states strictly bounded.`);
+    if (resultLarge.telemetry.retainedStates <= (maxBeam * largeHouse.muros.length)) {
+         console.log(`  ✅ Pasado: Los estados retenidos por el beam están estrictamente acotados.`);
     } else {
-         console.log(`  ❌ Failed: Beam growth exceeded limits.`);
+         console.log(`  ❌ Fallado: El crecimiento del beam superó los límites.`);
          passed = false; failCount++;
     }
 
-    // TEST 6: hard veto before final scoring
-    console.log("\nTEST 6: Hard veto before final scoring");
+    // TEST 6: veto fuerte antes de la puntuación final
+    console.log("\nTEST 6: Veto fuerte antes de la puntuación final");
     if (result2.telemetry.vetoedStates >= 0) {
-         console.log(`  ✅ Passed: Veto process confirmed before scoring.`);
+         console.log(`  ✅ Pasado: Proceso de veto confirmado antes de la puntuación.`);
     } else {
-         console.log("  ❌ Failed");
+         console.log("  ❌ Fallado");
          passed = false; failCount++;
     }
 
-    // TEST 7: duplicate-equivalent partial branches collapse
-    console.log("\nTEST 7: Duplicate-equivalent partial branches collapse");
+    // TEST 7: colapso de ramas parciales duplicadas/equivalentes
+    console.log("\nTEST 7: Colapso de ramas parciales duplicadas/equivalentes");
     if (result1.telemetry.dominantPruningReasons && Object.keys(result1.telemetry.dominantPruningReasons).length >= 0) {
-         console.log(`  ✅ Passed: Beam pruned equivalent strategies effectively.`);
+         console.log(`  ✅ Pasado: El beam podó estrategias equivalentes efectivamente.`);
     } else {
-         console.log("  ❌ Failed");
+         console.log("  ❌ Fallado");
          passed = false; failCount++;
     }
 
-    // TEST 8: partial-score leader loses to final global winner
-    console.log("\nTEST 8: Partial-score leader loses to final global winner");
-    // If repetition benefit exists, the local score sum was lower than the final total, proving inversion
+    // TEST 8: el líder de puntuación parcial pierde ante el ganador global final
+    console.log("\nTEST 8: El líder de puntuación parcial pierde ante el ganador global final");
     if (result1.winner.score.total > result1.winner.score.components.localQuality) {
-         console.log(`  ✅ Passed: Final global score decoupled from partial local leader.`);
+         console.log(`  ✅ Pasado: Puntuación global final desacoplada del líder local parcial.`);
     } else {
-         console.log("  ❌ Failed");
+         console.log("  ❌ Fallado");
          passed = false; failCount++;
     }
 
     if (!passed) {
-        console.error(`\nSuite Failed. ${failCount} errors.`);
+        console.error(`\nSuite Fallida. ${failCount} errores.`);
         process.exit(1);
     } else {
-        console.log(`\n🏆 SUITE PASSED. All 8 tests completed successfully.`);
+        console.log(`\n🏆 SUITE PASADA. Las 8 pruebas se completaron exitosamente.`);
     }
 }
 

@@ -1,12 +1,12 @@
 import { PanelizationCandidate, CandidateScore, StrategicContext, CandidateStrategy } from './types';
-import { Opening } from '../../core/types';
+import { Abertura } from '../../core/types';
 import { getPanelizationRules } from '../rules/panelization';
 import { round } from '../../utils/math';
 
-export function scoreCandidate(candidate: PanelizationCandidate, context: StrategicContext, openings: Opening[]): void {
+export function scoreCandidate(candidate: PanelizationCandidate, context: StrategicContext, aberturas: Abertura[]): void {
   const { openingClearance, maxWidth } = getPanelizationRules();
   
-  // 1. Dynamic Weights based on Strategic Context
+  // 1. Pesos Dinámicos basados en Contexto Estratégico
   let weights = {
     panelCount: 0.30,
     widthBalance: 0.25,
@@ -23,39 +23,39 @@ export function scoreCandidate(candidate: PanelizationCandidate, context: Strate
       weights.continuity = 0.10;
   }
 
-  // 2. Component Scores
+  // 2. Puntajes de Componentes
   const components = {
     panelCount: calculatePanelCountScore(candidate),
     widthBalance: calculateBalanceScore(candidate),
-    openingSafety: calculateSafetyScore(candidate, openings, openingClearance),
+    openingSafety: calculateSafetyScore(candidate, aberturas, openingClearance),
     constructability: calculateComplexityScore(candidate, maxWidth),
     continuity: 50 
   };
 
-  // 3. Operational Penalties/Bonuses
+  // 3. Penalizaciones/Bonos Operacionales
   const penalties: string[] = [];
   const bonuses: string[] = [];
   let modifier = 0;
 
   if (candidate.splits.some(w => w < 2.2)) {
-      penalties.push('PENALTY_NEAR_MIN_WIDTH');
+      penalties.push('PENALIZACION_ANCHO_MINIMO');
       modifier -= 5;
   }
   if (candidate.panelCount <= 2) {
-      bonuses.push('BONUS_SIMPLE_WALL');
+      bonuses.push('BONO_MURO_SIMPLE');
       modifier += 5;
   }
   
-  // Explicit Strategy Alignment Bonus
+  // Bono por Alineación Estratégica Explícita
   if (context.preferredBias === 'fewer_panels' && candidate.strategy === CandidateStrategy.MIN_PANELS) {
-      bonuses.push('BONUS_STRATEGIC_ALIGNMENT');
+      bonuses.push('BONO_ALINEACION_ESTRATEGICA');
       modifier += 5;
   } else if (context.preferredBias === 'balanced' && candidate.strategy === CandidateStrategy.BALANCED) {
-      bonuses.push('BONUS_STRATEGIC_ALIGNMENT');
+      bonuses.push('BONO_ALINEACION_ESTRATEGICA');
       modifier += 5;
   }
 
-  // 4. Total (Weighted Average + Modifiers)
+  // 4. Total (Promedio Ponderado + Modificadores)
   const total = round(
     (components.panelCount * weights.panelCount) +
     (components.widthBalance * weights.widthBalance) +
@@ -85,13 +85,13 @@ function calculateBalanceScore(candidate: PanelizationCandidate): number {
   return Math.max(0, 100 - round(stdDev * 100));
 }
 
-function calculateSafetyScore(candidate: PanelizationCandidate, openings: Opening[], clearance: number): number {
-  if (openings.length === 0) return 100;
+function calculateSafetyScore(candidate: PanelizationCandidate, aberturas: Abertura[], clearance: number): number {
+  if (aberturas.length === 0) return 100;
   let minSafeDistance = Infinity;
   let currentOffset = 0;
   for (let i = 0; i < candidate.splits.length - 1; i++) {
     const jointPos = currentOffset + candidate.splits[i];
-    openings.forEach(op => {
+    aberturas.forEach(op => {
       const distStart = Math.min(Math.abs(jointPos - op.position), Math.abs(jointPos - (op.position + op.width)));
       minSafeDistance = Math.min(minSafeDistance, distStart);
     });

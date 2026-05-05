@@ -9,6 +9,12 @@ export const STRUCTURAL_ASSUMPTIONS = {
     header_span_level_B_max: 2.4, // Medium spans
     header_span_level_C_max: 3.6, // Large spans
     roof_span_truss_requirement: 4.0, // Spans over 4m require truss
+    umbralesDinteles: {
+        luzMaximaPequena: 1.0,
+        luzMaximaMedia: 1.8,
+        luzMaximaGrande: 3.0,
+        luzCritica: 4.5
+    }
   },
   simplifications: {
     axial_only_studs: true,

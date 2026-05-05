@@ -1,40 +1,40 @@
-import { HouseInput, Wall, WallRole, HouseModel } from '../../core/types';
+import { HouseInput, Muro, WallRole, HouseModel } from '../../core/types';
 import { generateId } from '../../utils/ids';
 import { logger } from '../../utils/logger';
 import { resolveRoofMetadata } from '../roof/engine';
 
 export function generateGeometry(input: HouseInput): HouseModel {
-  logger.log('HOUSE_GENERATION_STARTED', 'system', 'Generating initial house geometry');
+  logger.log('HOUSE_GENERATION_STARTED', 'system', 'Generando geometría inicial de la casa');
   
   const roof = resolveRoofMetadata(input);
-  logger.log('ROOF_RESOLVED', 'house', 'Roof geometry resolved', { 
+  logger.log('ROOF_RESOLVED', 'house', 'Geometría de techo resuelta', { 
     type: roof.type, 
     low: roof.lowSideHeight, 
     high: roof.highSideHeight 
   });
 
-  const walls: Wall[] = [];
+  const muros: Muro[] = [];
 
-  // Assuming clockwise generation: North, East, South, West
-  // Wall 1: North (Width)
-  walls.push(createWall('wall_north', input.width, roof.lowSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: 0}, {x: input.width, y: 0}));
+  // Asumiendo generación en sentido horario: Norte, Este, Sur, Oeste
+  // Muro 1: Norte (Ancho)
+  muros.push(createWall('wall_north', input.width, roof.lowSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: 0}, {x: input.width, y: 0}));
   
-  // Wall 2: East (Length)
-  walls.push(createWall('wall_east', input.length, roof.lowSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: 0}, {x: input.width, y: input.length}));
+  // Muro 2: Este (Largo)
+  muros.push(createWall('wall_east', input.length, roof.lowSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: 0}, {x: input.width, y: input.length}));
   
-  // Wall 3: South (Width)
-  walls.push(createWall('wall_south', input.width, roof.highSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: input.length}, {x: 0, y: input.length}));
+  // Muro 3: Sur (Ancho)
+  muros.push(createWall('wall_south', input.width, roof.highSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: input.length}, {x: 0, y: input.length}));
   
-  // Wall 4: West (Length)
-  walls.push(createWall('wall_west', input.length, roof.highSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: input.length}, {x: 0, y: 0}));
+  // Muro 4: Oeste (Largo)
+  muros.push(createWall('wall_west', input.length, roof.highSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: input.length}, {x: 0, y: 0}));
 
-  // Map openings to walls
+  // Mapear aberturas a los muros
   if (input.openings) {
     input.openings.forEach(op => {
-      const wall = walls.find(w => w.id === op.wallId);
-      if (wall) {
-        wall.openings.push({
-          id: generateId('op'),
+      const muro = muros.find(w => w.id === op.wallId);
+      if (muro) {
+        muro.aberturas.push({
+          id: generateId('abertura'),
           type: op.type,
           width: op.width,
           height: op.height,
@@ -45,15 +45,15 @@ export function generateGeometry(input: HouseInput): HouseModel {
     });
   }
 
-  logger.log('HOUSE_GENERATED', 'house', 'Foundation geometry complete', { wallCount: walls.length });
+  logger.log('HOUSE_GENERATED', 'house', 'Geometría de fundación completa', { wallCount: muros.length });
 
   return {
-    walls,
+    muros,
     roof
   };
 }
 
-function createWall(id: string, length: number, hStart: number, hEnd: number, role: WallRole, start: {x:number, y:number}, end: {x:number, y:number}): Wall {
+function createWall(id: string, length: number, hStart: number, hEnd: number, role: WallRole, start: {x:number, y:number}, end: {x:number, y:number}): Muro {
   return {
     id,
     role,
@@ -62,6 +62,6 @@ function createWall(id: string, length: number, hStart: number, hEnd: number, ro
     heightEnd: hEnd,
     start,
     end,
-    openings: []
+    aberturas: []
   };
 }

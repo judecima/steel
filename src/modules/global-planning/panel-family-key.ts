@@ -1,17 +1,17 @@
-import { Wall } from '../../core/types';
+import { Muro } from '../../core/types';
 import { PanelizationCandidate } from '../intelligence/types';
 
-export function resolvePanelFamilyKey(wall: Wall, candidate: PanelizationCandidate): string {
-    // Group by width bucket (e.g. rounded to nearest 0.5m)
-    const widthBucket = Math.round(wall.length * 2) / 2;
+export function resolvePanelFamilyKey(muro: Muro, candidate: PanelizationCandidate): string {
+    // Agrupar por cubo de ancho (ej. redondeado al 0.5m más cercano)
+    const widthBucket = Math.round(muro.length * 2) / 2;
     
-    // Group by opening pattern similarity
-    const openingKey = wall.openings.map(o => `${o.type}_${Math.round(o.width * 10)}`).join('|');
+    // Agrupar por similitud en el patrón de aberturas
+    const openingKey = muro.aberturas.map(o => `${o.type}_${Math.round(o.width * 10)}`).join('|');
     
-    // Group by structural role similarity
-    const roleKey = wall.role;
+    // Agrupar por similitud en el rol estructural
+    const roleKey = muro.role;
     
-    // Add strategy to distinguish different local constructive resolutions
+    // Agregar estrategia para distinguir diferentes resoluciones constructivas locales
     const strategyKey = candidate.strategy;
 
     return `${widthBucket}_${openingKey}_${roleKey}_${strategyKey}`;

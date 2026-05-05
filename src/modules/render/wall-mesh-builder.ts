@@ -1,52 +1,35 @@
 import { ProjectResult } from '../../core/types';
 import { RenderObject } from './types';
 import { RENDER_CONFIG } from './render-config';
+import { getWallTransform, applyTransform } from './transform-helper';
+import { LOCALIZACION_DOMINIO, t } from './localizacion-dominio';
+import { crearEtiquetaMuro, traducirIdMuro } from './etiquetas-visuales';
 
 export function buildWallMeshes(projectResult: ProjectResult): RenderObject[] {
   const objects: RenderObject[] = [];
 
-  for (const wall of projectResult.house.walls) {
-    // Basic translation: x, z depends on orientation. 
-    // This is a naive positioning assuming walls start at (0,0) and go along axis.
-    // In a real 3D system, wall line vectors determine this.
-    // For DTO, we define position as center of wall bottom.
+  for (const muro of projectResult.house.muros) {
+    const tWall = getWallTransform(muro, projectResult.house);
     
-    // We infer basic orientation from wall ID in our parametric house:
-    // north: x = width/2, z = 0
-    // east: x = width, z = length/2
-    // south: x = width/2, z = length
-    // west: x = 0, z = length/2
-    
-    let x = 0;
-    let z = 0;
-    let dimX = RENDER_CONFIG.depth;
-    let dimZ = wall.length;
-    let rotY = 0;
-
-    const w = projectResult.input.width;
-    const l = projectResult.input.length;
-
-    if (wall.id.includes('north')) {
-      x = w / 2; z = 0; dimX = wall.length; dimZ = RENDER_CONFIG.depth;
-    } else if (wall.id.includes('south')) {
-      x = w / 2; z = l; dimX = wall.length; dimZ = RENDER_CONFIG.depth;
-    } else if (wall.id.includes('east')) {
-      x = w; z = l / 2; dimX = RENDER_CONFIG.depth; dimZ = wall.length;
-    } else if (wall.id.includes('west')) {
-      x = 0; z = l / 2; dimX = RENDER_CONFIG.depth; dimZ = wall.length;
-    }
+    // The wall center in its local coordinate space:
+    const pos = applyTransform(muro.length / 2, muro.heightStart / 2, 0, tWall);
 
     objects.push({
-      id: `render_wall_${wall.id}`,
-      type: 'wall',
-      sourceId: wall.id,
-      position: { x, y: wall.heightStart / 2, z },
-      rotation: { x: 0, y: rotY, z: 0 },
-      dimensions: { x: dimX, y: wall.heightStart, z: dimZ },
+      id: `render_wall_${muro.id}`,
+      type: 'muro',
+      sourceId: muro.id,
+      position: pos,
+      rotation: { x: 0, y: tWall.rotY, z: 0 },
+      dimensions: { x: muro.length, y: muro.heightStart, z: RENDER_CONFIG.depth },
       material: RENDER_CONFIG.materials.wall_volume.id,
-      layer: 'layer_walls',
-      visible: RENDER_CONFIG.layers.find(l => l.id === 'layer_walls')?.visibleByDefault || false,
-      metadata: { role: wall.role }
+      layer: 'layer_muros',
+      visible: RENDER_CONFIG.layers.find(l => l.id === 'layer_muros')?.visibleByDefault || false,
+      metadata: { 
+        ['Etiqueta']: crearEtiquetaMuro(muro.id),
+        ['ID Técnico']: muro.id,
+        [LOCALIZACION_DOMINIO.metadatos.role]: t('varios', muro.role),
+        ['Muro']: traducirIdMuro(muro.id)
+      }
     });
   }
 

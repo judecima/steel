@@ -1,27 +1,27 @@
-import { Opening, Wall } from '../../core/types';
+import { Abertura, Muro } from '../../core/types';
 import { CandidateStrategy, PanelizationCandidate } from './types';
 import { round } from '../../utils/math';
 import { generateId } from '../../utils/ids';
 import { getPanelizationRules } from '../rules/panelization';
 
-export function generateCandidates(wallId: string, wallLength: number, openings: Opening[]): PanelizationCandidate[] {
+export function generateCandidates(wallId: string, wallLength: number, aberturas: Abertura[]): PanelizationCandidate[] {
   const candidates: PanelizationCandidate[] = [];
 
-  // Strategy 1: Balanced
+  // Estrategia 1: Balanceado
   candidates.push(createCandidate(CandidateStrategy.BALANCED, resolveBalancedSplits(wallLength)));
 
-  // Strategy 2: Greedy Left
+  // Estrategia 2: Codicioso Izquierda
   candidates.push(createCandidate(CandidateStrategy.GREEDY_LEFT, resolveGreedySplits(wallLength, 'left')));
 
-  // Strategy 3: Greedy Right
+  // Estrategia 3: Codicioso Derecha
   candidates.push(createCandidate(CandidateStrategy.GREEDY_RIGHT, resolveGreedySplits(wallLength, 'right')));
 
-  // Strategy 4: Min Panels (Targeting standard 1.2m / 2.4m splits where possible)
+  // Estrategia 4: Mínimos Paneles
   candidates.push(createCandidate(CandidateStrategy.MIN_PANELS, resolveMinPanelsSplits(wallLength)));
 
-  // Strategy 5: Opening Aware
-  if (openings.length > 0) {
-      candidates.push(createCandidate(CandidateStrategy.OPENING_AWARE, resolveOpeningAwareSplits(wallLength, openings)));
+  // Estrategia 5: Sensible a Aberturas
+  if (aberturas.length > 0) {
+      candidates.push(createCandidate(CandidateStrategy.OPENING_AWARE, resolveOpeningAwareSplits(wallLength, aberturas)));
   }
 
   return candidates;
@@ -77,7 +77,6 @@ function resolveMinPanelsSplits(wallLength: number): number[] {
     const { maxWidth, minWidth } = getPanelizationRules();
     const targetCount = Math.ceil(wallLength / maxWidth);
     
-    // Attempt to use maximum width panels + one remainder that is at least minWidth
     if (targetCount === 1) return [wallLength];
     
     const splits: number[] = [];
@@ -90,7 +89,6 @@ function resolveMinPanelsSplits(wallLength: number): number[] {
     if (remaining >= minWidth) {
         splits.push(remaining);
     } else {
-        // Equalize the last two if remainder is too small
         const last = splits.pop()!;
         const total = round(last + remaining);
         splits.push(round(total / 2));
@@ -100,9 +98,9 @@ function resolveMinPanelsSplits(wallLength: number): number[] {
     return splits;
 }
 
-function resolveOpeningAwareSplits(wallLength: number, openings: Opening[]): number[] {
+function resolveOpeningAwareSplits(wallLength: number, aberturas: Abertura[]): number[] {
     const { maxWidth, minWidth } = getPanelizationRules();
-    const firstOp = openings[0];
+    const firstOp = aberturas[0];
     const center = round(firstOp.position + firstOp.width / 2);
     
     if (center >= minWidth && center <= maxWidth && (wallLength - center) >= minWidth) {

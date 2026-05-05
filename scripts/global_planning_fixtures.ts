@@ -1,17 +1,17 @@
-import { HouseInput, WallRole, Opening } from '../src/core/types';
+import { HouseInput, WallRole, Abertura } from '../src/core/types';
 
 export const GlobalPlanningFixtures = {
-    // 1. A basic square house for repetition testing
+    // 1. Una casa cuadrada básica para pruebas de repetición
     squareHouse: (): HouseInput => ({
         width: 10,
         length: 10,
         minHeight: 2.6,
         roofType: 'one_slope',
         roofSlope: 0,
-        openings: [] // No openings, completely uniform
+        openings: [] // Sin aberturas, completamente uniforme
     }),
 
-    // 2. A house that forces a corner conflict
+    // 2. Una casa que fuerza un conflicto de esquina
     cornerConflictHouse: (): HouseInput => ({
         width: 4.0,
         length: 4.0,
@@ -21,7 +21,7 @@ export const GlobalPlanningFixtures = {
         openings: []
     }),
 
-    // 3. A large house for bounded beam growth testing
+    // 3. Una casa grande para pruebas de crecimiento de beam acotado
     largeHouse: (): HouseInput => ({
         width: 12,
         length: 12,
@@ -29,10 +29,10 @@ export const GlobalPlanningFixtures = {
         roofType: 'one_slope',
         roofSlope: 0,
         openings: [
-            { wallId: 'wall_north', type: 'window', width: 2.0, height: 1.0, position: 5.0, sillHeight: 1.0 },
-            { wallId: 'wall_east', type: 'door', width: 1.0, height: 2.0, position: 5.0 },
-            { wallId: 'wall_south', type: 'window', width: 2.0, height: 1.0, position: 5.0, sillHeight: 1.0 },
-            { wallId: 'wall_west', type: 'door', width: 1.0, height: 2.0, position: 5.0 }
+            { wallId: 'wall_north', type: 'ventana', width: 2.0, height: 1.0, position: 5.0, sillHeight: 1.0 },
+            { wallId: 'wall_east', type: 'puerta', width: 1.0, height: 2.0, position: 5.0 },
+            { wallId: 'wall_south', type: 'ventana', width: 2.0, height: 1.0, position: 5.0, sillHeight: 1.0 },
+            { wallId: 'wall_west', type: 'puerta', width: 1.0, height: 2.0, position: 5.0 }
         ]
     })
 };

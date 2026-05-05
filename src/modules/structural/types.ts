@@ -58,15 +58,15 @@ export type StructuralProfile = {
 
 export type StructuralMember = {
   id: string;
-  sourceElementId: string; // Refers to stud ID or header ID
-  type: 'stud' | 'header' | 'beam' | 'column';
+  sourceElementId: string; // Refiere al ID del montante o del dintel
+  type: 'montante' | 'dintel' | 'viga' | 'columna';
   profileId: string;
   length: number;
   effectiveLength: number;
   boundaryCondition: string;
   role: string;
   tributaryWidth: number;
-  appliedLoads: string[]; // load case IDs
+  appliedLoads: string[]; // IDs de casos de carga
   metadata: Record<string, any>;
 };
 
@@ -82,7 +82,7 @@ export type MemberCheckResult = {
 };
 
 export type HeaderCheckResult = {
-  openingId: string;
+  aberturaId: string;
   status: StructuralStatus;
   span: number;
   selectedHeader: string;
@@ -110,11 +110,81 @@ export type RoofStructuralCheckResult = {
   warnings: string[];
 };
 
+export type EstrategiaDintel = 
+  | 'dintel_simple'
+  | 'dintel_compuesto'
+  | 'dintel_reticulado'
+  | 'dintel_tubular'
+  | 'requiere_viga_estructural_externa';
+
+export type CategoriaAbertura = 
+  | 'abertura_pequena'
+  | 'abertura_media'
+  | 'abertura_grande'
+  | 'abertura_critica';
+
+export type ClasificacionEstructuralAbertura = {
+  aberturaId: string;
+  luz: number;
+  categoria: CategoriaAbertura;
+  estrategiaRecomendada: EstrategiaDintel;
+  razon: string;
+  requiereRevisionEstructural: boolean;
+};
+
+export type CandidatoDisenoDintel = {
+  id: string;
+  aberturaId: string;
+  estrategia: EstrategiaDintel;
+  luz: number;
+  altura: number;
+  perfiles: string[];
+  demandaEstimada?: number;
+  capacidadEstimada?: number;
+  ratioUtilizacion?: number;
+  estado: StructuralStatus;
+  advertencias: string[];
+  referenciasNormativas: CodeReference[];
+  metadata?: Record<string, any>;
+};
+
+export type ModeloPreliminarDintelReticulado = {
+  cordonSuperior: string;
+  cordonInferior: string;
+  alma: string;
+  altura: number;
+  cantidadPaneles: number;
+  patronDiagonales: 'warren' | 'pratt' | 'n';
+  preliminar: boolean;
+};
+
+export type ModeloPreliminarDintelTubular = {
+  perfilTubular: string;
+  luz: number;
+  demanda?: number;
+  capacidad?: number;
+  ratioUtilizacion?: number;
+  preliminar: boolean;
+};
+
+export type ResultadoDisenoDintelAbertura = {
+  aberturaId: string;
+  clasificacion: ClasificacionEstructuralAbertura;
+  candidatos: CandidatoDisenoDintel[];
+  candidatoSeleccionado?: CandidatoDisenoDintel;
+  estado: StructuralStatus;
+  recomendacion: string;
+  advertencias: string[];
+  datosFaltantes: string[];
+  referenciasNormativas: CodeReference[];
+};
+
 export type StructuralAnalysisResult = {
   status: StructuralStatus;
   certificationLevel: StructuralCertificationLevel;
   memberChecks: MemberCheckResult[];
-  headerChecks: HeaderCheckResult[];
+  dintelChecks: HeaderCheckResult[]; 
+  disenosDintel: ResultadoDisenoDintelAbertura[]; // Nueva sección detallada
   roofCheck: RoofStructuralCheckResult;
   anchorCheck: AnchorCheckResult;
   criticalItems: string[];

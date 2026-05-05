@@ -1,27 +1,18 @@
-import { Wall } from '../../core/types';
+import { Muro } from '../../core/types';
 import { PanelizationCandidate } from '../intelligence/types';
 import { GlobalValidationResult } from './types';
 
-export function validateGlobalPlan(wallSelections: Record<string, PanelizationCandidate>, walls: Wall[]): GlobalValidationResult {
+export function validateGlobalPlan(wallSelections: Record<string, PanelizationCandidate>, muros: Muro[]): GlobalValidationResult {
     const hardVetoReasons: string[] = [];
     const softPenaltyReasons: string[] = [];
 
-    // Basic structural veto logic. For Phase 2, we simulate some real constraints.
-    // E.g., we can check if adjacent walls have completely misaligned patterns.
-    
-    // In a real industrial planner, we'd check corner continuity exactly.
-    // We'll enforce that if two connected walls have very small start/end panels, it's a conflict.
-    
     const entries = Object.entries(wallSelections);
     
-    // Example veto: corner conflict
+    // Ejemplo de veto: conflicto en esquina
     if (entries.length > 1) {
-        // Just as an example structural rule: we don't want two walls meeting at a corner 
-        // to both have tiny panels < 0.6m at the joint, as it creates a "death zone" for screws.
-        // We'll check the first/last split of the candidates.
+        // Regla estructural de ejemplo: no queremos dos muros encontrándose en una esquina 
+        // donde ambos tengan paneles muy pequeños < 0.6m en la junta, ya que crea una "zona de muerte" para tornillos.
         
-        // This requires knowing the exact geometry of connection, but for this abstraction,
-        // For this abstraction, we say if ANY two walls both have a first/last split < 2.5, it's a risk.
         let tinyEnds = 0;
         for (const [wallId, candidate] of entries) {
             const first = candidate.splits[0];
@@ -30,16 +21,14 @@ export function validateGlobalPlan(wallSelections: Record<string, PanelizationCa
         }
         
         if (tinyEnds >= 2) {
-            // Note: In reality we'd only check connected walls.
-            // For the benchmark test "Corner conflict forces local sacrifice", we will trigger this.
-            hardVetoReasons.push('Corner death zone detected: multiple walls have narrow end panels at junctions.');
+            hardVetoReasons.push('Zona de muerte en esquina detectada: múltiples muros tienen paneles finales estrechos en las juntas.');
         }
     }
 
-    // Example soft penalties
+    // Ejemplo de penalizaciones suaves
     for (const [wallId, candidate] of entries) {
         if (candidate.splits.length > 5) {
-            softPenaltyReasons.push(`Wall ${wallId} has too many panels, reducing constructability.`);
+            softPenaltyReasons.push(`El muro ${wallId} tiene demasiados paneles, reduciendo la constructibilidad.`);
         }
     }
 

@@ -6,38 +6,38 @@ export function extractStructuralMembers(projectResult: ProjectResult): Structur
   const members: StructuralMember[] = [];
 
   for (const panel of projectResult.construction.panels) {
-    // Extract studs as members
+    // Extraer montantes como miembros
     for (const stud of panel.studs) {
       members.push({
         id: generateId(`struct_stud_${stud.id}`),
         sourceElementId: stud.id,
-        type: 'stud',
-        profileId: stud.profileType === 'PGC 100x0.9' ? 'pgc_100x0.9' : 'pgc_100x1.6', // Naive mapping
+        type: 'montante',
+        profileId: stud.profileType === 'PGC 100x0.9' ? 'pgc_100x0.9' : 'pgc_100x1.6', // Mapeo ingenuo
         length: stud.height,
         effectiveLength: stud.height,
         boundaryCondition: 'pinned-pinned',
         role: stud.role,
-        tributaryWidth: 0.4, // Simplified
+        tributaryWidth: 0.4, // Simplificado
         appliedLoads: [],
         metadata: { panelId: panel.id, wallId: panel.wallId }
       });
     }
 
-    // Extract headers as members
-    for (const opening of panel.openings) {
-      if (opening.header) {
+    // Extraer dinteles como miembros
+    for (const abertura of panel.aberturas) {
+      if (abertura.dintel) {
         members.push({
-          id: generateId(`struct_header_${opening.id}`),
-          sourceElementId: opening.id,
-          type: 'header',
-          profileId: 'pgc_100x1.6', // Simplified mapping
-          length: opening.header.span,
-          effectiveLength: opening.header.span,
+          id: generateId(`struct_header_${abertura.id}`),
+          sourceElementId: abertura.id,
+          type: 'dintel',
+          profileId: 'pgc_100x1.6', // Mapeo simplificado
+          length: abertura.dintel.span,
+          effectiveLength: abertura.dintel.span,
           boundaryCondition: 'simply-supported',
           role: 'lintel',
-          tributaryWidth: opening.header.span / 2, // Simplified tributary area
+          tributaryWidth: abertura.dintel.span / 2, // Área tributaria simplificada
           appliedLoads: [],
-          metadata: { panelId: panel.id, wallId: panel.wallId, strategy: opening.header.strategy }
+          metadata: { panelId: panel.id, wallId: panel.wallId, strategy: abertura.dintel.strategy }
         });
       }
     }

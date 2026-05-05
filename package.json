@@ -11,9 +11,11 @@
     "test:structural": "npx ts-node scripts/structural_tests.ts",
     "test:render": "npx ts-node scripts/render_tests.ts",
     "render:export": "npx ts-node scripts/export_render_scene.ts",
+    "render:inspect-openings": "node scripts/inspect_render_openings.js",
     "test:all": "npm run test:regression && npm run test:intelligence && npm run test:global && npm run test:structural && npm run test:render",
     "audit:state": "node scripts/print_project_state.js",
     "phase:detect": "npx ts-node scripts/detect_phase.ts",
+    "localizacion:auditar": "npx ts-node scripts/auditar_localizacion_visible.ts",
     "build": "tsc"
   },
   "dependencies": {

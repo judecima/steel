@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { t, traducirValorMetadata, crearEtiquetaDesdeIdTecnico } from './localizacion.js';
 
 let scene, camera, renderer, controls;
 let sceneDTO = null;
@@ -7,6 +8,68 @@ const materialsMap = new Map();
 const layerGroups = new Map();
 const objectMeshes = [];
 let labelObjects = [];
+let selectedMesh = null;
+let boundingBoxHelper = null;
+let selectionLabelSprite = null;
+let debugMode = false;
+
+function createSelectionLabel() {
+    if (selectionLabelSprite) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    const tex = new THREE.CanvasTexture(canvas);
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
+    selectionLabelSprite = new THREE.Sprite(mat);
+    selectionLabelSprite.scale.set(2, 0.5, 1);
+    selectionLabelSprite.renderOrder = 999;
+    selectionLabelSprite.visible = false;
+    // We add this to scene in init() or dynamically
+}
+
+function updateSelectionLabel(hit) {
+    if (!selectionLabelSprite) {
+        createSelectionLabel();
+        scene.add(selectionLabelSprite);
+    }
+    
+    if (!hit || !hit.userData || !hit.userData.metadata) {
+        selectionLabelSprite.visible = false;
+        return;
+    }
+
+    const metadata = hit.userData.metadata;
+    let labelText = metadata['Etiqueta'] || metadata['Rol'] || metadata['Tipo'] || hit.userData.type;
+    
+    // Si la etiqueta parece ser un ID técnico, intentar traducirla
+    if (typeof labelText === 'string' && (labelText.includes('_') || labelText.includes('wall'))) {
+        labelText = crearEtiquetaDesdeIdTecnico(labelText);
+    }
+
+    const canvas = selectionLabelSprite.material.map.image;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    ctx.fillRect(10, 10, 236, 44);
+    
+    ctx.fillStyle = '#ffeb3b';
+    ctx.font = 'bold 20px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(String(labelText).toUpperCase(), 128, 32);
+    
+    selectionLabelSprite.material.map.needsUpdate = true;
+    
+    const box = new THREE.Box3().setFromObject(hit);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    
+    selectionLabelSprite.position.copy(center);
+    selectionLabelSprite.position.y += (size.y / 2) + 0.3;
+    selectionLabelSprite.visible = true;
+}
 
 // UI Elements
 const loadingEl = document.getElementById('loading');
@@ -110,6 +173,13 @@ async function init() {
 
 function buildSceneFromDTO() {
     // Reconstruct materials matching config logic
+    const stats = {};
+    sceneDTO.layers.forEach(l => stats[l.id] = 0);
+    
+    sceneDTO.objects.forEach(obj => { stats[obj.layer] += 1; });
+    sceneDTO.labels.forEach(lbl => { if(stats[lbl.layer] !== undefined) stats[lbl.layer] += 1; });
+    sceneDTO.warnings.forEach(w => { if(stats[w.layer] !== undefined) stats[w.layer] += 1; });
+
     // We map DTO layers to THREE.Group
     sceneDTO.layers.forEach(layer => {
         const group = new THREE.Group();
@@ -124,11 +194,23 @@ function buildSceneFromDTO() {
         const cb = document.createElement('input');
         cb.type = 'checkbox';
         cb.checked = layer.visibleByDefault;
+        
+        const count = stats[layer.id];
+        if (count === 0) {
+            cb.disabled = true;
+            cb.checked = false;
+        }
+
         cb.onchange = (e) => {
             group.visible = e.target.checked;
         };
         lbl.appendChild(cb);
-        lbl.appendChild(document.createTextNode(` ${layer.name}`));
+        
+        const span = document.createElement('span');
+        span.textContent = ` ${layer.name} (${count})`;
+        if (count === 0) span.style.color = '#777';
+        
+        lbl.appendChild(span);
         layersContainer.appendChild(lbl);
     });
 
@@ -148,6 +230,8 @@ function buildSceneFromDTO() {
         else if (matId.includes('track')) { color = 0xD3D3D3; }
         else if (matId.includes('king')) { color = 0xA9A9A9; }
         else if (matId.includes('jack')) { color = 0x808080; }
+        else if (matId.includes('cripple')) { color = 0x696969; }
+        else if (matId.includes('foundation')) { color = 0x555555; }
         else if (matId.includes('warn')) { color = 0xFF0000; opacity = 0.8; transparent = true; }
 
         const mat = new THREE.MeshStandardMaterial({
@@ -195,6 +279,18 @@ function buildSceneFromDTO() {
 
         objectMeshes.push(mesh);
     });
+
+    const statsContainer = document.getElementById('stats-container');
+    if (statsContainer) {
+        let statsHtml = `<div class="prop-row"><span class="prop-label">${t('ui', 'total_objects')}:</span> <span class="prop-value">${sceneDTO.objects.length}</span></div>`;
+        for (const [layerId, count] of Object.entries(stats)) {
+            const layer = sceneDTO.layers.find(l => l.id === layerId);
+            // Translate layer name if it matches an internal id, otherwise use layer.name (which should be localized already)
+            const layerName = layer ? layer.name : layerId.replace('layer_', '');
+            statsHtml += `<div class="prop-row"><span class="prop-label">${layerName}:</span> <span class="prop-value">${count}</span></div>`;
+        }
+        statsContainer.innerHTML = statsHtml;
+    }
 
     // Simple Labels (Sprite based)
     sceneDTO.labels.forEach(label => {
@@ -259,6 +355,67 @@ function setupUIControls() {
             l.visible = isVisible;
         });
     });
+
+    const roofOpacityToggle = document.getElementById('toggle-roof-opacity');
+    if (roofOpacityToggle) {
+        roofOpacityToggle.addEventListener('change', (e) => {
+            const isHigh = e.target.checked;
+            materialsMap.forEach((mat, key) => {
+                if (key.includes('roof')) {
+                    mat.opacity = isHigh ? 0.8 : 0.2;
+                    mat.transparent = true;
+                    mat.needsUpdate = true;
+                }
+            });
+        });
+    }
+
+    const btnFocus = document.getElementById('btn-focus');
+    if (btnFocus) {
+        btnFocus.addEventListener('click', () => {
+            if (selectedMesh) {
+                const box = new THREE.Box3().setFromObject(selectedMesh);
+                const center = box.getCenter(new THREE.Vector3());
+                controls.target.copy(center);
+                const size = box.getSize(new THREE.Vector3()).length();
+                const dist = size * 1.5 > 2 ? size * 1.5 : 2;
+                const dir = camera.position.clone().sub(center).normalize();
+                if (dir.lengthSq() === 0) dir.set(0, 0, 1);
+                camera.position.copy(center.clone().add(dir.multiplyScalar(dist)));
+                controls.update();
+            }
+        });
+    }
+
+    const btnIsolate = document.getElementById('btn-isolate');
+    if (btnIsolate) {
+        btnIsolate.addEventListener('click', () => {
+            if (selectedMesh) {
+                const layer = selectedMesh.userData.layer;
+                layerGroups.forEach((group, key) => {
+                    group.visible = (key === layer);
+                });
+                
+                // Update UI checkboxes
+                const checkboxes = document.querySelectorAll('#layers-container input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    const labelText = cb.parentNode.textContent.toLowerCase();
+                    const layerName = layer.replace('layer_', '').toLowerCase();
+                    cb.checked = labelText.includes(layerName);
+                });
+            }
+        });
+    }
+
+    const toggleDebugMode = document.getElementById('toggle-debug-mode');
+    if (toggleDebugMode) {
+        toggleDebugMode.addEventListener('change', (e) => {
+            debugMode = e.target.checked;
+            if (selectedMesh) {
+                showSelectionInfo(selectedMesh.userData);
+            }
+        });
+    }
 }
 
 function onPointerDown(event) {
@@ -284,8 +441,18 @@ function onPointerDown(event) {
     if (intersects.length > 0) {
         // Find first intersection that is not a wireframe or edges if possible, but basic mesh is fine
         const hit = intersects[0].object;
+        selectedMesh = hit;
         showSelectionInfo(hit.userData);
+        updateSelectionLabel(hit);
         
+        if (!boundingBoxHelper) {
+            boundingBoxHelper = new THREE.BoxHelper(hit, 0xffff00);
+            scene.add(boundingBoxHelper);
+        } else {
+            boundingBoxHelper.setFromObject(hit);
+            boundingBoxHelper.visible = true;
+        }
+
         // Simple highlight logic
         objectMeshes.forEach(m => {
             if (m.material && m.material.emissive) {
@@ -296,7 +463,10 @@ function onPointerDown(event) {
             hit.material.emissive.setHex(0x333333);
         }
     } else {
+        selectedMesh = null;
+        updateSelectionLabel(null);
         selectionPanel.style.display = 'none';
+        if (boundingBoxHelper) boundingBoxHelper.visible = false;
         objectMeshes.forEach(m => {
             if (m.material && m.material.emissive) {
                 m.material.emissive.setHex(0x000000);
@@ -310,18 +480,61 @@ function showSelectionInfo(data) {
     selectionPanel.style.display = 'block';
     
     let html = '';
-    html += `<div class="prop-row"><span class="prop-label">ID:</span> <span class="prop-value">${data.id}</span></div>`;
-    html += `<div class="prop-row"><span class="prop-label">Type:</span> <span class="prop-value">${data.type}</span></div>`;
-    html += `<div class="prop-row"><span class="prop-label">SourceId:</span> <span class="prop-value">${data.sourceId}</span></div>`;
-    html += `<div class="prop-row"><span class="prop-label">Layer:</span> <span class="prop-value">${data.layer}</span></div>`;
+    const label = data.metadata && data.metadata['Etiqueta'] ? data.metadata['Etiqueta'] : crearEtiquetaDesdeIdTecnico(data.id);
     
+    html += `<div class="prop-row"><span class="prop-label">${t('ui', 'objeto')}:</span> <span class="prop-value" style="font-weight:bold; color:#fff;">${label}</span></div>`;
+    html += `<div class="prop-row"><span class="prop-label">${t('ui', 'type')}:</span> <span class="prop-value">${t('tipos', data.type)}</span></div>`;
+    
+    const visibleSourceId = crearEtiquetaDesdeIdTecnico(data.sourceId);
+    html += `<div class="prop-row"><span class="prop-label">${t('ui', 'id_fuente')}:</span> <span class="prop-value">${visibleSourceId}</span></div>`;
+    
+    const layer = sceneDTO.layers.find(l => l.id === data.layer);
+    const layerName = layer ? layer.name : data.layer;
+    html += `<div class="prop-row"><span class="prop-label">${t('ui', 'capa')}:</span> <span class="prop-value">${layerName}</span></div>`;
+    
+    // IDs Técnicos (Sección separada solo en modo debug)
+    let technicalIdsHtml = '';
+    if (debugMode) {
+        technicalIdsHtml += `<h4 style="margin: 15px 0 5px 0; font-size: 13px; color: #ffeb3b; border-bottom: 1px solid #550; padding-bottom: 2px;">IDs técnicos</h4>`;
+        technicalIdsHtml += `<div class="prop-row"><span class="prop-label">ID render:</span> <span class="prop-value" style="font-size:11px; color:#aaa;">${data.id}</span></div>`;
+        if (visibleSourceId !== data.sourceId) {
+            technicalIdsHtml += `<div class="prop-row"><span class="prop-label">ID fuente interno:</span> <span class="prop-value" style="font-size:11px; color:#aaa;">${data.sourceId}</span></div>`;
+        }
+    }
+
     if (data.metadata) {
-        html += `<h4 style="margin: 10px 0 5px 0; font-size: 13px; color: #fff;">Metadata</h4>`;
+        html += `<h4 style="margin: 10px 0 5px 0; font-size: 13px; color: #fff; border-bottom: 1px solid #444; padding-bottom: 2px;">${t('ui', 'metadata')}</h4>`;
         for (const [k, v] of Object.entries(data.metadata)) {
-            html += `<div class="prop-row"><span class="prop-label">${k}:</span> <span class="prop-value">${v}</span></div>`;
+            // Evitar duplicar si ya se mostraron arriba o si son técnicos
+            if (k === 'Etiqueta' || k === 'ID Técnico' || k === 'id' || k === 'sourceId') continue;
+            if (k.toLowerCase().includes('interno')) {
+                if (debugMode) {
+                    technicalIdsHtml += `<div class="prop-row"><span class="prop-label">${k}:</span> <span class="prop-value" style="font-size:11px; color:#aaa;">${v}</span></div>`;
+                }
+                continue;
+            }
+            
+            // Traducir clave
+            const translatedKey = t('metadatos', k);
+            
+            // Traducir valor
+            let translatedValue = traducirValorMetadata(k, v);
+            
+            // Si el valor es un ID técnico (de muro, panel, etc), intentar traducirlo para visualización primaria
+            if (typeof v === 'string' && (k.toLowerCase().includes('id') || v.includes('_'))) {
+                const labelValue = crearEtiquetaDesdeIdTecnico(v);
+                if (labelValue !== v) {
+                    // Mostrar etiqueta primaria
+                    html += `<div class="prop-row"><span class="prop-label">${translatedKey}:</span> <span class="prop-value">${labelValue}</span></div>`;
+                    continue;
+                }
+            }
+            
+            html += `<div class="prop-row"><span class="prop-label">${translatedKey}:</span> <span class="prop-value">${translatedValue}</span></div>`;
         }
     }
     
+    html += technicalIdsHtml;
     selectionContent.innerHTML = html;
 }
 

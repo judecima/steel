@@ -20,11 +20,11 @@ export class StructuralEngine {
 
     // 3. Run Checkers
     const memberChecks = checkMembers(members, loads, combos);
-    const headerChecks = checkHeaders(members);
+    const { checks: headerChecks, disenos: disenosDintel } = checkHeaders(members);
     const roofCheck = checkRoof(projectResult);
     const anchorCheck = checkAnchors(projectResult);
 
     // 4. Build Report
-    return buildStructuralReport(memberChecks, headerChecks, roofCheck, anchorCheck, missingData);
+    return buildStructuralReport(memberChecks, headerChecks, disenosDintel, roofCheck, anchorCheck, missingData);
   }
 }

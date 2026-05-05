@@ -23,21 +23,22 @@ function buildSampleProject(): ProjectResult {
     roofType: 'one_slope' as const, 
     roofSlope: 0, 
     openings: [
-      { wallId: 'wall_north', type: 'window' as const, width: 1.0, height: 1.0, position: 1.0 }
+      { wallId: 'wall_north', type: 'ventana' as const, width: 1.0, height: 1.0, position: 1.0, sillHeight: 1.0 },
+      { wallId: 'wall_south', type: 'puerta' as const, width: 0.9, height: 2.1, position: 1.5, sillHeight: 0 }
     ] 
   };
   
   const house = generateGeometry(input);
   const localMap = new Map<string, PanelizationCandidate[]>();
   
-  for (const wall of house.walls) {
-      const cands = generateCandidates(wall.id, wall.length, wall.openings);
-      const context = { wallRole: wall.role };
+  for (const muro of house.muros) {
+      const cands = generateCandidates(muro.id, muro.length, muro.aberturas);
+      const context = { wallRole: muro.role };
       cands.forEach(c => {
-          validateCandidate(c, wall.length, wall.openings);
-          if (c.valid) scoreCandidate(c, context, wall.openings);
+          validateCandidate(c, muro.length, muro.aberturas);
+          if (c.valid) scoreCandidate(c, context, muro.aberturas);
       });
-      localMap.set(wall.id, cands.filter(c => c.valid).sort((a, b) => b.score!.total - a.score!.total));
+      localMap.set(muro.id, cands.filter(c => c.valid).sort((a, b) => b.score!.total - a.score!.total));
   }
   
   const { winner, telemetry } = GlobalArbiter.planHouse(house, localMap, ENGINE_CONFIG.planning);

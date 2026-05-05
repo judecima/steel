@@ -7,8 +7,8 @@ export function checkAnchors(projectResult: ProjectResult): AnchorCheckResult {
   if (!assumptions.includes('foundation_data_provided')) {
     return {
       status: 'insufficient_data',
-      requiredData: ['concrete_strength', 'slab_thickness', 'edge_distance'],
-      warnings: ['Cannot perform preliminary anchor check without foundation data.'],
+      requiredData: ['resistencia_hormigon', 'espesor_losa', 'distancia_al_borde'],
+      warnings: ['No se puede realizar la verificación preliminar de anclajes sin datos de la fundación.'],
     };
   }
 
@@ -16,7 +16,7 @@ export function checkAnchors(projectResult: ProjectResult): AnchorCheckResult {
   return {
     status: 'requires_engineer_review',
     requiredData: [],
-    warnings: ['Preliminary anchor check passed based on assumptions, but engineer review is mandatory.'],
-    recommendation: 'Use chemical anchors for main hold-downs and mechanical for shear'
+    warnings: ['La verificación preliminar de anclajes pasó según supuestos, pero la revisión de ingeniería es obligatoria.'],
+    recommendation: 'Usar anclajes químicos para hold-downs principales y mecánicos para corte.'
   };
 }

@@ -15,7 +15,7 @@ import { PanelizationCandidate } from './modules/intelligence/types';
 async function main() {
   console.log("--- PROJECT STEEL FRAME - PHASE 2 FOUNDATION ---");
 
-  // 1. Define sample input
+  // 1. Definir entrada de muestra
   const input: HouseInput = {
     width: 8.0,
     length: 12.0,
@@ -23,52 +23,52 @@ async function main() {
     roofType: 'two_slope',
     roofSlope: 15,
     openings: [
-      { wallId: 'wall_north', type: 'window', width: 1.5, height: 1.2, position: 2.0, sillHeight: 0.9 },
-      { wallId: 'wall_east', type: 'door', width: 0.9, height: 2.05, position: 5.0 }
+      { wallId: 'wall_north', type: 'ventana', width: 1.5, height: 1.2, position: 2.0, sillHeight: 0.9 },
+      { wallId: 'wall_east', type: 'puerta', width: 0.9, height: 2.05, position: 5.0 }
     ]
   };
 
-  // 2. Run Precheck
+  // 2. Ejecutar Pre-verificación
   const precheck = runPrecheck(input);
   if (!precheck.passed) {
-    console.error("Critical Errors found in input:");
+    console.error("Errores críticos encontrados en la entrada:");
     precheck.errors.forEach(e => console.error(`- ${e}`));
     return;
   }
 
-  // 3. Generate Geometry
+  // 3. Generar Geometría
   const house = generateGeometry(input);
 
-  // 4. Local Intelligence: Generate candidates for each wall
-  logger.log('LOCAL_INTELLIGENCE_STARTED', 'house', 'Evaluating local wall candidates');
+  // 4. Inteligencia Local: Generar candidatos para cada muro
+  logger.log('LOCAL_INTELLIGENCE_STARTED', 'house', 'Evaluando candidatos locales de muro');
   const localCandidatesPerWall = new Map<string, PanelizationCandidate[]>();
   
-  for (const wall of house.walls) {
-      const candidates = generateCandidates(wall.id, wall.length, wall.openings);
-      const context = { wallRole: wall.role };
+  for (const muro of house.muros) {
+      const candidates = generateCandidates(muro.id, muro.length, muro.aberturas);
+      const context = { wallRole: muro.role };
       candidates.forEach(lc => {
-         validateCandidate(lc, wall.length, wall.openings);
-         if (lc.valid) scoreCandidate(lc, context, wall.openings);
+         validateCandidate(lc, muro.length, muro.aberturas);
+         if (lc.valid) scoreCandidate(lc, context, muro.aberturas);
       });
-      // Sort and keep valid
+      // Ordenar y mantener válidos
       const validCandidates = candidates
         .filter(c => c.valid)
         .sort((a, b) => (b.score?.total || 0) - (a.score?.total || 0));
         
-      localCandidatesPerWall.set(wall.id, validCandidates);
+      localCandidatesPerWall.set(muro.id, validCandidates);
   }
 
-  // 5. Global Planning
-  logger.log('GLOBAL_PLANNING_STARTED', 'house', 'Selecting best global combination');
+  // 5. Planificación Global
+  logger.log('GLOBAL_PLANNING_STARTED', 'house', 'Seleccionando la mejor combinación global');
   const { winner: globalPlanWinner, telemetry: plannerTelemetry } = GlobalArbiter.planHouse(house, localCandidatesPerWall, ENGINE_CONFIG.planning);
 
-  // 6. Construction Logic
+  // 6. Lógica de Construcción
   const constructionResult = panelizeHouse(house, globalPlanWinner, plannerTelemetry);
 
-  // 7. Materials & BOM
+  // 7. Materiales & BOM
   const bom = calculateBOM(constructionResult.panels);
 
-  // 8. Final Result Assembly
+  // 8. Ensamblaje del Resultado Final
   const result: ProjectResult = {
     input,
     house,
@@ -80,23 +80,23 @@ async function main() {
     warnings: precheck.warnings
   };
 
-  // 9. Output Summary
-  console.log("\n--- GENERATION SUMMARY ---");
-  console.log(`Status: ${result.status}`);
-  console.log(`Walls generated: ${result.house.walls.length}`);
-  console.log(`Panels generated: ${result.construction.panels.length}`);
-  console.log(`Global Winner Score: ${globalPlanWinner.score.total} pts`);
-  console.log(`Planning Time: ${plannerTelemetry.planningTimeMs} ms`);
-  console.log(`States Generated: ${plannerTelemetry.generatedStates}`);
-  console.log(`BOM Profile Types: ${result.bom.aggregated.length}`);
+  // 9. Resumen de Salida
+  console.log("\n--- RESUMEN DE GENERACIÓN ---");
+  console.log(`Estado: ${result.status}`);
+  console.log(`Muros generados: ${result.house.muros.length}`);
+  console.log(`Paneles generados: ${result.construction.panels.length}`);
+  console.log(`Puntuación del Ganador Global: ${globalPlanWinner.score.total} pts`);
+  console.log(`Tiempo de Planificación: ${plannerTelemetry.planningTimeMs} ms`);
+  console.log(`Estados Generados: ${plannerTelemetry.generatedStates}`);
+  console.log(`Tipos de Perfiles BOM: ${result.bom.aggregated.length}`);
   
-  console.log("\n--- AGGREGATED BOM ---");
+  console.log("\n--- LISTADO DE MATERIALES (BOM) ---");
   result.bom.aggregated.forEach(item => {
     console.log(`- ${item.profileType}: ${item.totalLinearMeters} m`);
   });
 
-  console.log("\n--- VALIDATION ---");
-  console.log("Phase 2 complete. Global planning integration is operational.");
+  console.log("\n--- VALIDACIÓN ---");
+  console.log("Fase 2 completa. La integración de planificación global es operativa.");
 }
 
 main().catch(err => {
