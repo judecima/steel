@@ -1,6 +1,0 @@
-role,length,quantity,thickness,profileType,sourceEntityId,codigo,descripcion,muro,panel
-"common",2.4,2,0.9,"PGC100","PANEL_1","PGC100-90","Montante Estándar","wall_1","PANEL_1"
-"common",2.4,2,0.9,"PGC100","PANEL_2","PGC100-90","Montante Estándar","wall_1","PANEL_2"
-"common",2.4,2,0.9,"PGC100","PANEL_3","PGC100-90","Montante Estándar","wall_1","PANEL_3"
-"common",2.4,2,0.9,"PGC100","PANEL_4","PGC100-90","Montante Estándar","wall_1","PANEL_4"
-"common",2.4,2,0.9,"PGC100","PANEL_5","PGC100-90","Montante Estándar","wall_1","PANEL_5"

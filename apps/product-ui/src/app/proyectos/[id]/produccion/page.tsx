@@ -30,23 +30,23 @@ export default function ProduccionPage({ params }: { params: { id: string } }) {
       setProject(p);
       setGlobalStatus(prod.estado_global || 'pendiente');
       
-      // Merge panels if production data exists, else use defaults
-      const defaultPanels = [
-        { id: 'P01', nombre: 'Panel PB-01', largo: 3.25, perfiles: 12, estado: 'pendiente' },
-        { id: 'P02', nombre: 'Panel PB-02', largo: 4.10, perfiles: 15, estado: 'pendiente' },
-        { id: 'P03', nombre: 'Panel PB-03', largo: 2.80, perfiles: 10, estado: 'pendiente' },
-        { id: 'P04', nombre: 'Panel PB-04', largo: 3.85, perfiles: 14, estado: 'pendiente' },
-        { id: 'P05', nombre: 'Panel PB-05', largo: 4.50, perfiles: 18, estado: 'pendiente' },
-      ];
+      const vActual = p.historialVersiones?.find((v: any) => v.id === p.versionActual) || p.historialVersiones?.[0];
+      const enginePanels = vActual?.resultadoMotor?.construction?.panels || [];
 
-      if (prod.paneles && prod.paneles.length > 0) {
-        const merged = defaultPanels.map(dp => {
-          const saved = prod.paneles.find((sp: any) => sp.panel_id === dp.id);
-          return saved ? { ...dp, estado: saved.estado } : dp;
+      if (enginePanels.length > 0) {
+        const merged = enginePanels.map((ep: any) => {
+          const saved = prod.paneles?.find((sp: any) => sp.panel_id === ep.id);
+          return {
+            id: ep.id,
+            nombre: `Panel ${ep.id}`,
+            largo: ep.width,
+            perfiles: ep.studs.length,
+            estado: saved ? saved.estado : 'pendiente'
+          };
         });
         setPanels(merged);
       } else {
-        setPanels(defaultPanels);
+        setPanels([]);
       }
       
       setLoading(false);
@@ -55,6 +55,9 @@ export default function ProduccionPage({ params }: { params: { id: string } }) {
       setLoading(false);
     }
   };
+
+  const vActual = project?.historialVersiones?.find((v: any) => v.id === project.versionActual) || project?.historialVersiones?.[0];
+  const isGenerated = !!vActual?.resultadoMotor;
 
   const handleStatusChange = async (panelId: string, newStatus: any) => {
     const updatedPanels = panels.map(p => p.id === panelId ? { ...p, estado: newStatus } : p);
@@ -66,7 +69,7 @@ export default function ProduccionPage({ params }: { params: { id: string } }) {
     setSaving(true);
     try {
       const finished = currentPanels.filter(p => ['fabricado', 'despachado', 'montado'].includes(p.estado)).length;
-      const progress = Math.round((finished / currentPanels.length) * 100);
+      const progress = currentPanels.length > 0 ? Math.round((finished / currentPanels.length) * 100) : 0;
       
       await ApiClient.updateProduction(id, {
         estado_global: progress === 100 ? 'completado' : 'en_progreso',
@@ -88,6 +91,21 @@ export default function ProduccionPage({ params }: { params: { id: string } }) {
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
+
+  if (!isGenerated) {
+    return (
+      <div className="prod-layout">
+        <Sidebar projectId={id} />
+        <main className="prod-content">
+           <div className="empty-state-overlay">
+              <h2>Producción no disponible</h2>
+              <p>El seguimiento de producción requiere un listado real de paneles generado por el motor.</p>
+              <a href={`/proyectos/${id}`} className="btn-primary">Ir a Generar Proyecto</a>
+           </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="prod-layout">
@@ -138,7 +156,7 @@ export default function ProduccionPage({ params }: { params: { id: string } }) {
             <span className="lab">Pendientes</span>
           </div>
           <div className="stat-mini">
-            <span className="val">{panels.filter(p => p.estado === 'fabricacion').length}</span>
+            <span className="val">{panels.filter(p => p.estado === 'fabricacion' || p.estado === 'en_fabricacion').length}</span>
             <span className="lab">En Taller</span>
           </div>
           <div className="stat-mini">
@@ -155,6 +173,24 @@ export default function ProduccionPage({ params }: { params: { id: string } }) {
         .prod-content {
           flex: 1;
           padding: 48px 64px;
+        }
+        .empty-state-overlay {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 60vh;
+          text-align: center;
+        }
+        .empty-state-overlay h2 {
+          font-size: 24px;
+          margin-bottom: 16px;
+          color: var(--accent);
+        }
+        .empty-state-overlay p {
+          color: var(--muted);
+          margin-bottom: 32px;
+          max-width: 400px;
         }
         .prod-header {
           display: flex;

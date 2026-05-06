@@ -19,13 +19,48 @@ export enum EstadoProduccion {
 }
 
 export interface ConfiguracionProyectoDTO {
+    anchoVivienda: number;
+    largoVivienda: number;
     alturaMuro: number;
+    pendienteTecho: number;
     espesorPerfil: number;
     separacionMontantes: number;
     tipoPerfil: string;
     material: string;
     tipoCubierta: 'one_slope' | 'two_slope';
     tipoFundacion: string;
+    direccionCaida: 'ancho' | 'largo';
+    // Nuevos campos Fase 9F
+    panelMaxLengthM?: number;
+    panelPreferredLengthM?: number;
+    aberturas?: {
+        id: string;
+        wallId: string;
+        tipo: 'puerta' | 'ventana';
+        ancho: number;
+        alto: number;
+        antepecho: number;
+        posicion: number;
+        createdAt: string;
+    }[];
+    murosInternos?: {
+        id: string;
+        startX: number;
+        startZ: number;
+        endX: number;
+        endZ: number;
+        height: number;
+        thickness: number;
+        aberturas: {
+            id: string;
+            tipo: 'puerta' | 'ventana';
+            ancho: number;
+            alto: number;
+            antepecho: number;
+            posicion: number;
+            createdAt: string;
+        }[];
+    }[];
 }
 
 export interface VersionProyectoDTO {

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 4A Visual QA Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #eee;
+        }
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+        #ui-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #selection-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            min-width: 250px;
+            display: none;
+        }
+        h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #fff;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+        }
+        .control-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .layer-item {
+            margin-left: 10px;
+        }
+        .prop-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+        .prop-label {
+            color: #aaa;
+        }
+        .prop-value {
+            color: #4da6ff;
+            font-weight: bold;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">Cargando datos de renderizado...</div>
+    <div id="canvas-container"></div>
+    
+    <div id="ui-panel">
+        <h3>Modo de Visualización</h3>
+        <div class="control-group" style="display: flex; gap: 5px;">
+            <select id="mode-selector" style="flex: 1; padding: 8px; background: #333; color: #fff; border: 1px solid #555; border-radius: 4px; cursor: pointer;">
+                <option value="estandar">Estándar</option>
+                <option value="estructural">Estructural</option>
+                <option value="taller">Taller</option>
+                <option value="montaje">Montaje</option>
+                <option value="inspeccion">Inspección</option>
+            </select>
+            <button onclick="location.reload()" style="padding: 0 10px; background: #444; border: 1px solid #555; border-radius: 4px; color: #fff; cursor: pointer;">↻</button>
+        </div>
+
+        <h3>Controles de QA</h3>
+        <div class="control-group">
+            <label><input type="checkbox" id="toggle-wireframe"> Estructura Alámbrica</label>
+            <label><input type="checkbox" id="toggle-grid" checked> Grilla de Referencia</label>
+            <label><input type="checkbox" id="toggle-axis" checked> Ejes de Referencia</label>
+            <label><input type="checkbox" id="toggle-labels" checked> Mostrar Etiquetas</label>
+            <label><input type="checkbox" id="toggle-roof-opacity" checked> Opacidad de Techo</label>
+            <label><input type="checkbox" id="toggle-debug-mode"> Mostrar IDs técnicos</label>
+        </div>
+
+        <h3>Capas</h3>
+        <div class="control-group" id="layers-container">
+            <!-- Populated dynamically -->
+        </div>
+        
+        <h3>Estadísticas de Escena</h3>
+        <div class="control-group" id="stats-container" style="font-size: 13px; color: #aaa;">
+            <!-- Populated dynamically -->
+        </div>
+
+        <h3>Exportaciones Industriales</h3>
+        <div class="control-group" id="exports-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-download" data-file="bom.csv" style="padding: 8px; background: #2ecc71; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar BOM CSV</button>
+            <button class="btn-download" data-file="cutlist.csv" style="padding: 8px; background: #2ecc71; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar Lista de Corte CSV</button>
+            <button class="btn-download" data-file="proyecto_industrial.json" style="padding: 8px; background: #3498db; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar Paquete JSON</button>
+            <button class="btn-download" data-file="reporte.tsv" style="padding: 8px; background: #f1c40f; color: #000; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar Excel (TSV)</button>
+            <button class="btn-download" data-file="montaje.txt" style="padding: 8px; background: #e67e22; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar Resumen Montaje</button>
+            <div id="export-status" style="font-size: 11px; color: #777; margin-top: 5px;"></div>
+        </div>
+    </div>
+
+    <div id="selection-panel">
+        <h3>Información de Selección</h3>
+        <div id="selection-content"></div>
+        <div style="margin-top: 10px; display: flex; gap: 5px;">
+            <button id="btn-focus" style="flex:1; padding: 5px; cursor: pointer; background: #333; color: #fff; border: 1px solid #555; border-radius: 4px;">Enfocar</button>
+            <button id="btn-isolate" style="flex:1; padding: 5px; cursor: pointer; background: #333; color: #fff; border: 1px solid #555; border-radius: 4px;">Aislar Capa</button>
+        </div>
+    </div>
+
+    <!-- Three.js Dependencies -->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+        let scriptPath = './viewer.js';
+        if (window.location.pathname.endsWith('/qa-viewer')) {
+            scriptPath = './qa-viewer/viewer.js';
+        }
+        console.log('[QA-Viewer] Resolved script path:', scriptPath);
+        
+        import(scriptPath).catch(err => {
+            console.error('[QA-Viewer] Failed to load script:', err);
+            const loadingEl = document.getElementById('loading');
+            if (loadingEl) {
+                loadingEl.innerHTML = `Error loading viewer.js.<br>Attempted path: ${scriptPath}<br>Error: ${err.message}`;
+                loadingEl.style.color = '#ff4da6';
+            }
+        });
+    </script>
+</body>
+</html>

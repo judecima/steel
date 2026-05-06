@@ -54,7 +54,7 @@ export default function ProductionTable({ panels, onStatusChange }: ProductionTa
           {panels.map((panel) => (
             <tr key={panel.id}>
               <td className="panel-name">{panel.nombre}</td>
-              <td className="panel-dim">{panel.largo.toFixed(2)}m</td>
+              <td className="panel-dim">{(panel.largo || 0).toFixed(2)}m</td>
               <td>{panel.perfiles}</td>
               <td>
                 <div className="status-cell" style={{ color: getStatusColor(panel.estado) }}>

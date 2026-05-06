@@ -4,8 +4,9 @@ export const ENGINE_CONFIG = {
   rules: {
     panelization: {
       maxPanelWidth: 4.0,
-      minPanelWidth: 2.0,
-      openingEdgeClearance: 0.3, // minimum distance between opening and panel joint
+      preferredPanelWidth: 3.0,
+      minPanelWidth: 1.0, // Reducido para mayor flexibilidad en remates
+      openingEdgeClearance: 0.2, // Distancia mínima entre abertura y junta
     },
     studs: {
       defaultSpacing: 0.4, // 400mm O.C.

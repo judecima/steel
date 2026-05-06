@@ -41,7 +41,7 @@ export class PostgresStorageAdapter implements ProjectStorage {
             await pool.query(
                 `INSERT INTO versiones_proyecto (id, proyecto_id, numero_version, snapshot_json, fecha_creacion)
                  VALUES ($1, $2, $3, $4, $5)
-                 ON CONFLICT (id) DO NOTHING`,
+                 ON CONFLICT (id) DO UPDATE SET snapshot_json = EXCLUDED.snapshot_json, numero_version = EXCLUDED.numero_version`,
                 [v.id, project.id, i + 1, JSON.stringify(v), v.fecha]
             );
         }
@@ -126,11 +126,12 @@ export class PostgresStorageAdapter implements ProjectStorage {
             `SELECT snapshot_json FROM versiones_proyecto WHERE proyecto_id=$1 ORDER BY numero_version`,
             [proyectoId]
         );
-        return r.rows.map((row: any) =>
-            typeof row.snapshot_json === 'string'
+        return r.rows.map((row: any) => {
+            const data = typeof row.snapshot_json === 'string'
                 ? JSON.parse(row.snapshot_json)
-                : row.snapshot_json
-        );
+                : row.snapshot_json;
+            return data;
+        });
     }
 
     private async _getProduccion(pool: any, proyectoId: string): Promise<any> {

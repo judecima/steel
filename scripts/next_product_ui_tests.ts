@@ -83,7 +83,7 @@ const projId = 'test_proj_9b';
 
 // TEST 168: viewer page existe y usa iframe
 const viewerFile = path.join(nextDir, 'src/app/proyectos/[id]/viewer/page.tsx');
-const hasIframe = checkInFile(viewerFile, '<iframe') && checkInFile(viewerFile, 'viewer.html');
+const hasIframe = checkInFile(viewerFile, '<iframe') && (checkInFile(viewerFile, 'viewer.html') || checkInFile(viewerFile, 'index.html'));
 console.log(`TEST 168: ${hasIframe ? 'PASSED' : 'FAILED'} (viewer page usa iframe)`);
 
 // TEST 169: viewer no duplica Three.js
@@ -124,5 +124,34 @@ console.log(`TEST 176: ${hasPersistOk ? 'PASSED' : 'FAILED'} (produccion muestra
 // TEST 177: no hay localStorage para proyectos (re-check)
 const hasForbidden9B = checkInFile(viewerFile, forbidden) || checkInFile(exportFile, forbidden) || checkInFile(budgetFile, forbidden) || checkInFile(prodFile, forbidden);
 console.log(`TEST 177: ${!hasForbidden9B ? 'PASSED' : 'FAILED'} (no hay localStorage para proyectos en 9B)`);
+
+// --- VIEWER INTEGRATION TESTS (V1-V6) ---
+console.log('\n--- RUNNING VIEWER INTEGRATION TESTS (V1-V6) ---');
+
+// TEST V1: viewer page usa iframe src="/qa-viewer/index.html"
+const hasCorrectIframeSrc = checkInFile(viewerFile, '/qa-viewer/index.html');
+console.log(`TEST V1: ${hasCorrectIframeSrc ? 'PASSED' : 'FAILED'} (viewer page usa iframe src="/qa-viewer/index.html")`);
+
+// TEST V2: apps/product-ui/public/qa-viewer/index.html existe
+const publicViewerDir = path.join(nextDir, 'public/qa-viewer');
+const indexExists = fs.existsSync(path.join(publicViewerDir, 'index.html'));
+console.log(`TEST V2: ${indexExists ? 'PASSED' : 'FAILED'} (public/qa-viewer/index.html existe)`);
+
+// TEST V3: apps/product-ui/public/qa-viewer/viewer.js existe
+const jsExists = fs.existsSync(path.join(publicViewerDir, 'viewer.js'));
+console.log(`TEST V3: ${jsExists ? 'PASSED' : 'FAILED'} (public/qa-viewer/viewer.js existe)`);
+
+// TEST V4: No hay referencias a ../../tools/qa-viewer en viewer page
+const hasLegacyRef = checkInFile(viewerFile, '../../tools/qa-viewer') || checkInFile(viewerFile, '/ui/product/viewer.html');
+console.log(`TEST V4: ${!hasLegacyRef ? 'PASSED' : 'FAILED'} (No hay referencias legacy en viewer page)`);
+
+// TEST V5: ModeTabs sigue enviando postMessage
+const hasTabsInViewer = checkInFile(viewerFile, '<ModeTabs');
+const hasPostMessageV = checkInFile(viewerFile, 'postMessage') && checkInFile(viewerFile, 'CHANGE_MODE');
+console.log(`TEST V5: ${hasTabsInViewer && hasPostMessageV ? 'PASSED' : 'FAILED'} (ModeTabs y postMessage configurados)`);
+
+// TEST V6: El viewer muestra fallback si proyecto no carga
+const hasOverlay = checkInFile(viewerFile, 'viewer-overlay') || checkInFile(viewerFile, 'Visualizador no disponible');
+console.log(`TEST V6: ${hasOverlay ? 'PASSED' : 'FAILED'} (El viewer tiene overlay de fallback/error)`);
 
 console.log('--- NEXT.JS PRODUCT UI TESTS COMPLETE ---');

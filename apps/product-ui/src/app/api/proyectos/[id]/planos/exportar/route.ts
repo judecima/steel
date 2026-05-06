@@ -53,6 +53,11 @@ export async function POST(
       }
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("[API_PDF_EXPORT] Critical failure:", error);
+    return NextResponse.json({ 
+      ok: false, 
+      code: "PDF_EXPORT_FAILED",
+      message: error.message 
+    }, { status: 200 }); // Status 200 to allow UI to show the code/message
   }
 }

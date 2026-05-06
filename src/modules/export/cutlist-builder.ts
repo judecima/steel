@@ -3,6 +3,22 @@ import { IndustrialCutListDTO, IndustrialCutListPiece } from './types';
 
 export class CutListBuilder {
     static build(project: ProjectResult): IndustrialCutListDTO {
+        const ROLE_MAP: Record<string, string> = {
+            'common': 'Montante común',
+            'montante_principal': 'Montante rey',
+            'montante_apoyo': 'Montante de apoyo',
+            'montante_corto_superior': 'Montante corto superior',
+            'montante_corto_inferior': 'Montante corto inferior',
+            'track': 'Solera',
+            'solera_inferior': 'Solera inferior',
+            'solera_superior': 'Solera superior',
+            'solera_ventana': 'Solera de ventana',
+            'corner': 'Montante de esquina',
+            'junction': 'Encuentro T',
+            'provisional_boxed_header': 'Dintel (Boxed)',
+            'provisional_double_pgc': 'Dintel Doble PGC'
+        };
+
         const piezas: IndustrialCutListPiece[] = project.bom.cutList.map((item, index) => {
             const panel = project.construction.panels.find(p => p.id === item.sourceEntityId);
             const muro = panel ? panel.wallId : 'N/A';
@@ -19,6 +35,7 @@ export class CutListBuilder {
                 anguloFin: 0,
                 panel: item.sourceEntityId || 'N/A',
                 muro: muro,
+                piezaTipo: ROLE_MAP[item.role] || item.role,
                 prioridadFabricacion
             };
         });

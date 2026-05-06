@@ -15,8 +15,8 @@ export function buildPanelMeshes(projectResult: ProjectResult): RenderObject[] {
     const tPanel = getWallTransform(muro, projectResult.house);
     
     const w = panel.width;
-    const h = panel.height;
-    const pos = applyTransform(panel.offset + w / 2, h / 2, 0, tPanel);
+    const hAvg = (panel.heightStart + panel.heightEnd) / 2;
+    const pos = applyTransform(panel.offset + w / 2, hAvg / 2, 0, tPanel);
     
     objects.push({
       id: `render_panel_${panel.id}`,
@@ -24,7 +24,9 @@ export function buildPanelMeshes(projectResult: ProjectResult): RenderObject[] {
       sourceId: panel.id,
       position: pos,
       rotation: { x: 0, y: tPanel.rotY, z: 0 },
-      dimensions: { x: w, y: h, z: RENDER_CONFIG.depth },
+      dimensions: { x: w, y: Math.max(panel.heightStart, panel.heightEnd), z: RENDER_CONFIG.depth },
+      heightStart: panel.heightStart,
+      heightEnd: panel.heightEnd,
       material: RENDER_CONFIG.materials.panel_volume.id,
       layer: 'layer_paneles',
       visible: RENDER_CONFIG.layers.find(l => l.id === 'layer_paneles')?.visibleByDefault || false,

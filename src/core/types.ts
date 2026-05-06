@@ -6,6 +6,49 @@ export type ProjectStatus =
   | 'precheck_failed'
   | 'requires_structural_validation';
 
+export type OpeningType = 'door' | 'window' | 'puerta' | 'ventana';
+
+export interface ProjectOpening {
+  id: string;
+  wallId: string;
+  wallKind: 'external' | 'internal';
+  type: OpeningType;
+  positionMm: number;
+  widthMm: number;
+  heightMm: number;
+  sillHeightMm: number;
+}
+
+export interface InternalWall {
+  id: string;
+  startXmm: number;
+  startZmm: number;
+  endXmm: number;
+  endZmm: number;
+  heightMm: number;
+  thicknessMm: number;
+  openings: ProjectOpening[];
+}
+
+export interface PanelJoint {
+  id: string;
+  wallId: string;
+  positionMm: number;
+  panelIndex: number;
+}
+
+export interface OpeningStructuralFrame {
+  openingId: string;
+  headerProfileId: string;
+  kingCountLeft: number;
+  kingCountRight: number;
+  jackCountLeft: number;
+  jackCountRight: number;
+  jackProfileId: string;
+  crippleStudsTop: number;
+  crippleStudsBottom: number;
+}
+
 export enum WallRole {
   EXTERNAL_LOADBEARING = 'external_loadbearing',
   INTERNAL_LOADBEARING = 'internal_loadbearing',
@@ -27,12 +70,14 @@ export enum StudRole {
   CORNER = 'corner',
   JUNCTION = 'junction',
   SOLERA_VENTANA = 'solera_ventana',
+  DINTEL = 'dintel',
   // Legacy aliases
   KING = 'montante_principal',
   JACK = 'montante_apoyo',
   CRIPPLE_TOP = 'montante_corto_superior',
   CRIPPLE_BOTTOM = 'montante_corto_inferior',
-  SILL = 'solera_ventana'
+  SILL = 'solera_ventana',
+  HEADER = 'dintel'
 }
 
 export enum JunctionType {
@@ -55,6 +100,9 @@ export type HouseInput = {
   roofType: 'one_slope' | 'two_slope';
   roofSlope: number;
   openings?: OpeningInput[];
+  panelMaxLength?: number;
+  panelPreferredLength?: number;
+  internalWalls?: InternalWall[];
 };
 
 export type AberturaInput = {
@@ -102,7 +150,9 @@ export type Panel = {
   wallId: string;
   role: PanelRole;
   width: number;
-  height: number;
+  height: number; // Max height for compatibility
+  heightStart: number;
+  heightEnd: number;
   offset: number;
   studs: Stud[];
   aberturas: Abertura[]; // Renamed from openings
@@ -118,6 +168,7 @@ export type Stud = {
   height: number;
   profileType: string; // e.g., PGC 100x0.9
   yOffset?: number; // vertical offset from bottom track
+  metadata?: Record<string, any>;
 };
 
 export type Junction = {
@@ -161,8 +212,12 @@ export type ProjectResult = {
   house: HouseModel;
   construction: {
     panels: Panel[];
-    metadata?: {
-      candidatesEvaluated: Record<string, PanelizationCandidate>;
+    metadata: {
+      candidatesEvaluated: Record<string, any>;
+      globalWinner?: any;
+      industrialSegments?: any[]; // IndustrialPanelSegment[]
+      panelJoints?: PanelJoint[];
+      openingFrames?: any[]; // OpeningStructuralFrame[]
     };
   };
   structural?: StructuralAnalysisResult;
@@ -175,6 +230,7 @@ export type ProjectResult = {
 
 export type HouseModel = {
   muros: Muro[]; // Renamed from walls
+  murosInternos?: InternalWall[];
   roof: RoofMetadata;
 };
 

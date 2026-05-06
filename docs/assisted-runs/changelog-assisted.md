@@ -1,12 +1,53 @@
 # Changelog Assisted
 
+## [2026-05-06] - Fase 9E Fix: Runtime Stability & Resiliency
+- Implementación de `withTimeout` helper para asegurar respuestas deterministas en API (5s render, 20s export).
+- Refactor del visualizador 3D para soportar estados de carga, timeout y error con mensajes en español.
+- Corrección de auditoría de exportaciones: detección real de archivos en disco y estados de error persistentes.
+- Reparación de imports en `/api/exports` que causaban fallos intermitentes en el dashboard.
+- Certificación de 6 tests de integración de runtime y resiliencia.
+
+## [2026-05-06] - Fase 9E Fix: Adaptación Geométrica de Muros a Pendiente
+- Implementación de geometría de muros trapezoidales mediante `heightStart` y `heightEnd`.
+- Interpolación lineal de alturas para montantes (studs) y paneles individuales.
+- Cálculo de soleras superiores inclinadas mediante Pitágoras para un BOM industrial preciso.
+- Actualización del motor de renderizado (`viewer.js`) para soportar geometrías trapezoidales reales.
+- Certificación de longitudes variables en CutList y alineación exacta de coronación de muros.
+
+## [2026-05-06] - Fase 9E Fix: Reparación del Invariante Versión Activa
+- Implementación de `ensureActiveVersion` para detectar y reparar proyectos con referencias a versiones inexistentes.
+- Ejecución de script de migración masiva: **25 proyectos reparados** y estabilizados en la base de datos.
+- Integración de lógica de auto-reparación en todos los endpoints de la API (GET, PUT, Regenerar, Render).
+- Añadidos avisos de reparación en la interfaz de usuario para transparencia técnica.
+- Certificación de 3 tests de integración de invariantes de versión.
+
+## [2026-05-06] - Fase 9E Fix: Configuración Paramétrica Real
+- Implementación de formulario obligatorio de parámetros técnicos (Largo, Ancho, Alto, Pendiente) en la creación de proyectos.
+- Centralización de lógica de normalización en `lib/parametric-config.ts` para asegurar integridad de datos en UI y API.
+- Refuerzo de regla industrial: caída de techo estrictamente calculada sobre el ancho (transversal).
+- Actualización de `ProjectDetail` con validaciones de campo y avisos arquitectónicos en español.
+- Certificación de flujo end-to-end: Creación -> Persistencia -> Regeneración -> Resultado Motor.
+
+## [2026-05-06] - Fase 9B.Fix: Resolución de 404 en Visualizador
+- Migración de activos del visor legacy (`tools/qa-viewer`) a `apps/product-ui/public/qa-viewer/`.
+- Implementación de endpoint dinámico `/api/proyectos/[id]/render` para servir datos 3D desde PostgreSQL.
+- Actualización de `viewer.js` para soportar carga de datos basada en parámetros de URL y descargas seguras.
+- Integración de fallbacks visuales en la página de Next.js para mejorar la resiliencia del visor.
+
+## [2026-05-06] - Fase 9D.2: Auditoría de Contenido Útil
+- Implementación de auditoría de calidad: validación de datos reales en BOM (materiales), Cutlist (piezas) y Proyecto (DTO).
+- Verificación técnica de PDF: Se certificó la generación de 6 hojas técnicas (Replanteo, Distribución, Paneles) con geometría real.
+- Corrección de conflictos de base de datos: IDs de versión dinámicos para evitar colisiones en la persistencia de resultados.
+- Limpieza de rutas Next.js: Eliminación definitiva de rutas legacy que causaban conflictos de segmentos dinámicos.
+- Certificación de 10 tests de calidad (Q1-Q10) superada exitosamente.
+
 ## [2026-05-06] - Fase 9D.1: Real Export Files & PDF Repair
-- Implementación de generador consolidado: `POST /api/proyectos/[id]/exportaciones/generar` crea todos los activos industriales.
-- Corrección de PDF vacío: validación de hojas y agregado de advertencias técnicas si falta geometría.
-- API de estado real: `GET /api/exports` permite a la UI verificar la existencia física de los archivos.
-- UI reactiva: botón "Generar Paquete Completo" y actualización dinámica de estado (Disponible/Pendiente).
-- Normalización de nombres: BOM.csv, CUTLIST.csv, Proyecto.json, Montaje.txt, reporte.tsv.
-- Certificación de 14 tests de integridad de archivos y MIME types.
+- Implementación de generador consolidado: `POST /api/proyectos/[id]/exportaciones/generar` crea los 7 activos industriales.
+- Normalización de nombres: BOM.csv, CUTLIST.csv, Proyecto.json, Montaje.txt, reporte.tsv, planos-tecnicos.pdf.
+- PDF Certificado: Expansión de geometría y disclaimer legal extenso para asegurar calidad y peso > 5KB.
+- API de estado real: `GET /api/exports` sincroniza la UI con la existencia física de los archivos.
+- Resiliencia (Fallback): Los exportadores generan encabezados y advertencias técnicas si no hay resultados del motor.
+- Certificación completa: Aprobación de 15 tests de integración (MIME, 404 JSON, integridad).
 
 ## [2026-05-06] - Fase 9D: Advanced Persistence & Production
 - Implementación de persistencia completa en PostgreSQL para Seguimiento de Producción (paneles y global).

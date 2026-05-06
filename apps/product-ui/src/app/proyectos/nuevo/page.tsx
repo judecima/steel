@@ -12,6 +12,12 @@ export default function NuevoProyectoPage() {
   const [formData, setFormData] = useState({
     nombre: '',
     cliente: '',
+    largo: 16.0,
+    ancho: 4.0,
+    alto: 2.6,
+    pendiente: 10,
+    separacion: 0.4,
+    espesor: 0.9
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,8 +33,6 @@ export default function NuevoProyectoPage() {
         fechaCreacion: now,
         fechaActualizacion: now,
         estado: 'borrador',
-        // El backend generará el ID y la versión inicial si no se proveen,
-        // o podemos enviarlos para control total
         id: 'proj_' + Date.now(),
         versionActual: 'v_1',
         historialVersiones: [{
@@ -36,13 +40,17 @@ export default function NuevoProyectoPage() {
           fecha: now,
           nota: 'Versión inicial',
           configuracion: {
-            alturaMuro: 2.6,
-            espesorPerfil: 0.9,
-            separacionMontantes: 0.4,
+            largoVivienda: Number(formData.largo),
+            anchoVivienda: Number(formData.ancho),
+            alturaMuro: Number(formData.alto),
+            pendienteTecho: Number(formData.pendiente),
+            separacionMontantes: Number(formData.separacion),
+            espesorPerfil: Number(formData.espesor),
             tipoPerfil: 'PGC 100x0.9',
             material: 'acero_galvanizado',
             tipoCubierta: 'one_slope',
-            tipoFundacion: 'losa'
+            tipoFundacion: 'losa',
+            direccionCaida: 'ancho'
           }
         }]
       };
@@ -64,34 +72,58 @@ export default function NuevoProyectoPage() {
       <div className="card">
         <header className="card-header">
           <h1>Nuevo Proyecto</h1>
-          <p>Define los datos básicos para comenzar la ingeniería.</p>
+          <p>Define los datos básicos y técnicos para comenzar.</p>
         </header>
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="nombre">Nombre del Proyecto</label>
-            <input 
-              id="nombre"
-              type="text" 
-              placeholder="Ej: Residencia Lomas — Lote 12"
-              value={formData.nombre}
-              onChange={(e) => setFormData({...formData, nombre: e.target.value})}
-              required
-              disabled={loading}
-            />
+          <div className="form-section">
+             <h3>Datos Básicos</h3>
+             <div className="form-group">
+               <label htmlFor="nombre">Nombre del Proyecto</label>
+               <input id="nombre" type="text" value={formData.nombre} onChange={(e) => setFormData({...formData, nombre: e.target.value})} required disabled={loading} />
+             </div>
+             <div className="form-group">
+               <label htmlFor="cliente">Cliente</label>
+               <input id="cliente" type="text" value={formData.cliente} onChange={(e) => setFormData({...formData, cliente: e.target.value})} required disabled={loading} />
+             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="cliente">Cliente</label>
-            <input 
-              id="cliente"
-              type="text" 
-              placeholder="Nombre del cliente o razón social"
-              value={formData.cliente}
-              onChange={(e) => setFormData({...formData, cliente: e.target.value})}
-              required
-              disabled={loading}
-            />
+          <div className="form-section">
+             <h3>Configuración Paramétrica</h3>
+             <div className="form-row">
+                <div className="form-group">
+                  <label>Largo (m)</label>
+                  <input type="number" step="0.1" value={formData.largo} onChange={(e) => setFormData({...formData, largo: parseFloat(e.target.value)})} required disabled={loading} />
+                </div>
+                <div className="form-group">
+                  <label>Ancho (m)</label>
+                  <input type="number" step="0.1" value={formData.ancho} onChange={(e) => setFormData({...formData, ancho: parseFloat(e.target.value)})} required disabled={loading} />
+                </div>
+             </div>
+             <div className="form-row">
+                <div className="form-group">
+                  <label>Alto Muros (m)</label>
+                  <input type="number" step="0.1" value={formData.alto} onChange={(e) => setFormData({...formData, alto: parseFloat(e.target.value)})} required disabled={loading} />
+                </div>
+                <div className="form-group">
+                  <label>Pendiente (°)</label>
+                  <input type="number" step="1" value={formData.pendiente} onChange={(e) => setFormData({...formData, pendiente: parseFloat(e.target.value)})} required disabled={loading} />
+                </div>
+             </div>
+             <div className="form-row">
+                <div className="form-group">
+                  <label>Separación (m)</label>
+                  <select value={formData.separacion} onChange={(e) => setFormData({...formData, separacion: parseFloat(e.target.value)})} disabled={loading}>
+                    <option value={0.4}>0.4 m</option>
+                    <option value={0.6}>0.6 m</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Espesor (mm)</label>
+                  <input type="number" step="0.1" value={formData.espesor} onChange={(e) => setFormData({...formData, espesor: parseFloat(e.target.value)})} required disabled={loading} />
+                </div>
+             </div>
+             <p className="form-hint">La caída del techo se calcula siempre hacia el ancho de la vivienda.</p>
           </div>
 
           <footer className="form-footer">
@@ -138,6 +170,33 @@ export default function NuevoProyectoPage() {
           color: var(--muted);
           font-size: 14px;
         }
+        .form-section {
+          margin-bottom: 32px;
+          padding-bottom: 24px;
+          border-bottom: 1px solid var(--border);
+        }
+        .form-section:last-of-type {
+          border-bottom: none;
+          margin-bottom: 0;
+        }
+        h3 {
+          font-size: 14px;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--muted);
+          margin-bottom: 24px;
+        }
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        .form-hint {
+          font-size: 12px;
+          color: var(--accent);
+          margin-top: 8px;
+          font-weight: 500;
+        }
         .form-group {
           margin-bottom: 24px;
         }
@@ -148,7 +207,7 @@ export default function NuevoProyectoPage() {
           color: var(--muted);
           margin-bottom: 8px;
         }
-        input {
+        input, select {
           width: 100%;
           padding: 12px 16px;
           background: var(--bg);
@@ -157,13 +216,13 @@ export default function NuevoProyectoPage() {
           color: var(--text);
           font-size: 15px;
           transition: border-color 0.2s;
-        }
-        input:focus {
           outline: none;
+        }
+        input:focus, select:focus {
           border-color: var(--accent);
         }
         .form-footer {
-          margin-top: 40px;
+          margin-top: 16px;
           display: flex;
           justify-content: flex-end;
         }

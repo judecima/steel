@@ -34,14 +34,18 @@ export class IndustrialBOMBuilder {
 
     private static getDescripcion(profile: string, role: string): string {
         const roles: Record<string, string> = {
-            'common': 'Montante Estándar',
-            'montante_principal': 'Montante Principal (King)',
-            'montante_apoyo': 'Montante de Apoyo (Jack)',
-            'montante_corto_superior': 'Montante Corto Superior (Cripple)',
-            'montante_corto_inferior': 'Montante Corto Inferior (Cripple)',
+            'common': 'Montante común',
+            'montante_principal': 'Montante rey',
+            'montante_apoyo': 'Montante de apoyo',
+            'montante_corto_superior': 'Montante corto superior',
+            'montante_corto_inferior': 'Montante corto inferior',
             'track': 'Solera',
-            'solera_ventana': 'Solera de Ventana',
-            'provisional_boxed_header': 'Dintel de Refuerzo (Boxed)',
+            'solera_inferior': 'Solera inferior',
+            'solera_superior': 'Solera superior',
+            'solera_ventana': 'Solera de ventana',
+            'corner': 'Montante de esquina',
+            'junction': 'Encuentro T',
+            'provisional_boxed_header': 'Dintel (Boxed)',
             'provisional_double_pgc': 'Dintel Doble PGC'
         };
 

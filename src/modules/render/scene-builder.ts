@@ -20,6 +20,7 @@ import { buildShopScene } from './shop-mode-builder';
 import { buildPanelCutLabels } from './panel-cutlist-builder';
 import { buildSequenceScene } from './sequence-builder';
 import { buildInspectionOverlays } from './inspection-overlay-builder';
+import { buildJointMeshes } from './joint-mesh-builder';
 
 export class SceneBuilder {
   /**
@@ -44,6 +45,7 @@ export class SceneBuilder {
       ...buildStudMeshes(projectResult),
       ...buildOpeningMeshes(projectResult),
       ...buildHeaderMeshes(projectResult),
+      ...buildJointMeshes(projectResult),
       ...buildRoofMeshes(projectResult).objects
     ];
 

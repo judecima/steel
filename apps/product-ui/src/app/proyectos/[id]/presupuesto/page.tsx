@@ -17,18 +17,6 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // BOM real se derivará de los perfiles del proyecto en una fase futura
-  // Por ahora seguimos usando el mock pero con precios persistentes
-  const [mockBOM, setMockBOM] = useState({
-    items: [
-      { id: 'perfil_pgc', label: 'Perfil PGC 100x0.9', quantity: 450.5 },
-      { id: 'perfil_pru', label: 'Perfil PGU 100x0.9', quantity: 120.2 },
-      { id: 'tornillo_t1', label: 'Tornillo T1 mecha', quantity: 2400 },
-      { id: 'tornillo_t2', label: 'Tornillo T2 punta aguja', quantity: 1800 },
-      { id: 'mano_obra', label: 'Mano de obra armado', quantity: 85.0 },
-    ]
-  });
-
   useEffect(() => {
     loadData();
   }, [id]);
@@ -46,8 +34,8 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
       // Si no hay catálogo en DB, usar defaults y guardar
       if (catalog.length === 0) {
         const defaults = [
-          { codigo: 'perfil_pgc', descripcion: 'Perfil PGC 100x0.9', unidad: 'ml', precio_unitario: 12.5 },
-          { codigo: 'perfil_pru', descripcion: 'Perfil PGU 100x0.9', unidad: 'ml', precio_unitario: 10.8 },
+          { codigo: 'PGC 100x0.9', descripcion: 'Perfil PGC 100x0.9', unidad: 'ml', precio_unitario: 12.5 },
+          { codigo: 'PGU 100x0.9', descripcion: 'Perfil PGU 100x0.9', unidad: 'ml', precio_unitario: 10.8 },
           { codigo: 'tornillo_t1', descripcion: 'Tornillo T1 mecha', unidad: 'u', precio_unitario: 0.05 },
           { codigo: 'tornillo_t2', descripcion: 'Tornillo T2 punta aguja', unidad: 'u', precio_unitario: 0.08 },
           { codigo: 'mano_obra', descripcion: 'Mano de obra armado', unidad: 'm2', precio_unitario: 45.0 },
@@ -63,6 +51,9 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
       setLoading(false);
     }
   };
+
+  const vActual = project?.historialVersiones?.find((v: any) => v.id === project.versionActual) || project?.historialVersiones?.[0];
+  const realBOM = vActual?.resultadoMotor?.bom;
 
   const handlePriceChange = (priceId: string, value: number) => {
     setPrices(prev => prev.map(p => p.id === priceId ? { ...p, price: value } : p));
@@ -87,6 +78,7 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
   };
 
   const handleSaveSnapshot = async () => {
+    if (!realBOM) return;
     setSaving(true);
     try {
       const { total, complete } = calculateTotal();
@@ -95,12 +87,13 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
       }
 
       const snapshot = await ApiClient.saveBudget(id, {
-        items_json: mockBOM.items.map(item => {
-          const priceItem = prices.find(p => p.id === item.id);
+        items_json: realBOM.aggregated.map((item: any) => {
+          const priceItem = prices.find(p => p.id === item.profileType);
           return {
-            ...item,
+            label: item.profileType,
+            quantity: item.totalLinearMeters,
             precio_unitario: priceItem?.price || 0,
-            subtotal: (priceItem?.price || 0) * item.quantity
+            subtotal: (priceItem?.price || 0) * item.totalLinearMeters
           };
         }),
         total,
@@ -120,10 +113,12 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
     let total = 0;
     let complete = true;
 
-    mockBOM.items.forEach(item => {
-      const priceItem = prices.find(p => p.id === item.id);
+    if (!realBOM) return { total: 0, complete: false };
+
+    realBOM.aggregated.forEach((item: any) => {
+      const priceItem = prices.find(p => p.id === item.profileType);
       if (priceItem && priceItem.price !== null && !isNaN(priceItem.price)) {
-        total += item.quantity * priceItem.price;
+        total += item.totalLinearMeters * priceItem.price;
       } else {
         complete = false;
       }
@@ -136,6 +131,21 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
+
+  if (!realBOM) {
+    return (
+      <div className="budget-layout">
+        <Sidebar projectId={id} />
+        <main className="budget-content">
+           <div className="empty-state-overlay">
+              <h2>BOM no disponible</h2>
+              <p>Debe generar el proyecto primero para obtener el cómputo real de materiales.</p>
+              <a href={`/proyectos/${id}`} className="btn-primary">Ir a Generar</a>
+           </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="budget-layout">
@@ -187,14 +197,14 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
                     </tr>
                   </thead>
                   <tbody>
-                    {mockBOM.items.map(item => {
-                      const priceItem = prices.find(p => p.id === item.id);
-                      const subtotal = (priceItem?.price || 0) * item.quantity;
+                    {realBOM.aggregated.map((item: any, idx: number) => {
+                      const priceItem = prices.find(p => p.id === item.profileType);
+                      const subtotal = (priceItem?.price || 0) * item.totalLinearMeters;
                       return (
-                        <tr key={item.id}>
-                          <td>{item.label}</td>
-                          <td>{item.quantity.toLocaleString()}</td>
-                          <td>{priceItem?.unit}</td>
+                        <tr key={idx}>
+                          <td>{item.profileType}</td>
+                          <td>{item.totalLinearMeters.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                          <td>m lin.</td>
                           <td className="subtotal">
                             {priceItem?.price ? `USD ${subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : '-'}
                           </td>
@@ -223,6 +233,24 @@ export default function PresupuestoPage({ params }: { params: { id: string } }) 
       </main>
 
       <style jsx>{`
+        .empty-state-overlay {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 60vh;
+          text-align: center;
+        }
+        .empty-state-overlay h2 {
+          font-size: 24px;
+          margin-bottom: 16px;
+          color: var(--accent);
+        }
+        .empty-state-overlay p {
+          color: var(--muted);
+          margin-bottom: 32px;
+          max-width: 400px;
+        }
         .budget-layout {
           display: flex;
         }

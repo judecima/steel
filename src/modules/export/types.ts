@@ -21,6 +21,7 @@ export type IndustrialCutListPiece = {
     anguloFin: number;
     panel: string;
     muro: string;
+    piezaTipo: string;
     prioridadFabricacion: number;
 };
 

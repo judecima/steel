@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ApiClient } from '@/lib/api';
+import { normalizarConfiguracionParametrica } from '@/lib/parametric-config';
 import Sidebar from '@/components/Sidebar';
 import ErrorState from '@/components/ErrorState';
 import LoadingState from '@/components/LoadingState';
@@ -17,30 +18,92 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
   const [project, setProject] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState<any>(null);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+ 
   useEffect(() => {
-    ApiClient.getProject(id)
-      .then(p => {
-        setProject(p);
-        setLoading(false);
-      })
-      .catch(e => {
-        if (e.status === 404) {
-          setError('El proyecto solicitado no existe en PostgreSQL o fue eliminado.');
-        } else {
-          setError(e.message);
-        }
-        setLoading(false);
-      });
+    fetchProject();
   }, [id]);
+
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    if (!formData.largoVivienda || formData.largoVivienda <= 0) errors.largoVivienda = 'Largo debe ser mayor a 0';
+    if (!formData.anchoVivienda || formData.anchoVivienda <= 0) errors.anchoVivienda = 'Ancho debe ser mayor a 0';
+    if (!formData.alturaMuro || formData.alturaMuro <= 0) errors.alturaMuro = 'Alto debe ser mayor a 0';
+    if (!formData.pendienteTecho || formData.pendienteTecho < 1 || formData.pendienteTecho > 45) 
+      errors.pendienteTecho = 'Ángulo debe estar entre 1° y 45°';
+    if (![0.4, 0.6].includes(formData.separacionMontantes)) errors.separacionMontantes = 'Separación debe ser 0.4 o 0.6';
+    if (!formData.espesorPerfil || formData.espesorPerfil <= 0) errors.espesorPerfil = 'Espesor debe ser mayor a 0';
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const fetchProject = async () => {
+    try {
+      const p = await ApiClient.getProject(id);
+      setProject(p);
+      
+      if (p.repairedVersion) {
+        console.warn('Proyecto reparado:', p.repairWarning);
+        // Toast simple via alert para este MVP
+        setTimeout(() => alert(`⚠️ Inconsistencia reparada: ${p.repairWarning}`), 500);
+      }
+
+      const v = p.historialVersiones?.find((v: any) => v.id === p.versionActual) || p.historialVersiones?.[0];
+      setFormData(normalizarConfiguracionParametrica(v?.configuracion));
+      setLoading(false);
+    } catch (e: any) {
+      setError(e.status === 404 ? 'El proyecto solicitado no existe.' : e.message);
+      setLoading(false);
+    }
+  };
+
+  const handleRegenerate = async () => {
+    setIsRegenerating(true);
+    try {
+      const result = await ApiClient.regenerarProyecto(id);
+      if (result.repairedVersion) {
+        alert(`⚠️ Inconsistencia reparada durante la generación: ${result.repairWarning}`);
+      }
+      await fetchProject();
+      alert('Proyecto generado exitosamente');
+    } catch (e: any) {
+      alert('Error al generar: ' + e.message);
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
+  const handleSaveConfig = async () => {
+    if (!validateForm()) return;
+    try {
+      // Para simplificar, guardamos en la versión actual o creamos una nueva
+      await ApiClient.updateProject(id, {
+        ...project,
+        historialVersiones: project.historialVersiones.map((v: any) => 
+          v.id === project.versionActual 
+            ? { ...v, configuracion: formData, resultadoMotor: null } // Limpiar resultado al editar
+            : v
+        )
+      });
+      setIsEditing(false);
+      fetchProject();
+    } catch (e: any) {
+      alert('Error al guardar: ' + e.message);
+    }
+  };
 
   if (loading) return <LoadingState />;
   if (error || !project) {
     return <ErrorState message={error || 'No se encontró el proyecto'} />;
   }
 
-  const vActual = project.historialVersiones?.find(v => v.id === project.versionActual) || project.historialVersiones?.[0];
-  const config = vActual?.configuracion;
+  const vActual = project.historialVersiones?.find((v: any) => v.id === project.versionActual) || project.historialVersiones?.[0];
+  const config = normalizarConfiguracionParametrica(vActual?.configuracion);
+  const resultado = vActual?.resultadoMotor;
 
   return (
     <div className="detail-layout">
@@ -67,43 +130,146 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
 
         <section className="config-grid">
           <div className="config-card">
-            <h3>Configuración Dimensional</h3>
-            <div className="config-params">
-              <div className="param">
-                <span className="label">Altura Muro</span>
-                <span className="value">{config?.alturaMuro} m</span>
-              </div>
-              <div className="param">
-                <span className="label">Separación Montantes</span>
-                <span className="value">{config?.separacionMontantes} m</span>
-              </div>
-              <div className="param">
-                <span className="label">Tipo de Perfil</span>
-                <span className="value">{config?.tipoPerfil}</span>
-              </div>
-              <div className="param">
-                <span className="label">Cubierta</span>
-                <span className="value">{config?.tipoCubierta === 'one_slope' ? 'Un agua' : 'Dos aguas'}</span>
-              </div>
+            <div className="card-header">
+              <h3>Configuración Paramétrica</h3>
+              {!isEditing ? (
+                <button className="btn-small" onClick={() => setIsEditing(true)}>Editar</button>
+              ) : (
+                <div className="edit-actions">
+                  <button className="btn-small btn-cancel" onClick={() => setIsEditing(false)}>Cancelar</button>
+                  <button className="btn-small btn-save" onClick={handleSaveConfig}>Guardar</button>
+                </div>
+              )}
+            </div>
+
+              <div className="config-params">
+                <div className="param">
+                  <span className="label">Largo de vivienda (m)</span>
+                  {isEditing && formData ? (
+                    <>
+                      <input type="number" step="0.1" value={formData.largoVivienda || 0} onChange={e => setFormData({...formData, largoVivienda: parseFloat(e.target.value) || 0})} />
+                      {formErrors.largoVivienda && <span className="error-text">{formErrors.largoVivienda}</span>}
+                    </>
+                  ) : (
+                    <span className="value">{config?.largoVivienda || '-'} m</span>
+                  )}
+                </div>
+                <div className="param">
+                  <span className="label">Ancho de vivienda (m)</span>
+                  {isEditing && formData ? (
+                    <>
+                      <input type="number" step="0.1" value={formData.anchoVivienda || 0} onChange={e => setFormData({...formData, anchoVivienda: parseFloat(e.target.value) || 0})} />
+                      {formErrors.anchoVivienda && <span className="error-text">{formErrors.anchoVivienda}</span>}
+                    </>
+                  ) : (
+                    <span className="value">{config?.anchoVivienda || '-'} m</span>
+                  )}
+                </div>
+                <div className="param">
+                  <span className="label">Alto de muros (m)</span>
+                  {isEditing && formData ? (
+                    <>
+                      <input type="number" step="0.1" value={formData.alturaMuro || 0} onChange={e => setFormData({...formData, alturaMuro: parseFloat(e.target.value) || 0})} />
+                      {formErrors.alturaMuro && <span className="error-text">{formErrors.alturaMuro}</span>}
+                    </>
+                  ) : (
+                    <span className="value">{config?.alturaMuro || '-'} m</span>
+                  )}
+                </div>
+                <div className="param">
+                  <span className="label">Ángulo de techo (°)</span>
+                  {isEditing && formData ? (
+                    <>
+                      <input type="number" step="1" value={formData.pendienteTecho || 0} onChange={e => setFormData({...formData, pendienteTecho: parseFloat(e.target.value) || 0})} />
+                      {formErrors.pendienteTecho && <span className="error-text">{formErrors.pendienteTecho}</span>}
+                    </>
+                  ) : (
+                    <span className="value">{config?.pendienteTecho || '-'}°</span>
+                  )}
+                </div>
+                <div className="param">
+                  <span className="label">Separación montantes (m)</span>
+                  {isEditing && formData ? (
+                    <>
+                      <select value={formData.separacionMontantes} onChange={e => setFormData({...formData, separacionMontantes: parseFloat(e.target.value)})}>
+                        <option value={0.4}>0.4 m</option>
+                        <option value={0.6}>0.6 m</option>
+                      </select>
+                      {formErrors.separacionMontantes && <span className="error-text">{formErrors.separacionMontantes}</span>}
+                    </>
+                  ) : (
+                    <span className="value">{config?.separacionMontantes || '-'} m</span>
+                  )}
+                </div>
+                <div className="param">
+                  <span className="label">Espesor perfil (mm)</span>
+                  {isEditing && formData ? (
+                    <>
+                      <input type="number" step="0.1" value={formData.espesorPerfil || 0} onChange={e => setFormData({...formData, espesorPerfil: parseFloat(e.target.value) || 0})} />
+                      {formErrors.espesorPerfil && <span className="error-text">{formErrors.espesorPerfil}</span>}
+                    </>
+                  ) : (
+                    <span className="value">{config?.espesorPerfil || '-'} mm</span>
+                  )}
+                </div>
+                <div className="param">
+                  <span className="label">Tipo de Cubierta</span>
+                  {isEditing && formData ? (
+                    <select value={formData.tipoCubierta} onChange={e => setFormData({...formData, tipoCubierta: e.target.value})}>
+                      <option value="one_slope">Techo a un agua</option>
+                      <option value="two_slope">Dos aguas (Gable)</option>
+                    </select>
+                  ) : (
+                    <span className="value">{config?.tipoCubierta === 'one_slope' ? 'Techo a un agua' : 'Dos aguas (Gable)'}</span>
+                  )}
+                </div>
+                <div className="param full-width">
+                   <div className="info-box">
+                      <Clock size={14} />
+                      <span>Caída del techo: hacia el ancho de la vivienda</span>
+                   </div>
+                </div>
             </div>
           </div>
 
           <div className="actions-card">
-            <h3>Acciones</h3>
+            <h3>Generación Técnica</h3>
             <div className="action-buttons">
-              <button className="btn-secondary">Cambiar Estado</button>
-              <button className="btn-accent">
-                <Rocket size={16} /> Regenerar (API)
+              <button 
+                className={`btn-accent ${isRegenerating ? 'loading' : ''}`}
+                onClick={handleRegenerate}
+                disabled={isRegenerating || isEditing}
+              >
+                <Rocket size={16} /> 
+                {isRegenerating ? 'Generando...' : 'Generar Proyecto'}
               </button>
             </div>
-            <p className="action-hint">La regeneración aplicará los cambios paramétricos vía motor industrial.</p>
+            
+            {resultado ? (
+              <div className="gen-stats animate-fade">
+                <div className="stat-item">
+                  <span className="stat-val">{resultado.house.muros.length}</span>
+                  <span className="stat-lbl">Muros</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-val">{resultado.construction.panels.length}</span>
+                  <span className="stat-lbl">Paneles</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-val">{resultado.bom.aggregated.length}</span>
+                  <span className="stat-lbl">Materiales</span>
+                </div>
+              </div>
+            ) : (
+              <p className="action-hint">Requiere generación para habilitar Viewer y Exportaciones.</p>
+            )}
           </div>
         </section>
 
         <section className="history-section">
           <h3>Historial de Versiones</h3>
           <div className="version-list">
-            {project.historialVersiones?.map((v, idx) => (
+            {project.historialVersiones?.map((v: any, idx: number) => (
               <div key={v.id} className="version-item">
                 <div className="version-info">
                   <span className="version-tag">V{project.historialVersiones.length - idx}</span>
@@ -111,6 +277,7 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
                 </div>
                 <div className="version-note">{v.nota}</div>
                 {v.id === project.versionActual && <span className="active-mark">Activa</span>}
+                {v.resultadoMotor && <span className="gen-mark">✓ Generada</span>}
               </div>
             ))}
           </div>
@@ -160,11 +327,79 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
           gap: 24px;
           margin-bottom: 48px;
         }
-        .config-card, .actions-card {
+        .actions-card {
           background: var(--surface);
           border: 1px solid var(--border);
           border-radius: var(--radius);
           padding: 32px;
+          display: flex;
+          flex-direction: column;
+        }
+        .card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 24px;
+        }
+        .card-header h3 {
+          margin-bottom: 0;
+        }
+        .btn-small {
+          padding: 4px 12px;
+          font-size: 11px;
+          border-radius: 4px;
+          background: var(--bg);
+          border: 1px solid var(--border);
+          color: var(--text);
+          cursor: pointer;
+        }
+        .edit-actions {
+          display: flex;
+          gap: 8px;
+        }
+        .btn-save {
+          background: var(--accent);
+          color: white;
+          border-color: var(--accent);
+        }
+        .btn-cancel {
+          color: var(--error);
+        }
+        input[type="number"], select {
+          background: var(--bg);
+          border: 1px solid var(--border);
+          color: var(--text);
+          padding: 4px 8px;
+          border-radius: 4px;
+          width: 120px;
+          font-family: inherit;
+          outline: none;
+        }
+        input[type="number"]:focus, select:focus {
+          border-color: var(--accent);
+        }
+        .gen-stats {
+          margin-top: 24px;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+          padding-top: 20px;
+          border-top: 1px solid var(--border);
+        }
+        .stat-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .stat-val {
+          font-size: 20px;
+          font-weight: 700;
+          color: var(--accent);
+        }
+        .stat-lbl {
+          font-size: 10px;
+          text-transform: uppercase;
+          color: var(--muted);
         }
         h3 {
           font-size: 14px;
@@ -190,6 +425,26 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
         .param .value {
           font-size: 16px;
           font-weight: 600;
+        }
+        .error-text {
+          color: var(--error);
+          font-size: 10px;
+          font-weight: 700;
+          margin-top: 4px;
+        }
+        .full-width {
+          grid-column: 1 / -1;
+        }
+        .info-box {
+          background: rgba(var(--accent-rgb), 0.1);
+          border: 1px solid var(--accent);
+          color: var(--accent);
+          padding: 12px;
+          border-radius: 8px;
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
         }
         .action-buttons {
           display: flex;
@@ -224,10 +479,15 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
         .btn-accent:hover {
           background: var(--accent-hover);
         }
+        .btn-accent:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
         .action-hint {
           font-size: 12px;
           color: var(--muted);
           line-height: 1.4;
+          text-align: center;
         }
         .history-section {
           background: var(--surface);
@@ -276,6 +536,12 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
           font-weight: 700;
           color: var(--success);
           text-transform: uppercase;
+        }
+        .gen-mark {
+          font-size: 11px;
+          font-weight: 700;
+          color: var(--accent);
+          opacity: 0.8;
         }
       `}</style>
     </div>

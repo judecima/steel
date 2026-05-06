@@ -29,7 +29,45 @@ async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T
   return response.json();
 }
 
+/**
+ * Generic API Helpers (Phase 9F)
+ */
+export async function apiGet<T>(path: string): Promise<T> {
+  return apiRequest<T>(path, { method: 'GET' });
+}
+
+export async function apiPost<T>(path: string, body?: any): Promise<T> {
+  return apiRequest<T>(path, {
+    method: 'POST',
+    body: body ? JSON.stringify(body) : undefined,
+  });
+}
+
+export async function apiPut<T>(path: string, body?: any): Promise<T> {
+  return apiRequest<T>(path, {
+    method: 'PUT',
+    body: body ? JSON.stringify(body) : undefined,
+  });
+}
+
+export async function apiPatch<T>(path: string, body?: any): Promise<T> {
+  return apiRequest<T>(path, {
+    method: 'PATCH',
+    body: body ? JSON.stringify(body) : undefined,
+  });
+}
+
+export async function apiDelete<T>(path: string): Promise<T> {
+  return apiRequest<T>(path, { method: 'DELETE' });
+}
+
 export const ApiClient = {
+  get: apiGet,
+  post: apiPost,
+  put: apiPut,
+  patch: apiPatch,
+  delete: apiDelete,
+
   async getHealth(): Promise<ApiHealth> {
     return apiRequest<ApiHealth>('/health');
   },
@@ -78,10 +116,10 @@ export const ApiClient = {
   async getIndustrialExports(projectId: string): Promise<any> {
     // Note: For 9D, these are the standard secure download paths
     return {
-      bom: '/api/exports/bom-industrial.csv',
-      cutlist: '/api/exports/cutlist-paneles.csv',
-      json: '/api/exports/proyecto-render.json',
-      txt: '/api/exports/secuencia-montaje.txt',
+      bom: '/api/exports/BOM.csv',
+      cutlist: '/api/exports/CUTLIST.csv',
+      json: '/api/exports/Proyecto.json',
+      txt: '/api/exports/Montaje.txt',
       pdf: '/api/exports/planos-tecnicos.pdf',
       package: '/api/exports/planos-package.json'
     };
@@ -130,7 +168,7 @@ export const ApiClient = {
     });
   },
 
-  async getFilesStatus(): Promise<any[]> {
-    return apiRequest<any[]>('/exports');
+  async getFilesStatus(projectId: string): Promise<any> {
+    return apiRequest<any>(`/exports?projectId=${projectId}`);
   }
 };

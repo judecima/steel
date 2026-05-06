@@ -20,9 +20,15 @@
 - Phase 9B — Advanced UI Features (Certified)
 - Phase 9D — Advanced Persistence & Production (Certified)
 - Phase 9D.1 — Real Export Files & PDF Repair (Certified)
+- Phase 9D.2 — Quality Audit of Industrial Exports (Certified)
+- Phase 9B.Fix — Visualizer 404 Resolution (Certified)
+- Phase 9E — Parametric Project Generation (Certified)
+- Phase 9E.Fix — Active Version Invariant Stabilized (Certified)
+- Phase 9E.Fix.2 — Sloped Wall Geometric Adaptation (Certified)
+- Phase 9E.Fix.3 — Runtime Stability & Resiliency (Certified)
 
 ## Current Phase
-*   **Fase 10: Visual Editor & BIM Export** - PENDIENTE
+*   **Fase 10: Visual Editor & BIM Export** - EN PROCESO
 
 ## Current Capabilities
 - Modular foundation geometry generation

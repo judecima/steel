@@ -143,14 +143,35 @@ Result: Passed (10/10)
 ## Real Export Files & PDF Repair (Phase 9D.1)
 Last run: 2026-05-06
 Command: npx ts-node --transpile-only scripts/next_exports_real_tests.ts
-Result: Passed (14/14)
-| E-01 | Consolidated Generation | PASSED | Crea todos los activos industriales |
-| E-08 | PDF Integrity | PASSED | PDF > 5KB con geometría técnica |
-| E-09 | Real-time Status API | PASSED | UI verifica existencia física |
-| E-12 | Secure JSON 404 | PASSED | Sin error HTML en descargas fallidas |
+Result: Passed (15/15)
+| E-01 | Consolidated Generation | PASSED | Crea todos los activos industriales (BOM, PDF, etc.) |
+| E-08 | PDF Integrity (> 5KB) | PASSED | 13.2KB en real, 5.9KB en fallback |
+| E-12 | Secure JSON 404 | PASSED | Manejo de errores sin HTML |
+| E-14 | Legacy Names Removal | PASSED | Solo se usan nombres estandarizados |
+| E-15 | Fallback Recovery | PASSED | Archivos válidos sin resultadoMotor |
+
+## Quality Audit of Industrial Exports (Phase 9D.2)
+Last run: 2026-05-06
+Command: npx ts-node --transpile-only scripts/next_exports_quality_tests.ts
+Result: Passed (10/10)
+| Q-01 | BOM Useful Content | PASSED | 3+ filas de materiales reales |
+| Q-06 | Graphic Entities | PASSED | 2 hojas de panel con geometría técnica |
+| Q-07 | PDF Completeness | PASSED | 6 hojas (Portada, Indice, Replanteo, Distribución, Paneles) |
+| Q-08 | PDF Content Weight | PASSED | 9.1 KB (Valid technical data) |
+| Q-10 | End-to-End Integrity | PASSED | ProjectResult real mapeado correctamente a archivos |
+
+## Runtime Stability & Resiliency (Phase 9E Fix)
+Last run: 2026-05-06
+Command: npx ts-node --transpile-only scripts/runtime_viewer_export_tests.ts
+Result: Passed (6/6)
+| R-01 | Render Missing Project | PASSED | Returns 404 with structured JSON error |
+| R-04 | Render Valid Project | PASSED | Returns 200 with ok:true and scene data |
+| R-08 | Export Missing Project | PASSED | Returns 404 without hanging |
+| R-10 | Disk Audit Logic | PASSED | Correctly identifies disponible/error/pendiente |
+| R-11 | Server-side Timeout | PASSED | enforced 5s/20s bounds |
 
 ## Known Validation Gaps
 - Non-deterministic output in Test 2 (ProjectResult compare) still being monitored.
 
 ## Current Certification Level
-**Phase 9D.1 Certified (Real Industrial Exports & Persistence).**
+**Phase 9D.2 Certified (High-Quality Industrial Exports & Persistence).**

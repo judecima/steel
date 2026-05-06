@@ -1,11 +1,12 @@
 import { ENGINE_CONFIG } from '../../core/config';
-import { Opening } from '../../core/types';
+import { Opening, HouseInput } from '../../core/types';
 import { round } from '../../utils/math';
 import { logger } from '../../utils/logger';
 
-export function getPanelizationRules() {
+export function getPanelizationRules(input?: HouseInput) {
   return {
-    maxWidth: ENGINE_CONFIG.rules.panelization.maxPanelWidth,
+    maxWidth: input?.panelMaxLength || ENGINE_CONFIG.rules.panelization.maxPanelWidth,
+    preferredWidth: input?.panelPreferredLength || ENGINE_CONFIG.rules.panelization.preferredPanelWidth,
     minWidth: ENGINE_CONFIG.rules.panelization.minPanelWidth,
     openingClearance: ENGINE_CONFIG.rules.panelization.openingEdgeClearance
   };

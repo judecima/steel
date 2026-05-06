@@ -15,6 +15,7 @@ export const RENDER_CONFIG = {
     { id: 'layer_anclajes', name: 'Anclajes', visibleByDefault: true, description: 'Marcadores de anclajes de fundacion' },
     { id: 'layer_etiquetas', name: 'Etiquetas', visibleByDefault: true, description: 'Textos y etiquetas' },
     { id: 'layer_advertencias', name: 'Advertencias', visibleByDefault: true, description: 'Advertencias estructurales' },
+    { id: 'layer_panel_joints', name: 'Juntas de Paneles', visibleByDefault: true, description: 'Líneas divisorias entre paneles' },
     { id: 'layer_estructural_overlays', name: 'Overlays Estructurales', visibleByDefault: true, description: 'Indicadores de estado structural' },
     { id: 'layer_shop_labels', name: 'Etiquetas de Taller', visibleByDefault: true, description: 'IDs de piezas y longitudes' },
     { id: 'layer_inspeccion', name: 'Capa de Inspección', visibleByDefault: true, description: 'Bounding boxes y diagnósticos' }
@@ -32,6 +33,7 @@ export const RENDER_CONFIG = {
     opening_void: { id: 'mat_opening', name: 'Vacio de Abertura', color: '#FF6347', opacity: 0.2, metalness: 0, roughness: 1 },
     header: { id: 'mat_header', name: 'Dintel', color: '#FFD700', opacity: 1.0, metalness: 0.8, roughness: 0.2 },
     roof: { id: 'mat_roof', name: 'Techo', color: '#8B4513', opacity: 0.8, metalness: 0.1, roughness: 0.9 },
+    mat_panel_joint: { id: 'mat_panel_joint', name: 'Junta de Panel', color: '#FF8C00', opacity: 1.0, metalness: 0.5, roughness: 0.5 },
     warning_critical: { id: 'mat_warn_crit', name: 'Advertencia Critica', color: '#FF0000', opacity: 0.8, metalness: 0, roughness: 1 },
     warning_review: { id: 'mat_warn_rev', name: 'Requiere Revision', color: '#FFA500', opacity: 0.8, metalness: 0, roughness: 1 },
     mat_struct_preliminary_pass: { id: 'mat_struct_pass', name: 'Pase Preliminar', color: '#2ecc71', opacity: 0.9, metalness: 0.5, roughness: 0.5 },

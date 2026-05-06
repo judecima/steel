@@ -45,6 +45,8 @@ export type RenderObject = {
   position: Vector3;
   rotation: Vector3;
   dimensions: Vector3; // width(x), height(y), depth(z)
+  heightStart?: number; // For trapezoidal objects (like slanted walls/panels)
+  heightEnd?: number;   // For trapezoidal objects
   material: string;
   layer: string;
   visible: boolean;

@@ -1,18 +1,25 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { PlanoSheetDTO, PlanoEntityDTO, PlanosPackageDTO } from './types';
 import { PLANO_CONFIG } from './plano-config';
+import { validatePdfScene } from './validate-pdf-scene';
+import { normalizePanelGeometry } from './pdf-scene-adapter';
 
 export class PdfExporter {
     static async export(pkg: PlanosPackageDTO): Promise<Uint8Array> {
-        if (!pkg.hojas || pkg.hojas.length === 0) {
-            throw new Error("No hay hojas técnicas para exportar en este proyecto.");
+        try {
+            validatePdfScene(pkg);
+        } catch (error: any) {
+            console.error("[PDF_EXPORT] Validation failed:", error.message);
+            throw error;
         }
+
         const pdfDoc = await PDFDocument.create();
         const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
         const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
         for (const sheet of pkg.hojas) {
-            const page = pdfDoc.addPage([PLANO_CONFIG.SIZES.A3.width, PLANO_CONFIG.SIZES.A3.height]);
+            try {
+                const page = pdfDoc.addPage([PLANO_CONFIG.SIZES.A3.width, PLANO_CONFIG.SIZES.A3.height]);
             const { width, height } = page.getSize();
 
             // Draw Border
@@ -45,14 +52,32 @@ export class PdfExporter {
             page.drawText(`FECHA: ${sheet.titleBlock.fecha}`, { x: tbX + 10, y: tbY + 70, size: 8, font });
             page.drawText(`HOJA: ${sheet.codigoHoja} / ${sheet.numeroHoja}`, { x: tbX + 10, y: tbY + 55, size: 12, font: fontBold });
             
-            // Disclaimer
-            page.drawText(sheet.titleBlock.disclaimer, {
-                x: PLANO_CONFIG.MARGINS.left + 10,
-                y: PLANO_CONFIG.MARGINS.bottom + 10,
-                size: 6,
-                font,
-                color: rgb(0.5, 0.5, 0.5)
-            });
+            // Disclaimer (Multi-line)
+            const disclaimerText = sheet.titleBlock.disclaimer;
+            const words = disclaimerText.split(' ');
+            let line = '';
+            let discY = PLANO_CONFIG.MARGINS.bottom + 25;
+            for (const word of words) {
+                if ((line + word).length > 100) {
+                    page.drawText(line, { x: PLANO_CONFIG.MARGINS.left + 10, y: discY, size: 5, font });
+                    line = word + ' ';
+                    discY -= 6;
+                } else {
+                    line += word + ' ';
+                }
+            }
+            page.drawText(line, { x: PLANO_CONFIG.MARGINS.left + 10, y: discY, size: 5, font });
+
+            // Draw Empty Sheet Warning if needed
+            if (sheet.entities.length === 0 && sheet.tables.length === 0) {
+                page.drawText("Hoja generada sin geometría técnica disponible", {
+                    x: width / 2 - 150,
+                    y: height / 2,
+                    size: 14,
+                    font: fontBold,
+                    color: rgb(1, 0, 0)
+                });
+            }
 
             // Draw Entities
             for (const entity of sheet.entities) {
@@ -65,21 +90,78 @@ export class PdfExporter {
                     });
                 }
                 if (entity.type === 'line' && entity.points && entity.points.length >= 2) {
-                    // Lines in PDF use bottom-left origin
-                    // For 8A, we do a simple scale to center for visualization
-                    const p1 = entity.points[0];
-                    const p2 = entity.points[1];
-                    page.drawLine({
-                        start: { x: 300 + p1.x * 20, y: 300 + p1.y * 20 },
-                        end: { x: 300 + p2.x * 20, y: 300 + p2.y * 20 },
-                        color: rgb(1, 0, 0),
-                        thickness: 2
+                    const geometry = normalizePanelGeometry(entity);
+                    if (geometry.start && geometry.end) {
+                        page.drawLine({
+                            start: { x: 300 + geometry.start.x * 20, y: 300 + geometry.start.y * 20 },
+                            end: { x: 300 + geometry.end.x * 20, y: 300 + geometry.end.y * 20 },
+                            color: rgb(0, 0, 0),
+                            thickness: 1
+                        });
+                    }
+                }
+                if (entity.type === 'rect') {
+                    page.drawRectangle({
+                        x: entity.x || 0,
+                        y: entity.y || 0,
+                        width: entity.width || 50,
+                        height: entity.height || 50,
+                        borderColor: rgb(0, 0, 0),
+                        borderWidth: 1
+                    });
+                }
+                if (entity.type === 'circle') {
+                    page.drawCircle({
+                        x: entity.x || 0,
+                        y: entity.y || 0,
+                        size: entity.radius || 10,
+                        borderColor: rgb(0, 0, 0),
+                        borderWidth: 1
                     });
                 }
             }
+
+            // Draw Dimensions
+            for (const dim of sheet.dimensions || []) {
+                const geometry = normalizePanelGeometry(dim);
+                if (geometry.start && geometry.end) {
+                    const x1 = geometry.start.x;
+                    const y1 = geometry.start.y;
+                    const x2 = geometry.end.x;
+                    const y2 = geometry.end.y;
+
+                    page.drawLine({
+                        start: { x: x1, y: y1 },
+                        end: { x: x2, y: y2 },
+                        color: rgb(0, 0, 1),
+                        thickness: 0.5
+                    });
+                    page.drawText(dim.value || dim.text || '', {
+                        x: (x1 + x2) / 2,
+                        y: (y1 + y2) / 2 + 5,
+                        size: 8,
+                        font
+                    });
+                }
+            }
+
+            // Draw Warnings (Visible in the sheet)
+            sheet.warnings.forEach((warn, idx) => {
+                page.drawText(`WARN: ${warn}`, {
+                    x: PLANO_CONFIG.MARGINS.left + 10,
+                    y: PLANO_CONFIG.MARGINS.bottom + 100 - (idx * 12),
+                    size: 7,
+                    font,
+                    color: rgb(0.8, 0.4, 0)
+                });
+            });
             
             // Draw Tables
             for (const table of sheet.tables) {
+                if (!table.position) {
+                    console.warn("[PDF_EXPORT] skipping table due to missing position");
+                    continue;
+                }
                 let currentY = table.position.y;
                 page.drawText(table.title || '', { x: table.position.x, y: currentY + 15, size: 10, font: fontBold });
                 
@@ -92,11 +174,15 @@ export class PdfExporter {
                 // Rows
                 table.rows.forEach(row => {
                     row.forEach((cell, i) => {
-                        page.drawText(cell, { x: table.position.x + (i * 70), y: currentY, size: 7, font });
+                        page.drawText(cell || '', { x: table.position.x + (i * 70), y: currentY, size: 7, font });
                     });
                     currentY -= 12;
                 });
             }
+          } catch (sheetError: any) {
+              console.error(`[PDF_EXPORT] Error exporting sheet ${sheet.id}:`, sheetError.message);
+              // Fallback: Continue with next sheet instead of breaking everything
+          }
         }
 
         return await pdfDoc.save();

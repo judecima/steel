@@ -1,7 +1,26 @@
-import { Panel, BillOfMaterials, BOMItem, StudRole, HeaderStrategy } from '../../core/types';
+import { Panel, BillOfMaterials, BOMItem } from '../../core/types';
 import { logger } from '../../utils/logger';
 import { round } from '../../utils/math';
 import { getDefaultTrack, getDefaultProfile } from '../rules/studs';
+
+const ROLE_TRANSLATIONS: Record<string, string> = {
+    'common': 'Montante común',
+    'montante_principal': 'Montante rey',
+    'montante_apoyo': 'Montante de apoyo',
+    'montante_corto_superior': 'Montante corto superior',
+    'montante_corto_inferior': 'Montante corto inferior',
+    'corner': 'Montante de esquina',
+    'junction': 'Encuentro T',
+    'solera_ventana': 'Solera de ventana',
+    'solera_inferior': 'Solera inferior',
+    'solera_superior': 'Solera superior',
+    'provisional_boxed_header': 'Dintel (Boxed)',
+    'track': 'Solera'
+};
+
+function translateRole(role: string): string {
+    return ROLE_TRANSLATIONS[role] || role;
+}
 
 export function calculateBOM(panels: Panel[]): BillOfMaterials {
   const cutList: BOMItem[] = [];
@@ -25,26 +44,40 @@ export function calculateBOM(panels: Panel[]): BillOfMaterials {
     }
 
     // 2. Add tracks
+    // Bottom track (Solera inferior - horizontal)
     cutList.push({ 
         profileType: trackProfile, 
         thickness: defaultThickness, 
         length: round(panel.width), 
-        quantity: 2, 
-        role: 'track',
+        quantity: 1, 
+        role: 'solera_inferior',
+        sourceEntityId: panel.id
+    });
+
+    // Top track (Solera superior - puede ser inclinada)
+    const hDelta = Math.abs(panel.heightEnd - panel.heightStart);
+    const slopedLength = Math.sqrt(Math.pow(panel.width, 2) + Math.pow(hDelta, 2));
+    
+    cutList.push({ 
+        profileType: trackProfile, 
+        thickness: defaultThickness, 
+        length: round(slopedLength), 
+        quantity: 1, 
+        role: 'solera_superior',
         sourceEntityId: panel.id
     });
 
     // 3. Add headers (Dinteles)
     if (panel.aberturas) {
       panel.aberturas.forEach(op => {
-          if (op.header) {
+          if (op.dintel) {
               const headerPieces = 2; // Logic for provisional boxed header
               cutList.push({ 
                   profileType: studProfile, 
                   thickness: defaultThickness, 
-                  length: round(op.header.span + 0.1), 
+                  length: round(op.dintel.span + 0.1), 
                   quantity: headerPieces, 
-                  role: op.header.strategy,
+                  role: op.dintel.strategy,
                   sourceEntityId: panel.id
               });
           }

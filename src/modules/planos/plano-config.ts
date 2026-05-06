@@ -39,7 +39,7 @@ export const PLANO_CONFIG = {
         tiny: 5
     },
     
-    DISCLAIMER: 'Documento preliminar. Requiere revisión y firma de profesional competente antes de fabricación o montaje.',
+    DISCLAIMER: 'Documento preliminar generado automáticamente por Steel Frame Engine. Requiere revisión, validación técnica y firma de profesional matriculado competente según normativas locales vigentes (CIRSOC, IRAM, etc.) antes de su uso para fabricación, cotización o montaje. El usuario asume total responsabilidad por el uso de este documento. Todas las medidas deben ser verificadas en obra antes de la ejecución. La empresa no se responsabiliza por errores derivados de la interpretación de este modelo digital sin supervisión profesional calificada.',
     SYSTEM_NAME: 'Steel Frame Engine'
 };
 

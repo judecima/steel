@@ -13,6 +13,9 @@ export type ConstructionResult = {
         candidatesEvaluated: Record<string, PanelizationCandidate>;
         globalWinner?: GlobalPlanCandidate;
         telemetry?: PlannerTelemetry;
+        industrialSegments?: any[];
+        panelJoints?: any[];
+        openingFrames?: any[];
     }
 };
 
@@ -31,13 +34,25 @@ export function panelizeHouse(house: HouseModel, winner: GlobalPlanCandidate, te
     let currentOffset = 0;
     
     winningCandidate.splits.forEach((width, index) => {
+      // Calcular alturas interpoladas para el panel
+      const hStart = muro.heightStart + (muro.heightEnd - muro.heightStart) * (currentOffset / muro.length);
+      const hEnd = muro.heightStart + (muro.heightEnd - muro.heightStart) * ((currentOffset + width) / muro.length);
+
+      logger.log('PANEL_GEOMETRY_RESOLVED', `panel_${wallId}_${index}`, `Geometría de panel resuelta`, { 
+        hStart: Math.round(hStart * 1000) / 1000, 
+        hEnd: Math.round(hEnd * 1000) / 1000, 
+        delta: Math.round(Math.abs(hEnd - hStart) * 1000) / 1000 
+      });
+
       // Crear objetos Panel reales
       const panel: Panel = {
         id: `panel_${wallId}_${index}`,
         wallId: wallId,
         role: PanelRole.STRUCTURAL,
         width: width,
-        height: Math.max(muro.heightStart, muro.heightEnd),
+        height: Math.max(hStart, hEnd),
+        heightStart: hStart,
+        heightEnd: hEnd,
         offset: currentOffset,
         studs: [],
         aberturas: muro.aberturas.filter(op => op.position >= currentOffset - 0.01 && op.position + op.width <= currentOffset + width + 0.01),
@@ -69,7 +84,10 @@ export function panelizeHouse(house: HouseModel, winner: GlobalPlanCandidate, te
     metadata: {
       candidatesEvaluated: winner.wallSelections,
       globalWinner: winner,
-      telemetry: telemetry
+      telemetry: telemetry,
+      industrialSegments: [], // To be populated if needed
+      panelJoints: [], // To be populated if needed
+      openingFrames: [] // To be populated if needed
     }
   };
 }

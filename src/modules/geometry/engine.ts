@@ -15,18 +15,17 @@ export function generateGeometry(input: HouseInput): HouseModel {
 
   const muros: Muro[] = [];
 
-  // Asumiendo generación en sentido horario: Norte, Este, Sur, Oeste
-  // Muro 1: Norte (Ancho)
-  muros.push(createWall('wall_north', input.width, roof.lowSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: 0}, {x: input.width, y: 0}));
+  // Muro 1: Norte (Ancho) - TRAMO PENDIENTE
+  muros.push(createWall('wall_north', input.width, roof.lowSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: 0}, {x: input.width, y: 0}));
   
-  // Muro 2: Este (Largo)
-  muros.push(createWall('wall_east', input.length, roof.lowSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: 0}, {x: input.width, y: input.length}));
+  // Muro 2: Este (Largo) - LADO ALTO
+  muros.push(createWall('wall_east', input.length, roof.highSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: 0}, {x: input.width, y: input.length}));
   
-  // Muro 3: Sur (Ancho)
-  muros.push(createWall('wall_south', input.width, roof.highSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: input.length}, {x: 0, y: input.length}));
+  // Muro 3: Sur (Ancho) - TRAMO PENDIENTE (Retorno)
+  muros.push(createWall('wall_south', input.width, roof.highSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: input.length}, {x: 0, y: input.length}));
   
-  // Muro 4: Oeste (Largo)
-  muros.push(createWall('wall_west', input.length, roof.highSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: input.length}, {x: 0, y: 0}));
+  // Muro 4: Oeste (Largo) - LADO BAJO
+  muros.push(createWall('wall_west', input.length, roof.lowSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: input.length}, {x: 0, y: 0}));
 
   // Mapear aberturas a los muros
   if (input.openings) {

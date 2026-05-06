@@ -21,7 +21,7 @@ export function buildSequenceScene(projectResult: ProjectResult): { pasos: Assem
   });
 
   // Pasos de Muros (siguiendo el rastro del planificador)
-  winner.decidedWalls.forEach((wallId, index) => {
+  winner.decidedWalls.forEach((wallId: string, index: number) => {
     const muro = projectResult.house.muros.find(w => w.id === wallId);
     const wallName = muro ? muro.id : wallId;
     

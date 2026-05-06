@@ -70,7 +70,7 @@ async function runTests() {
     }
 
     // TEST E9: GET /api/exports lista estado real
-    const listRes = await axios.get(`${API_BASE}/exports`);
+    const listRes = await axios.get(`${API_BASE}/exports?projectId=${projId}`);
     console.log(`TEST E9: ${Array.isArray(listRes.data) && listRes.data.length > 0 ? 'PASSED' : 'FAILED'} (GET /api/exports OK)`);
 
     const checkFile = (filename: string) => {
@@ -87,10 +87,10 @@ async function runTests() {
     console.log(`TEST E7: ${checkFile('planos-package.json') ? 'PASSED' : 'FAILED'} (planos-package.json existe)`);
 
     // TEST E10-E11: Tipos MIME
-    const bomFetch = await axios.get(`${API_BASE}/exports/BOM.csv`);
+    const bomFetch = await axios.get(`${API_BASE}/exports/${projId}/BOM.csv`);
     console.log(`TEST E10: ${bomFetch.headers['content-type'].includes('text/csv') ? 'PASSED' : 'FAILED'} (MIME BOM: ${bomFetch.headers['content-type']})`);
 
-    const pdfFetch = await axios.get(`${API_BASE}/exports/planos-tecnicos.pdf`, { responseType: 'arraybuffer' });
+    const pdfFetch = await axios.get(`${API_BASE}/exports/${projId}/planos-tecnicos.pdf`, { responseType: 'arraybuffer' });
     console.log(`TEST E11: ${pdfFetch.headers['content-type'] === 'application/pdf' ? 'PASSED' : 'FAILED'} (MIME PDF: ${pdfFetch.headers['content-type']})`);
 
     // TEST E8: PDF size > 5KB
@@ -99,11 +99,40 @@ async function runTests() {
 
     // TEST E12: 404 JSON
     try {
-      await axios.get(`${API_BASE}/exports/non-existent.file`);
+      await axios.get(`${API_BASE}/exports/${projId}/non-existent.file`);
     } catch (e: any) {
       const isJson = e.response?.headers['content-type'].includes('application/json');
       console.log(`TEST E12: ${isJson && e.response?.status === 404 ? 'PASSED' : 'FAILED'} (404 is JSON)`);
     }
+
+    // TEST E13: La lista de la API solo contiene archivos con exists: true (o la UI filtra)
+    // El endpoint /api/exports ya filtra, verificamos consistencia
+    const allExists = listRes.data.every((x: any) => x.exists);
+    console.log(`TEST E13: ${allExists ? 'PASSED' : 'FAILED'} (Lista API consistente)`);
+
+    // TEST E14: No quedan nombres legacy en la lista
+    const legacyNames = ['bom-industrial.csv', 'cutlist-paneles.csv', 'proyecto-render.json', 'secuencia-montaje.txt'];
+    const hasLegacy = listRes.data.some((x: any) => legacyNames.includes(x.filename));
+    console.log(`TEST E14: ${!hasLegacy ? 'PASSED' : 'FAILED'} (No hay nombres legacy)`);
+
+    // TEST E15: Proyecto sin resultadoMotor genera fallback válido
+    console.log('[STEP] Testing fallback without motor results...');
+    const emptyProjId = 'test_proj_no_motor_' + Date.now();
+    await axios.post(`${API_BASE}/proyectos`, {
+      id: emptyProjId,
+      nombre: 'Test No Motor',
+      cliente: 'QA Bot',
+      versionActual: 'v1',
+      estado: 'borrador',
+      fechaCreacion: new Date().toISOString(),
+      fechaActualizacion: new Date().toISOString(),
+      historialVersiones: [{ id: 'v1', numero: 1, fecha: new Date().toISOString() }]
+    });
+    
+    const emptyGenRes = await axios.post(`${API_BASE}/proyectos/${emptyProjId}/exportaciones/generar`);
+    const bomFallback = await axios.get(`${API_BASE}/exports/${emptyProjId}/BOM.csv`);
+    const isFallback = bomFallback.data.includes('Sin datos disponibles') || bomFallback.data.includes('Regenerar proyecto');
+    console.log(`TEST E15: ${emptyGenRes.data.ok && isFallback ? 'PASSED' : 'FAILED'} (Fallback sin motor OK)`);
 
   } catch (error: any) {
     console.error('Error en tests reales de exportación:', error.message);
