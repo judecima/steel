@@ -1,5 +1,13 @@
 # Changelog Assisted
 
+## [2026-05-06] - Fase 9A: Migración Product UI a Next.js
+- Inicialización de aplicación Next.js 14 en `apps/product-ui`.
+- Implementación de Dashboard, Listado de Proyectos, Creación y Detalle.
+- Eliminación total de dependencia de LocalStorage para datos de proyecto (PostgreSQL única fuente).
+- Sistema de navegación App Router con AppShell unificado y Sidebar contextual.
+- Banner de redirección en UI legacy para facilitar la transición.
+- Certificación de 10 tests de migración y estabilidad.
+
 ## [2026-05-06] - Fase 7: Reparación de Proyecto Activo y Persistencia
 - Corrección de visibilidad intermitente de proyectos.
 - Implementación de limpieza automática de IDs obsoletos (404 de API).

@@ -105,8 +105,17 @@ Result: Passed (6/6 nuevos)
 | F7-146 | Detalle Guided 404 UI | PASSED | Mensaje amigable |
 | F7-147 | Local Cleanup Helper | PASSED | Herramienta de soporte |
 
+## Next.js Product UI Migration (Phase 9A)
+Last run: 2026-05-06
+Command: npx ts-node --transpile-only scripts/next_product_ui_tests.ts
+Result: Passed (10/10)
+| F9A-148 | App Existence | PASSED | apps/product-ui inicializado |
+| F9A-150 | No LocalStorage | PASSED | PostgreSQL es fuente única |
+| F9A-151 | App Router Slugs | PASSED | /, /proyectos, /proyectos/nuevo, /proyectos/[id] |
+| F9A-157 | Legacy Redirection | PASSED | Banner en index.html legacy |
+
 ## Known Validation Gaps
 - Non-deterministic output in Test 2 (ProjectResult compare) still being monitored.
 
 ## Current Certification Level
-**Phase 8A Certified (Technical Drawing Generation - Base Package).**
+**Phase 9A Certified (Next.js Product UI Migration).**

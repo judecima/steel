@@ -1,9 +1,5 @@
 # Current State — Steel Frame Engine
 
-## Current Phase
-*   **Fase 8A: Generador Base de Planos Técnicos (PDF)** - **COMPLETO**
-*   **Fase 8B: Planos Avanzados y Detalles** - PENDIENTE
-
 ## Approved Completed Phases
 - Phase 0 — Modular foundation
 - Phase 0.5 — Safety Boundaries & Regression Hardening
@@ -18,6 +14,11 @@
 - Phase 6A — Persistencia PostgreSQL y Dashboard Local (Certified)
 - Phase 7 — API Local UI ↔ PostgreSQL (Certified)
 - Phase 7.5A — Product UX Stabilization (Certified)
+- Phase 8A — Generador Base de Planos Técnicos (Certified)
+- Phase 9A — Migración Product UI a Next.js (Certified)
+
+## Current Phase
+*   **Fase 9B: Advanced UI Features** - PENDIENTE
 
 ## Current Capabilities
 - Modular foundation geometry generation
