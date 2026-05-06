@@ -1,6 +1,10 @@
 import { ProjectResult } from '../../core/types';
-import { RenderSceneDTO, RenderObject, RenderWarning, RenderLabel } from './types';
-import { RENDER_CONFIG } from './render-config';
+import { 
+    RenderSceneDTO, 
+    RenderSceneIndustrialDTO, 
+    ModoVisualizacion,
+    ModeData
+} from './types';
 import { buildWallMeshes } from './wall-mesh-builder';
 import { buildPanelMeshes } from './panel-mesh-builder';
 import { buildStudMeshes } from './stud-mesh-builder';
@@ -10,54 +14,110 @@ import { buildRoofMeshes } from './roof-mesh-builder';
 import { buildFoundationMeshes } from './foundation-builder';
 import { buildAnchorMeshes } from './anchors-builder';
 import { buildLabels } from './labels-builder';
+import { RENDER_CONFIG } from './render-config';
+import { buildStructuralOverlays } from './overlay-estructural-builder';
+import { buildShopScene } from './shop-mode-builder';
+import { buildPanelCutLabels } from './panel-cutlist-builder';
+import { buildSequenceScene } from './sequence-builder';
+import { buildInspectionOverlays } from './inspection-overlay-builder';
 
 export class SceneBuilder {
+  /**
+   * Genera una escena base estándar (Legacy alias).
+   */
   static buildScene(projectResult: ProjectResult): RenderSceneDTO {
-    // 1. Gather all objects
-    const objects: RenderObject[] = [
+      return SceneBuilder.buildBaseScene(projectResult);
+  }
+
+  /**
+   * Genera una escena base estándar.
+   */
+  static buildBaseScene(projectResult: ProjectResult): RenderSceneDTO {
+    const foundationData = buildFoundationMeshes(projectResult);
+    const anchorData = buildAnchorMeshes(projectResult);
+    
+    const objects = [
+      ...foundationData.objects,
+      ...anchorData.objects,
       ...buildWallMeshes(projectResult),
       ...buildPanelMeshes(projectResult),
       ...buildStudMeshes(projectResult),
       ...buildOpeningMeshes(projectResult),
       ...buildHeaderMeshes(projectResult),
-      ...buildFoundationMeshes(projectResult)
+      ...buildRoofMeshes(projectResult).objects
     ];
 
-    const roofData = buildRoofMeshes(projectResult);
-    objects.push(...roofData.objects);
-
-    const anchorData = buildAnchorMeshes(projectResult);
-    objects.push(...anchorData.objects);
-
-    const labels: RenderLabel[] = buildLabels(projectResult);
-    const warnings: RenderWarning[] = [...roofData.warnings, ...anchorData.warnings];
-
-    // 2. Sort deterministically (by ID)
-    objects.sort((a, b) => a.id.localeCompare(b.id));
-    labels.sort((a, b) => a.id.localeCompare(b.id));
-    warnings.sort((a, b) => a.id.localeCompare(b.id));
-
-    // 3. Ensure all objects have sourceId
-    const missingSourceId = objects.find(o => !o.sourceId);
-    if (missingSourceId) {
-      throw new Error(`CRITICAL: Render object ${missingSourceId.id} is missing sourceId.`);
-    }
+    const warnings = [
+      ...foundationData.warnings,
+      ...anchorData.warnings
+    ];
 
     return {
-      units: RENDER_CONFIG.units,
+      units: 'meters',
       objects,
-      labels,
+      labels: buildLabels(projectResult),
       layers: RENDER_CONFIG.layers,
       warnings,
       cameraPresets: RENDER_CONFIG.camera.defaultPresets,
       metadata: {
-        'ID de proyecto': 'project_' + Date.now(),
-        'Fecha de generación': new Date().toISOString(),
-        'Unidades': RENDER_CONFIG.units,
-        'Fase de origen': 'Fase 4A',
-        'Cantidad de objetos': objects.length,
-        'Cantidad de advertencias': warnings.length
+        projectId: 'steel_project_v1',
+        generatedAt: new Date().toISOString(),
+        totalWalls: projectResult.house.muros.length,
+        totalPanels: projectResult.construction.panels.length
       }
     };
+  }
+
+  /**
+   * Genera la escena industrial completa con todos los modos disponibles para cambio dinámico.
+   */
+  static buildIndustrialScene(
+      projectResult: ProjectResult, 
+      modoInicial: ModoVisualizacion = 'estandar'
+  ): RenderSceneIndustrialDTO {
+    const escenaBase = SceneBuilder.buildBaseScene(projectResult);
+    
+    return {
+      escenaBase,
+      modoInicial,
+      modos: {
+        estandar: SceneBuilder.buildModeData(projectResult, 'estandar'),
+        estructural: SceneBuilder.buildModeData(projectResult, 'estructural'),
+        taller: SceneBuilder.buildModeData(projectResult, 'taller'),
+        montaje: SceneBuilder.buildModeData(projectResult, 'montaje'),
+        inspeccion: SceneBuilder.buildModeData(projectResult, 'inspeccion')
+      }
+    };
+  }
+
+  private static buildModeData(projectResult: ProjectResult, modo: ModoVisualizacion): ModeData {
+    const objects = [];
+    const labels = [];
+    const overlays: any = {};
+    const metadata: any = {};
+
+    if (modo === 'estructural') {
+        const { overlays: structuralOverlays, markers } = buildStructuralOverlays(projectResult);
+        overlays.estructural = structuralOverlays;
+        objects.push(...markers);
+    }
+
+    if (modo === 'taller') {
+        metadata.taller = buildShopScene(projectResult);
+        labels.push(...buildPanelCutLabels(projectResult));
+    }
+
+    if (modo === 'montaje') {
+        metadata.montaje = buildSequenceScene(projectResult);
+    }
+
+    if (modo === 'inspeccion') {
+        // Para inspección necesitamos la escena base para calcular colisiones/bounding boxes si fuera necesario
+        // Pero aquí solo consumimos lo ya calculado
+        const dummyScene = SceneBuilder.buildBaseScene(projectResult);
+        overlays.inspeccion = buildInspectionOverlays(projectResult, dummyScene);
+    }
+
+    return { objects, labels, overlays, metadata };
   }
 }

@@ -80,6 +80,7 @@ export class GlobalArbiter {
     const finalCandidates: GlobalPlanCandidate[] = beam.map(p => {
         const candidate: GlobalPlanCandidate = {
             id: generateId('global'),
+            decidedWalls: p.decidedWalls,
             wallSelections: p.wallSelections,
             valid: true,
             score: { total: 0, components: { localQuality: 0, continuity: 0, jointAlignment: 0, openingSafetyGlobal: 0, constructabilityGlobal: 0, transportSuitability: 0, repetitionBenefit: 0 }, penalties: [], bonuses: [] },

@@ -1,0 +1,98 @@
+DOCUMENTO INDUSTRIAL: RESUMEN DE MONTAJE
+==========================================
+FECHA: 5/5/2026
+
+[
+  {
+    "muroId": "wall_north",
+    "pasos": [
+      {
+        "orden": 1,
+        "titulo": "Preparación de Muro: wall_north",
+        "descripcion": "Identificar y posicionar los paneles panel_wall_north_0.",
+        "panelesInvolucrados": [
+          "panel_wall_north_0"
+        ],
+        "advertencias": []
+      },
+      {
+        "orden": 2,
+        "titulo": "Montaje de Paneles",
+        "descripcion": "Fijar paneles a fundación según plano de anclajes.",
+        "panelesInvolucrados": [
+          "panel_wall_north_0"
+        ],
+        "advertencias": []
+      }
+    ]
+  },
+  {
+    "muroId": "wall_east",
+    "pasos": [
+      {
+        "orden": 1,
+        "titulo": "Preparación de Muro: wall_east",
+        "descripcion": "Identificar y posicionar los paneles panel_wall_east_0.",
+        "panelesInvolucrados": [
+          "panel_wall_east_0"
+        ],
+        "advertencias": []
+      },
+      {
+        "orden": 2,
+        "titulo": "Montaje de Paneles",
+        "descripcion": "Fijar paneles a fundación según plano de anclajes.",
+        "panelesInvolucrados": [
+          "panel_wall_east_0"
+        ],
+        "advertencias": []
+      }
+    ]
+  },
+  {
+    "muroId": "wall_south",
+    "pasos": [
+      {
+        "orden": 1,
+        "titulo": "Preparación de Muro: wall_south",
+        "descripcion": "Identificar y posicionar los paneles panel_wall_south_0.",
+        "panelesInvolucrados": [
+          "panel_wall_south_0"
+        ],
+        "advertencias": []
+      },
+      {
+        "orden": 2,
+        "titulo": "Montaje de Paneles",
+        "descripcion": "Fijar paneles a fundación según plano de anclajes.",
+        "panelesInvolucrados": [
+          "panel_wall_south_0"
+        ],
+        "advertencias": []
+      }
+    ]
+  },
+  {
+    "muroId": "wall_west",
+    "pasos": [
+      {
+        "orden": 1,
+        "titulo": "Preparación de Muro: wall_west",
+        "descripcion": "Identificar y posicionar los paneles panel_wall_west_0.",
+        "panelesInvolucrados": [
+          "panel_wall_west_0"
+        ],
+        "advertencias": []
+      },
+      {
+        "orden": 2,
+        "titulo": "Montaje de Paneles",
+        "descripcion": "Fijar paneles a fundación según plano de anclajes.",
+        "panelesInvolucrados": [
+          "panel_wall_west_0"
+        ],
+        "advertencias": []
+      }
+    ]
+  }
+]

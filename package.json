@@ -10,17 +10,40 @@
     "test:global": "npx ts-node scripts/global_planning_tests.ts",
     "test:structural": "npx ts-node scripts/structural_tests.ts",
     "test:render": "npx ts-node scripts/render_tests.ts",
-    "render:export": "npx ts-node scripts/export_render_scene.ts",
+    "test:export": "npx ts-node --transpile-only scripts/export_tests.ts",
+    "test:product": "npx ts-node --transpile-only scripts/product_tests.ts",
+    "export:industrial": "npx ts-node --transpile-only scripts/export_industrial.ts",
+    "render:export": "npx ts-node --transpile-only scripts/export_render_scene.ts",
+    "render:inspect-layers": "npx ts-node --transpile-only scripts/inspect_render_layers.ts",
     "render:inspect-openings": "node scripts/inspect_render_openings.js",
+    "viewer:check": "node --check tools/qa-viewer/viewer.js",
+    "db:migrate": "npx ts-node --transpile-only scripts/db_migrate.ts",
+    "db:status": "npx ts-node --transpile-only scripts/db_status.ts",
+    "db:test-connection": "npx ts-node --transpile-only scripts/db_test_connection.ts",
+    "product:dashboard": "node -e \"console.log('Dashboard: http://localhost:3000/ui/product/index.html')\"",
     "test:all": "npm run test:regression && npm run test:intelligence && npm run test:global && npm run test:structural && npm run test:render",
     "audit:state": "node scripts/print_project_state.js",
     "phase:detect": "npx ts-node scripts/detect_phase.ts",
     "localizacion:auditar": "npx ts-node scripts/auditar_localizacion_visible.ts",
+    "api:dev": "npx ts-node --transpile-only src/api/server.ts",
+    "api:test": "SET NODE_ENV=test && npx ts-node --transpile-only src/api/server.ts",
+    "test:api": "npx ts-node --transpile-only scripts/api_tests.ts",
     "build": "tsc"
   },
   "dependencies": {
+    "@types/node": "^20.11.0",
+    "@types/pg": "^8.20.0",
+    "axios": "^1.16.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pdf-lib": "^1.17.1",
+    "pg": "^8.20.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3",
-    "@types/node": "^20.11.0"
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6"
   }
 }

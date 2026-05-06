@@ -47,7 +47,10 @@ export const LOCALIZACION = {
         'techo': 'Techo',
         'anclaje': 'Anclaje',
         'fundacion': 'Fundación',
-        'advertencia': 'Advertencia'
+        'advertencia': 'Advertencia',
+        'marcador_viga_externa': 'Requisito Viga Externa',
+        'box_inspeccion': 'Caja de Inspección',
+        'indicador_estructural': 'Indicador Estructural'
     },
     techos: {
         'one_slope': 'Techo a un agua',
@@ -97,6 +100,11 @@ export const LOCALIZACION = {
     },
     estrategias: {
         'provisional_boxed_header': 'Dintel Cajón Provisional',
+        'dintel_simple': 'Dintel Simple PGC',
+        'dintel_compuesto': 'Dintel Compuesto Doble',
+        'dintel_reticulado': 'Dintel Reticulado Estructural',
+        'dintel_tubular': 'Dintel Tubular Industrial',
+        'requiere_viga_estructural_externa': 'Viga Estructural Externa (Requerido)',
         'trussed_beam': 'Viga Reticulada',
         'tube_beam': 'Viga Tubo'
     },
@@ -116,7 +124,17 @@ export const LOCALIZACION = {
         'etiqueta': 'Etiqueta',
         'id_tecnico': 'ID técnico',
         'id_fuente': 'Fuente',
-        'capa': 'Capa'
+        'capa': 'Capa',
+        'objetos': 'Objetos',
+        'etiquetas': 'Etiquetas',
+        'advertencias': 'Advertencias'
+    },
+    modos: {
+        'estandar': 'Estándar',
+        'estructural': 'Estructural',
+        'taller': 'Taller',
+        'montaje': 'Montaje',
+        'inspeccion': 'Inspección'
     }
 };
 

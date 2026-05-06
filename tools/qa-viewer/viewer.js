@@ -12,6 +12,8 @@ let selectedMesh = null;
 let boundingBoxHelper = null;
 let selectionLabelSprite = null;
 let debugMode = false;
+let currentMode = 'estandar';
+let fullIndustrialDTO = null;
 
 function createSelectionLabel() {
     if (selectionLabelSprite) return;
@@ -153,9 +155,33 @@ async function init() {
         if (!response) {
             throw new Error(lastError || 'All fetch attempts failed');
         }
-        sceneDTO = await response.json();
+        fullIndustrialDTO = await response.json();
+        
+        // Handle composition: if it's the new DTO, use escenaBase as the default sceneDTO
+        if (fullIndustrialDTO.escenaBase) {
+            sceneDTO = fullIndustrialDTO.escenaBase;
+            currentMode = fullIndustrialDTO.modoInicial || 'estandar';
+        } else {
+            // Legacy support
+            sceneDTO = fullIndustrialDTO;
+            currentMode = 'estandar';
+            // Mock a multi-mode structure for legacy
+            fullIndustrialDTO = {
+                escenaBase: sceneDTO,
+                modoInicial: 'estandar',
+                modos: {
+                    estandar: { objects: [], labels: [], overlays: {}, metadata: {} }
+                }
+            };
+        }
+
         buildSceneFromDTO();
         loadingEl.style.display = 'none';
+        
+        // Sincronizar selector de modo si existe
+        const modeSelector = document.getElementById('mode-selector');
+        if (modeSelector) modeSelector.value = currentMode;
+
     } catch (err) {
         console.error("[QA-Viewer] Failed to load render-scene.json:", err);
         loadingEl.innerHTML = `Error loading render-scene.json.<br><br>Attempted paths:<br>${jsonPaths.join('<br>')}<br><br>Last error: ${err.message}<br><br>Did you run 'npm run render:export'?`;
@@ -172,13 +198,28 @@ async function init() {
 }
 
 function buildSceneFromDTO() {
-    // Reconstruct materials matching config logic
+    const modeData = fullIndustrialDTO.modos[currentMode] || { objects: [], labels: [], overlays: {}, metadata: {} };
+    console.log(`[QA-Viewer] Building scene for mode: ${currentMode}`, {
+        base_objects: sceneDTO.objects.length,
+        mode_objects: modeData.objects.length,
+        mode_labels: modeData.labels.length
+    });
+
+    // Limpiar escena anterior si existe
+    clearCurrentScene();
+
+    // Separate statistics
     const stats = {};
-    sceneDTO.layers.forEach(l => stats[l.id] = 0);
+    sceneDTO.layers.forEach(l => {
+        stats[l.id] = { objects: 0, labels: 0, warnings: 0 };
+    });
     
-    sceneDTO.objects.forEach(obj => { stats[obj.layer] += 1; });
-    sceneDTO.labels.forEach(lbl => { if(stats[lbl.layer] !== undefined) stats[lbl.layer] += 1; });
-    sceneDTO.warnings.forEach(w => { if(stats[w.layer] !== undefined) stats[w.layer] += 1; });
+    const allObjects = [...sceneDTO.objects, ...modeData.objects];
+    const allLabels = [...sceneDTO.labels, ...modeData.labels];
+
+    allObjects.forEach(obj => { if(stats[obj.layer]) stats[obj.layer].objects++; });
+    allLabels.forEach(lbl => { if(stats[lbl.layer]) stats[lbl.layer].labels++; });
+    sceneDTO.warnings.forEach(w => { if(stats[w.layer]) stats[w.layer].warnings++; });
 
     // We map DTO layers to THREE.Group
     sceneDTO.layers.forEach(layer => {
@@ -195,8 +236,10 @@ function buildSceneFromDTO() {
         cb.type = 'checkbox';
         cb.checked = layer.visibleByDefault;
         
-        const count = stats[layer.id];
-        if (count === 0) {
+        const s = stats[layer.id];
+        const hasContent = s.objects > 0 || s.labels > 0 || s.warnings > 0;
+        
+        if (!hasContent) {
             cb.disabled = true;
             cb.checked = false;
         }
@@ -207,8 +250,14 @@ function buildSceneFromDTO() {
         lbl.appendChild(cb);
         
         const span = document.createElement('span');
-        span.textContent = ` ${layer.name} (${count})`;
-        if (count === 0) span.style.color = '#777';
+        const total = s.objects + s.labels + s.warnings;
+        span.textContent = ` ${layer.name} (${total})`;
+        
+        // Title for detailed breakdown (Title remains in Spanish)
+        span.title = formatearEstadisticasCapa(s, true);
+        
+        if (!hasContent) span.style.color = '#777';
+        else if (s.warnings > 0 && s.objects === 0) span.style.color = '#ffeb3b';
         
         lbl.appendChild(span);
         layersContainer.appendChild(lbl);
@@ -232,7 +281,11 @@ function buildSceneFromDTO() {
         else if (matId.includes('jack')) { color = 0x808080; }
         else if (matId.includes('cripple')) { color = 0x696969; }
         else if (matId.includes('foundation')) { color = 0x555555; }
-        else if (matId.includes('warn')) { color = 0xFF0000; opacity = 0.8; transparent = true; }
+        else if (matId.includes('warn') || matId.includes('fail')) { color = 0xFF0000; opacity = 0.8; transparent = true; }
+        else if (matId.includes('pass')) { color = 0x2ecc71; opacity = 0.8; transparent = true; }
+        else if (matId.includes('rev')) { color = 0xf1c40f; opacity = 0.8; transparent = true; }
+        else if (matId.includes('inspect')) { color = 0xffffff; opacity = 0.1; transparent = true; }
+        else if (matId.includes('ext_beam')) { color = 0x8e44ad; opacity = 0.7; transparent = true; }
 
         const mat = new THREE.MeshStandardMaterial({
             color: color,
@@ -244,10 +297,10 @@ function buildSceneFromDTO() {
         return mat;
     };
 
-    // Build Objects
+    // Build Objects (Base + Mode)
     const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
     
-    sceneDTO.objects.forEach(obj => {
+    allObjects.forEach(obj => {
         const mat = getMaterial(obj.material).clone();
         const mesh = new THREE.Mesh(boxGeometry, mat);
         
@@ -274,7 +327,9 @@ function buildSceneFromDTO() {
         if (layerGroups.has(obj.layer)) {
             layerGroups.get(obj.layer).add(mesh);
         } else {
-            scene.add(mesh);
+            console.warn(`[QA-Viewer] Objeto ${obj.id} no tiene grupo de capa válido (${obj.layer}). Usando grupo fallback.`);
+            const fallback = layerGroups.get('layer_other') || layerGroups.values().next().value || scene;
+            fallback.add(mesh);
         }
 
         objectMeshes.push(mesh);
@@ -282,18 +337,20 @@ function buildSceneFromDTO() {
 
     const statsContainer = document.getElementById('stats-container');
     if (statsContainer) {
-        let statsHtml = `<div class="prop-row"><span class="prop-label">${t('ui', 'total_objects')}:</span> <span class="prop-value">${sceneDTO.objects.length}</span></div>`;
-        for (const [layerId, count] of Object.entries(stats)) {
+        let statsHtml = `<div class="prop-row"><span class="prop-label">${t('ui', 'total_objects')}:</span> <span class="prop-value">${allObjects.length}</span></div>`;
+        for (const [layerId, s] of Object.entries(stats)) {
+            if (s.objects === 0 && s.labels === 0 && s.warnings === 0) continue;
             const layer = sceneDTO.layers.find(l => l.id === layerId);
-            // Translate layer name if it matches an internal id, otherwise use layer.name (which should be localized already)
             const layerName = layer ? layer.name : layerId.replace('layer_', '');
-            statsHtml += `<div class="prop-row"><span class="prop-label">${layerName}:</span> <span class="prop-value">${count}</span></div>`;
+            
+            const detail = formatearEstadisticasCapa(s);
+            statsHtml += `<div class="prop-row"><span class="prop-label">${layerName}:</span> <span class="prop-value">${detail}</span></div>`;
         }
         statsContainer.innerHTML = statsHtml;
     }
 
-    // Simple Labels (Sprite based)
-    sceneDTO.labels.forEach(label => {
+    // Combine labels
+    allLabels.forEach(label => {
         const canvas = document.createElement('canvas');
         canvas.width = 256;
         canvas.height = 64;
@@ -318,6 +375,39 @@ function buildSceneFromDTO() {
         
         labelObjects.push(sprite);
     });
+
+    // Overlays especiales de Inspección (Solo en modo inspección o si debugMode)
+    const inspectionOverlays = modeData.overlays?.inspeccion || [];
+    if (inspectionOverlays.length > 0 && (currentMode === 'inspeccion' || debugMode)) {
+        inspectionOverlays.forEach(obj => {
+            const mat = getMaterial(obj.material).clone();
+            const mesh = new THREE.Mesh(boxGeometry, mat);
+            mesh.scale.set(obj.dimensions.x, obj.dimensions.y, obj.dimensions.z);
+            mesh.position.set(obj.position.x, obj.position.y, obj.position.z);
+            mesh.rotation.set(obj.rotation.x, obj.rotation.y, obj.rotation.z);
+            mesh.userData = obj;
+            
+            const edges = new THREE.LineSegments(
+                new THREE.EdgesGeometry(boxGeometry),
+                new THREE.LineBasicMaterial({ color: 0x00ffff, opacity: 0.5, transparent: true })
+            );
+            mesh.add(edges);
+
+            if (layerGroups.has(obj.layer)) {
+                layerGroups.get(obj.layer).add(mesh);
+            } else {
+                scene.add(mesh);
+            }
+            objectMeshes.push(mesh);
+        });
+    }
+
+    // Overlays Estructurales (Solo en modo estructural)
+    const structuralOverlays = modeData.overlays?.estructural || [];
+    if (structuralOverlays.length > 0 && (currentMode === 'estructural')) {
+        // En esta versión, los marcadores ya están en modeData.objects
+        // Si quisiéramos efectos extra, los añadiríamos aquí.
+    }
 
     // Setup camera target to center of model
     if (sceneDTO.objects.length > 0) {
@@ -373,39 +463,113 @@ function setupUIControls() {
     const btnFocus = document.getElementById('btn-focus');
     if (btnFocus) {
         btnFocus.addEventListener('click', () => {
+            console.log('[QA-Viewer] Click en Enfocar. Mesh seleccionado:', selectedMesh ? selectedMesh.userData.id : 'ninguno');
             if (selectedMesh) {
                 const box = new THREE.Box3().setFromObject(selectedMesh);
                 const center = box.getCenter(new THREE.Vector3());
+                
+                // Animación suave del target
                 controls.target.copy(center);
+                
                 const size = box.getSize(new THREE.Vector3()).length();
-                const dist = size * 1.5 > 2 ? size * 1.5 : 2;
-                const dir = camera.position.clone().sub(center).normalize();
-                if (dir.lengthSq() === 0) dir.set(0, 0, 1);
-                camera.position.copy(center.clone().add(dir.multiplyScalar(dist)));
+                const dist = Math.max(size * 2, 2);
+                
+                // Posicionar cámara relativa al objeto
+                const offset = new THREE.Vector3(dist, dist, dist);
+                camera.position.copy(center.clone().add(offset));
+                
                 controls.update();
+            } else {
+                alert("Seleccione un objeto primero.");
             }
         });
     }
 
     const btnIsolate = document.getElementById('btn-isolate');
     if (btnIsolate) {
+        let isIsolated = false;
         btnIsolate.addEventListener('click', () => {
-            if (selectedMesh) {
-                const layer = selectedMesh.userData.layer;
-                layerGroups.forEach((group, key) => {
-                    group.visible = (key === layer);
-                });
+            if (!isIsolated) {
+                console.log('[QA-Viewer] Aislando capa...');
+                if (selectedMesh) {
+                    const targetLayer = selectedMesh.userData.layer;
+                    
+                    // Ocultar todos los grupos excepto el objetivo
+                    layerGroups.forEach((group, key) => {
+                        group.visible = (key === targetLayer);
+                    });
+                    
+                    // Ocultar también objetos que pudieran estar sueltos en la escena
+                    objectMeshes.forEach(m => {
+                        if (m.userData.layer !== targetLayer) m.visible = false;
+                        else m.visible = true;
+                    });
+                    labelObjects.forEach(l => {
+                        // Las etiquetas suelen estar en grupos, pero por si acaso
+                        if (l.visible) { // Si el toggle global de etiquetas lo permite
+                             // ...
+                        }
+                    });
+
+                    btnIsolate.textContent = "Restaurar Capas";
+                    isIsolated = true;
+                } else {
+                    alert("Seleccione un objeto primero.");
+                }
+            } else {
+                console.log('[QA-Viewer] Restaurando capas...');
+                layerGroups.forEach(g => g.visible = true);
+                objectMeshes.forEach(m => m.visible = true);
+                btnIsolate.textContent = "Aislar Capa";
+                isIsolated = false;
                 
-                // Update UI checkboxes
+                // Sincronizar checkboxes de la UI
                 const checkboxes = document.querySelectorAll('#layers-container input[type="checkbox"]');
-                checkboxes.forEach(cb => {
-                    const labelText = cb.parentNode.textContent.toLowerCase();
-                    const layerName = layer.replace('layer_', '').toLowerCase();
-                    cb.checked = labelText.includes(layerName);
-                });
+                checkboxes.forEach(cb => cb.checked = true);
             }
         });
     }
+
+    // Export Downloads
+    const downloadButtons = document.querySelectorAll('.btn-download');
+    downloadButtons.forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const fileName = btn.getAttribute('data-file');
+            
+            // Use a simple relative path for canonical access
+            const filePath = `./exports/${fileName}`;
+            console.log(`[QA-Viewer] Click en descarga. Archivo: ${fileName}, URL resuelta: ${new URL(filePath, window.location.href).href}`);
+            
+            console.log(`[QA-Viewer] Intentando descargar: ${filePath}`);
+            const statusEl = document.getElementById('export-status');
+            
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                if (statusEl) {
+                    statusEl.textContent = `Descargado: ${fileName}`;
+                    statusEl.style.color = '#2ecc71';
+                }
+            } catch (err) {
+                console.error(`[QA-Viewer] Error al descargar ${fileName}:`, err);
+                if (statusEl) {
+                    statusEl.textContent = `No disponible (${err.message}) — ejecutar npm run export:industrial`;
+                    statusEl.style.color = '#ff4da6';
+                }
+            }
+        });
+    });
 
     const toggleDebugMode = document.getElementById('toggle-debug-mode');
     if (toggleDebugMode) {
@@ -416,9 +580,101 @@ function setupUIControls() {
             }
         });
     }
+
+    const modeSelector = document.getElementById('mode-selector');
+    if (modeSelector) {
+        modeSelector.addEventListener('change', (e) => {
+            const newMode = e.target.checked ? e.target.value : e.target.value; // Simplificado
+            switchMode(e.target.value);
+        });
+    }
+}
+
+function clearCurrentScene() {
+    // Eliminar mallas
+    objectMeshes.forEach(m => {
+        if (m.parent) m.parent.remove(m);
+    });
+    objectMeshes.length = 0;
+
+    // Eliminar etiquetas
+    labelObjects.forEach(l => {
+        if (l.parent) l.parent.remove(l);
+    });
+    labelObjects.length = 0;
+
+    // Eliminar grupos de capas
+    layerGroups.forEach(g => {
+        scene.remove(g);
+    });
+    layerGroups.clear();
+
+    // Limpiar UI de capas
+    if (layersContainer) layersContainer.innerHTML = '';
+}
+
+async function switchMode(mode) {
+    console.log(`[QA-Viewer] Switching to mode: ${mode}`);
+    currentMode = mode;
+    
+    // En una implementación real, esto podría disparar un fetch o una regeneración
+    // Por ahora, recargamos la escena con los metadatos que ya tenemos
+    buildSceneFromDTO();
+    
+    // Si es modo Taller o Montaje, podríamos mostrar paneles adicionales en la UI
+    updateIndustrialUI(mode);
+}
+
+function updateIndustrialUI(mode) {
+    const statsContainer = document.getElementById('stats-container');
+    if (!statsContainer) return;
+
+    const modeData = fullIndustrialDTO.modos[mode] || { metadata: {} };
+    
+    // Header con el nombre del modo traducido
+    let modeHeader = `<div style="margin-bottom: 15px; padding: 10px; background: #333; border-radius: 4px; border-left: 4px solid #4da6ff;">
+        <div style="font-size: 11px; text-transform: uppercase; color: #888;">Modo Activo</div>
+        <div style="font-size: 16px; font-weight: bold; color: #fff;">${t('modos', mode)}</div>
+    </div>`;
+    
+    statsContainer.innerHTML = modeHeader + statsContainer.innerHTML;
+
+    if (mode === 'taller' && modeData.metadata.taller) {
+        let html = '<h4 style="color:#fff; border-bottom:1px solid #444;">Resumen de Taller</h4>';
+        modeData.metadata.taller.paneles.forEach(p => {
+            html += `<div style="margin-bottom:10px; padding:5px; background:#222; border-radius:4px;">
+                <div style="font-weight:bold; color:#4da6ff;">${crearEtiquetaDesdeIdTecnico(p.panelId)}</div>
+                <div style="font-size:11px; color:#aaa;">Materiales (m lin):</div>`;
+            for (const [prof, len] of Object.entries(p.bomSummary)) {
+                html += `<div class="prop-row"><span class="prop-label">${prof}:</span> <span class="prop-value">${len.toFixed(2)}</span></div>`;
+            }
+            html += `</div>`;
+        });
+        statsContainer.innerHTML += html;
+    }
+
+    if (mode === 'montaje' && modeData.metadata.montaje) {
+        let html = '<h4 style="color:#fff; border-bottom:1px solid #444;">Pasos de Montaje</h4>';
+        modeData.metadata.montaje.pasos.forEach(s => {
+            html += `<div style="margin-bottom:8px; padding:8px; background:#222; border-left:3px solid #ffeb3b; border-radius:0 4px 4px 0; cursor:pointer;" onclick="window.focusStep('${s.id}')">
+                <div style="font-weight:bold; color:#fff;">${s.order}. ${s.title}</div>
+                <div style="font-size:12px; color:#ccc;">${s.description}</div>
+            </div>`;
+        });
+        statsContainer.innerHTML += html;
+    }
 }
 
 function onPointerDown(event) {
+    // EVITAR CLICK-THROUGH: Si el clic es en la interfaz, no procesar raycasting
+    if (event.target.closest('#ui-panel') || 
+        event.target.closest('#selection-panel') || 
+        event.target.tagName === 'BUTTON' ||
+        event.target.tagName === 'SELECT' ||
+        event.target.tagName === 'INPUT') {
+        return;
+    }
+
     // Calculate mouse position in normalized device coordinates
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -548,6 +804,61 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
+}
+
+/**
+ * Formatea las estadísticas de una capa en un string legible en español.
+ * @param {Object} s Estadísticas {objects, labels, warnings}
+ * @param {boolean} plainText Si es true, no usa HTML
+ */
+function formatearEstadisticasCapa(s, plainText = false) {
+    const parts = [];
+    if (s.objects > 0) parts.push(`${t('ui', 'objetos')}: ${s.objects}`);
+    if (s.labels > 0) parts.push(`${t('ui', 'etiquetas')}: ${s.labels}`);
+    if (s.warnings > 0) {
+        const warnText = `${t('ui', 'advertencias')}: ${s.warnings}`;
+        parts.push(plainText ? warnText : `<span style="color:#ffeb3b">${warnText}</span>`);
+    }
+    return parts.join(plainText ? ', ' : '<br>');
+}
+
+    // Startup diagnostics for exports
+    checkExports();
+
+async function checkExports() {
+    const statusEl = document.getElementById('export-status');
+    if (!statusEl) return;
+    
+    statusEl.textContent = "Verificando archivos de exportación...";
+    const buttons = document.querySelectorAll('.btn-download');
+    let availableCount = 0;
+    
+    for (const btn of buttons) {
+        const fileName = btn.getAttribute('data-file');
+        const filePath = `./exports/${fileName}`;
+        
+        try {
+            const response = await fetch(filePath, { method: 'HEAD' });
+            if (response.ok) {
+                btn.style.border = "2px solid #2ecc71";
+                availableCount++;
+            } else {
+                btn.style.opacity = "0.5";
+                btn.title = `No disponible (HTTP ${response.status})`;
+            }
+        } catch (err) {
+            btn.style.opacity = "0.5";
+            btn.title = `Error: ${err.message}`;
+        }
+    }
+    
+    if (availableCount === buttons.length) {
+        statusEl.textContent = "✅ Todos los archivos de exportación están disponibles.";
+        statusEl.style.color = "#2ecc71";
+    } else {
+        statusEl.textContent = `⚠️ Solo ${availableCount}/${buttons.length} archivos disponibles. Ejecute 'npm run export:industrial'.`;
+        statusEl.style.color = "#ffeb3b";
+    }
 }
 
 init();

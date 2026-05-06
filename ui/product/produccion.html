@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producción — Steel Frame</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#0d0f14; --surface:#161b24; --border:#242d3d; --accent:#3b82f6; --text:#f1f5f9; --muted:#64748b; --success:#22c55e; --warning:#f59e0b; --danger:#ef4444; --radius:10px; --font:'Inter',sans-serif; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; }
+        header { background:var(--surface); border-bottom:1px solid var(--border); padding:14px 32px; display:flex; align-items:center; gap:16px; }
+        .logo { font-size:18px; font-weight:700; } .logo span { color:var(--accent); }
+        main { max-width:1000px; margin:0 auto; padding:40px 24px; }
+        h1 { font-size:26px; font-weight:700; margin-bottom:6px; }
+        .subtitle { color:var(--muted); font-size:14px; margin-bottom:28px; }
+        .progress-section { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:20px; }
+        .progress-label { display:flex; justify-content:space-between; font-size:14px; margin-bottom:10px; }
+        .progress-bar { height:10px; background:var(--bg); border-radius:20px; overflow:hidden; }
+        .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--success)); border-radius:20px; transition:width 0.5s; }
+        .section { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:20px; }
+        .section-title { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:18px; }
+        table { width:100%; border-collapse:collapse; font-size:14px; }
+        th { text-align:left; padding:10px 12px; border-bottom:1px solid var(--border); color:var(--muted); font-size:12px; text-transform:uppercase; }
+        td { padding:10px 12px; border-bottom:1px solid var(--border); }
+        tr:last-child td { border-bottom:none; }
+        select.estado-select {
+            padding:6px 10px; background:var(--bg); border:1px solid var(--border);
+            border-radius:6px; color:var(--text); font-size:12px; font-family:var(--font); cursor:pointer;
+        }
+        .badge-estado { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; text-transform:uppercase; }
+        .e-pendiente      { background:#1e293b; color:var(--muted); }
+        .e-en_fabricacion { background:#1e3a8a; color:var(--accent); }
+        .e-fabricado      { background:#14532d; color:var(--success); }
+        .e-despachado     { background:#451a03; color:var(--warning); }
+        .e-montado        { background:#1e1b4b; color:#a5b4fc; }
+        .e-cerrado        { background:#0f172a; color:var(--muted); }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">Steel<span>Frame</span></div>
+    <a href="./proyecto-detalle.html" id="link-back" style="color:var(--muted);text-decoration:none;font-size:13px;">← Volver</a>
+    <span id="proj-title" style="font-size:14px;color:var(--muted);margin-left:auto;"></span>
+</header>
+<main>
+    <h1>Estado de Producción</h1>
+    <p class="subtitle">Seguimiento de fabricación y montaje por panel.</p>
+
+    <div class="progress-section">
+        <div class="progress-label">
+            <span>Avance General</span>
+            <span id="pct-label">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;" id="estado-global-label">Estado: Pendiente</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Estado por Panel</div>
+        <table>
+            <thead><tr><th>Panel</th><th>Muro</th><th>Estado</th><th>Actualizar</th></tr></thead>
+            <tbody id="paneles-body"><tr><td colspan="4" style="color:var(--muted);text-align:center;padding:20px;">Cargando...</td></tr></tbody>
+        </table>
+    </div>
+</main>
+<script>
+const ESTADOS = ['pendiente','en_fabricacion','fabricado','despachado','montado','cerrado'];
+const ESTADO_LABELS = { pendiente:'Pendiente', en_fabricacion:'En Fabricación', fabricado:'Fabricado', despachado:'Despachado', montado:'Montado', cerrado:'Cerrado' };
+const PROD_KEY_PREFIX = 'steel_prod_';
+
+const params = new URLSearchParams(window.location.search);
+const proyId = params.get('id');
+if (proyId) {
+    document.getElementById('link-back').href = './proyecto-detalle.html?id=' + proyId;
+} else {
+    document.getElementById('link-back').href = './proyectos.html';
+}
+
+const STORAGE_KEY = 'steel_projects_v1';
+const ps = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+const proyecto = ps.find(x => x.id === proyId);
+if (proyecto) document.getElementById('proj-title').textContent = proyecto.nombre;
+
+function getProd() { try { return JSON.parse(localStorage.getItem(PROD_KEY_PREFIX + proyId) || 'null'); } catch { return null; } }
+function saveProd(p) { localStorage.setItem(PROD_KEY_PREFIX + proyId, JSON.stringify(p)); }
+
+async function cargarPaneles() {
+    let paneles = [];
+    try {
+        const r = await fetch('../../tools/qa-viewer/exports/CUTLIST.csv');
+        if (r.ok) {
+            const text = await r.text();
+            const lines = text.trim().split('\n').slice(1).filter(Boolean);
+            paneles = [...new Set(lines.map(l => l.split(',')[0]?.trim()).filter(Boolean))].map(id => ({ id, muroId: id.split('_panel')[0] || 'desconocido' }));
+        }
+    } catch {}
+    if (!paneles.length) paneles = [{ id:'panel_demo_1', muroId:'wall_north' },{ id:'panel_demo_2', muroId:'wall_south' }];
+
+    let prod = getProd();
+    if (!prod) {
+        prod = { estadoGlobal:'pendiente', avancePorcentaje:0, estadosPorPanel:{}, estadosPorMuro:{} };
+        paneles.forEach(p => { prod.estadosPorPanel[p.id] = 'pendiente'; });
+        saveProd(prod);
+    }
+
+    renderPaneles(paneles, prod);
+}
+
+function recalcular(prod) {
+    const vals = Object.values(prod.estadosPorPanel);
+    const terminados = vals.filter(e => ['fabricado','despachado','montado','cerrado'].includes(e)).length;
+    prod.avancePorcentaje = vals.length ? Math.round(terminados/vals.length*100) : 0;
+    prod.estadoGlobal = prod.avancePorcentaje===100 ? 'cerrado' : prod.avancePorcentaje > 0 ? 'en_fabricacion' : 'pendiente';
+    return prod;
+}
+
+function renderPaneles(paneles, prod) {
+    const pct = prod.avancePorcentaje;
+    document.getElementById('pct-label').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('estado-global-label').textContent = 'Estado: ' + (ESTADO_LABELS[prod.estadoGlobal] || prod.estadoGlobal);
+
+    const rows = paneles.map(p => {
+        const estado = prod.estadosPorPanel[p.id] || 'pendiente';
+        const opts = ESTADOS.map(e => `<option value="${e}" ${e===estado?'selected':''}>${ESTADO_LABELS[e]}</option>`).join('');
+        return `<tr>
+            <td>${p.id}</td>
+            <td style="color:var(--muted);font-size:12px;">${p.muroId}</td>
+            <td><span class="badge-estado e-${estado}">${ESTADO_LABELS[estado]}</span></td>
+            <td><select class="estado-select" onchange="actualizarPanel('${p.id}', this.value)">${opts}</select></td>
+        </tr>`;
+    }).join('');
+    document.getElementById('paneles-body').innerHTML = rows;
+
+    this._paneles = paneles; this._prod = prod;
+}
+
+function actualizarPanel(panelId, nuevoEstado) {
+    const prod = getProd() || { estadoGlobal:'pendiente', avancePorcentaje:0, estadosPorPanel:{}, estadosPorMuro:{} };
+    prod.estadosPorPanel[panelId] = nuevoEstado;
+    const actualizado = recalcular(prod);
+    saveProd(actualizado);
+    const paneles = Object.keys(actualizado.estadosPorPanel).map(id => ({ id, muroId: id.split('_panel')[0] }));
+    renderPaneles(paneles, actualizado);
+}
+
+cargarPaneles();
+</script>
+</body>
+</html>

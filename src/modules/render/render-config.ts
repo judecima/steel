@@ -14,7 +14,10 @@ export const RENDER_CONFIG = {
     { id: 'layer_techo', name: 'Techo', visibleByDefault: true, description: 'Geometria del techo' },
     { id: 'layer_anclajes', name: 'Anclajes', visibleByDefault: true, description: 'Marcadores de anclajes de fundacion' },
     { id: 'layer_etiquetas', name: 'Etiquetas', visibleByDefault: true, description: 'Textos y etiquetas' },
-    { id: 'layer_advertencias', name: 'Advertencias', visibleByDefault: true, description: 'Advertencias estructurales' }
+    { id: 'layer_advertencias', name: 'Advertencias', visibleByDefault: true, description: 'Advertencias estructurales' },
+    { id: 'layer_estructural_overlays', name: 'Overlays Estructurales', visibleByDefault: true, description: 'Indicadores de estado structural' },
+    { id: 'layer_shop_labels', name: 'Etiquetas de Taller', visibleByDefault: true, description: 'IDs de piezas y longitudes' },
+    { id: 'layer_inspeccion', name: 'Capa de Inspección', visibleByDefault: true, description: 'Bounding boxes y diagnósticos' }
   ] as RenderLayer[],
 
   materials: {
@@ -30,7 +33,13 @@ export const RENDER_CONFIG = {
     header: { id: 'mat_header', name: 'Dintel', color: '#FFD700', opacity: 1.0, metalness: 0.8, roughness: 0.2 },
     roof: { id: 'mat_roof', name: 'Techo', color: '#8B4513', opacity: 0.8, metalness: 0.1, roughness: 0.9 },
     warning_critical: { id: 'mat_warn_crit', name: 'Advertencia Critica', color: '#FF0000', opacity: 0.8, metalness: 0, roughness: 1 },
-    warning_review: { id: 'mat_warn_rev', name: 'Requiere Revision', color: '#FFA500', opacity: 0.8, metalness: 0, roughness: 1 }
+    warning_review: { id: 'mat_warn_rev', name: 'Requiere Revision', color: '#FFA500', opacity: 0.8, metalness: 0, roughness: 1 },
+    mat_struct_preliminary_pass: { id: 'mat_struct_pass', name: 'Pase Preliminar', color: '#2ecc71', opacity: 0.9, metalness: 0.5, roughness: 0.5 },
+    mat_struct_requires_engineer_review: { id: 'mat_struct_rev', name: 'Revisión Requerida', color: '#f1c40f', opacity: 0.9, metalness: 0.5, roughness: 0.5 },
+    mat_struct_preliminary_fail: { id: 'mat_struct_fail', name: 'Fallo Preliminar', color: '#e74c3c', opacity: 0.9, metalness: 0.5, roughness: 0.5 },
+    mat_struct_insufficient_data: { id: 'mat_struct_none', name: 'Datos Insuficientes', color: '#808080', opacity: 0.9, metalness: 0.5, roughness: 0.5 },
+    mat_external_beam_warning: { id: 'mat_ext_beam', name: 'Viga Externa', color: '#8e44ad', opacity: 0.7, metalness: 0.5, roughness: 0.5 },
+    mat_inspection_bbox: { id: 'mat_inspect_bbox', name: 'Caja Inspección', color: '#ffffff', opacity: 0.1, metalness: 0, roughness: 1 }
   } as Record<string, RenderMaterial>,
 
   camera: {

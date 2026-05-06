@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presupuesto — Steel Frame</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#0d0f14; --surface:#161b24; --border:#242d3d; --accent:#3b82f6; --text:#f1f5f9; --muted:#64748b; --warning:#f59e0b; --radius:10px; --font:'Inter',sans-serif; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; }
+        header { background:var(--surface); border-bottom:1px solid var(--border); padding:14px 32px; display:flex; align-items:center; gap:16px; }
+        .logo { font-size:18px; font-weight:700; } .logo span { color:var(--accent); }
+        main { max-width:900px; margin:0 auto; padding:40px 24px; }
+        h1 { font-size:26px; font-weight:700; margin-bottom:6px; }
+        .subtitle { color:var(--muted); font-size:14px; margin-bottom:28px; }
+        .section { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:20px; }
+        .section-title { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:18px; }
+        table { width:100%; border-collapse:collapse; font-size:14px; }
+        th { text-align:left; padding:10px 12px; border-bottom:1px solid var(--border); color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:0.5px; }
+        td { padding:10px 12px; border-bottom:1px solid var(--border); }
+        tr:last-child td { border-bottom:none; }
+        .precio-pendiente { color:var(--warning); font-size:12px; font-style:italic; }
+        .totals-row { display:flex; gap:24px; flex-wrap:wrap; }
+        .total-card { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:16px 22px; flex:1; min-width:180px; }
+        .total-label { font-size:12px; color:var(--muted); margin-bottom:4px; }
+        .total-value { font-size:22px; font-weight:700; }
+        .total-value.pending { font-size:14px; color:var(--warning); font-style:italic; }
+        .form-row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:18px; }
+        .form-group { display:flex; flex-direction:column; gap:4px; }
+        label { font-size:12px; color:var(--muted); }
+        input { padding:9px 12px; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:13px; font-family:var(--font); width:180px; }
+        input:focus { outline:none; border-color:var(--accent); }
+        .btn { padding:9px 18px; border-radius:8px; border:none; cursor:pointer; font-size:13px; font-weight:500; background:var(--accent); color:#fff; font-family:var(--font); }
+        .notice { background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:14px; font-size:13px; color:var(--warning); margin-bottom:20px; }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">Steel<span>Frame</span></div>
+    <a href="./proyecto-detalle.html" id="link-back" style="color:var(--muted);text-decoration:none;font-size:13px;">← Volver</a>
+    <span id="proj-title" style="font-size:14px;color:var(--muted);margin-left:auto;"></span>
+</header>
+<main>
+    <h1>Presupuesto</h1>
+    <p class="subtitle">Ingresa precios por perfil para calcular el presupuesto del proyecto.</p>
+    <div class="notice">⚠️ El catálogo de precios es configurable. Sin precios cargados, se muestran cantidades pero no totales monetarios.</div>
+
+    <div class="section">
+        <div class="section-title">Catálogo de Precios (ARS por m lin.)</div>
+        <div class="form-row" id="catalogo-form">
+            <div class="form-group"><label>PGC 100x0.9</label><input type="number" id="precio-PGC-100" min="0" step="0.01" placeholder="precio pendiente"></div>
+            <div class="form-group"><label>PGU 100x0.9</label><input type="number" id="precio-PGU-100" min="0" step="0.01" placeholder="precio pendiente"></div>
+            <div class="form-group"><label>PGC 90x0.9</label><input type="number" id="precio-PGC-90" min="0" step="0.01" placeholder="precio pendiente"></div>
+            <button class="btn" onclick="calcular()">Calcular</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Detalle de Materiales</div>
+        <table id="items-table">
+            <thead><tr><th>Concepto</th><th>Cantidad</th><th>Unidad</th><th>Precio Unitario</th><th>Subtotal</th></tr></thead>
+            <tbody id="items-body"><tr><td colspan="5" style="color:var(--muted);text-align:center;padding:24px;">Cargando BOM...</td></tr></tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Resumen</div>
+        <div class="totals-row">
+            <div class="total-card"><div class="total-label">Costo Total</div><div class="total-value" id="total-val">—</div></div>
+            <div class="total-card"><div class="total-label">Costo por m²</div><div class="total-value" id="m2-val">—</div></div>
+            <div class="total-card"><div class="total-label">Desperdicio Est.</div><div class="total-value">10%</div></div>
+        </div>
+    </div>
+</main>
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+if (id) {
+    document.getElementById('link-back').href = './proyecto-detalle.html?id=' + id;
+    const ps = JSON.parse(localStorage.getItem('steel_projects_v1') || '[]');
+    const p = ps.find(x => x.id === id);
+    if (p) document.getElementById('proj-title').textContent = p.nombre;
+} else {
+    document.getElementById('link-back').href = './proyectos.html';
+}
+
+let bomData = null;
+async function cargarBOM() {
+    try {
+        const r = await fetch('../../tools/qa-viewer/exports/BOM.csv');
+        if (!r.ok) throw new Error('No disponible');
+        const text = await r.text();
+        const lines = text.trim().split('\n').slice(1).filter(Boolean);
+        bomData = lines.map(l => {
+            const [perfil, ,, metros] = l.split(',');
+            return { perfil: perfil?.trim(), metros: parseFloat(metros?.trim() || '0') };
+        });
+        renderTabla(bomData, {});
+    } catch {
+        document.getElementById('items-body').innerHTML = '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:24px;">BOM no disponible. Ejecuta: npm run export:industrial</td></tr>';
+    }
+}
+
+function getPrecio(perfil) {
+    const map = { 'PGC 100x0.9': 'precio-PGC-100', 'PGU 100x0.9': 'precio-PGU-100', 'PGC 90x0.9': 'precio-PGC-90' };
+    const elId = map[perfil];
+    if (!elId) return null;
+    const v = parseFloat(document.getElementById(elId)?.value);
+    return isNaN(v) ? null : v;
+}
+
+function calcular() { renderTabla(bomData || [], {}); }
+
+function renderTabla(items, _) {
+    if (!items || !items.length) return;
+    let total = 0; let allPriced = true;
+    const rows = items.map(i => {
+        const precio = getPrecio(i.perfil);
+        const sub = precio !== null ? precio * i.metros : null;
+        if (sub !== null) total += sub; else allPriced = false;
+        return `<tr>
+            <td>${i.perfil}</td>
+            <td>${i.metros.toFixed(2)}</td>
+            <td>m lin.</td>
+            <td>${precio !== null ? 'ARS ' + precio.toFixed(2) : '<span class="precio-pendiente">precio pendiente</span>'}</td>
+            <td>${sub !== null ? 'ARS ' + sub.toFixed(2) : '<span class="precio-pendiente">precio pendiente</span>'}</td>
+        </tr>`;
+    });
+    document.getElementById('items-body').innerHTML = rows.join('');
+    const totalEl = document.getElementById('total-val');
+    const m2El = document.getElementById('m2-val');
+    if (allPriced) {
+        totalEl.textContent = 'ARS ' + total.toFixed(2);
+        totalEl.className = 'total-value';
+        m2El.textContent = '— (ingresar m²)';
+    } else {
+        totalEl.textContent = 'Precio(s) pendiente(s)';
+        totalEl.className = 'total-value pending';
+        m2El.textContent = '—';
+        m2El.className = 'total-value pending';
+    }
+}
+
+cargarBOM();
+</script>
+</body>
+</html>

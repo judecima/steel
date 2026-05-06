@@ -1,0 +1,4032 @@
+{
+  "projectId": "PROYECTO-CERTIFICADO-V1",
+  "bom": {
+    "items": [
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "montante_principal",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Principal (King)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "montante_principal",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Principal (King)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2,
+        "quantity": 1,
+        "role": "montante_apoyo",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante de Apoyo (Jack)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2,
+        "quantity": 1,
+        "role": "montante_apoyo",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante de Apoyo (Jack)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 0.4,
+        "quantity": 1,
+        "role": "montante_corto_superior",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Corto Superior (Cripple)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 0.4,
+        "quantity": 1,
+        "role": "montante_corto_superior",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Corto Superior (Cripple)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 0.4,
+        "quantity": 1,
+        "role": "montante_corto_superior",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Corto Superior (Cripple)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 1.2,
+        "quantity": 1,
+        "role": "solera_ventana",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Solera de Ventana",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 1,
+        "quantity": 1,
+        "role": "montante_corto_inferior",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Corto Inferior (Cripple)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 1,
+        "quantity": 1,
+        "role": "montante_corto_inferior",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Corto Inferior (Cripple)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 1,
+        "quantity": 1,
+        "role": "montante_corto_inferior",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Corto Inferior (Cripple)",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGU 100x0.9",
+        "thickness": 0.9,
+        "length": 4,
+        "quantity": 2,
+        "role": "track",
+        "sourceEntityId": "panel_wall_north_0",
+        "codigo": "PGU 100x0.9-90",
+        "descripcion": "Solera",
+        "muro": "wall_north",
+        "panel": "panel_wall_north_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "montante_principal",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Principal (King)",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "montante_principal",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Principal (King)",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.1,
+        "quantity": 1,
+        "role": "montante_apoyo",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante de Apoyo (Jack)",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.1,
+        "quantity": 1,
+        "role": "montante_apoyo",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante de Apoyo (Jack)",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 0.3,
+        "quantity": 1,
+        "role": "montante_corto_superior",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Corto Superior (Cripple)",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 0.3,
+        "quantity": 1,
+        "role": "montante_corto_superior",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Corto Superior (Cripple)",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGU 100x0.9",
+        "thickness": 0.9,
+        "length": 4,
+        "quantity": 2,
+        "role": "track",
+        "sourceEntityId": "panel_wall_south_0",
+        "codigo": "PGU 100x0.9-90",
+        "descripcion": "Solera",
+        "muro": "wall_south",
+        "panel": "panel_wall_south_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGU 100x0.9",
+        "thickness": 0.9,
+        "length": 4,
+        "quantity": 2,
+        "role": "track",
+        "sourceEntityId": "panel_wall_east_0",
+        "codigo": "PGU 100x0.9-90",
+        "descripcion": "Solera",
+        "muro": "wall_east",
+        "panel": "panel_wall_east_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "common",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Montante Estándar",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGC 100x0.9",
+        "thickness": 0.9,
+        "length": 2.6,
+        "quantity": 1,
+        "role": "corner",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGC 100x0.9-90",
+        "descripcion": "Perfil PGC 100x0.9 - corner",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      },
+      {
+        "profileType": "PGU 100x0.9",
+        "thickness": 0.9,
+        "length": 4,
+        "quantity": 2,
+        "role": "track",
+        "sourceEntityId": "panel_wall_west_0",
+        "codigo": "PGU 100x0.9-90",
+        "descripcion": "Solera",
+        "muro": "wall_west",
+        "panel": "panel_wall_west_0"
+      }
+    ],
+    "resumenPorPerfil": {
+      "PGC 100x0.9": 165,
+      "PGU 100x0.9": 32
+    }
+  },
+  "cutList": {
+    "piezas": [
+      {
+        "id": "PIEZA-0000",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0001",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0002",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0003",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0004",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0005",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0006",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0007",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0008",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0009",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0010",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0011",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0012",
+        "perfil": "PGC 100x0.9",
+        "longitud": 0.4,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0013",
+        "perfil": "PGC 100x0.9",
+        "longitud": 0.4,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0014",
+        "perfil": "PGC 100x0.9",
+        "longitud": 0.4,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0015",
+        "perfil": "PGC 100x0.9",
+        "longitud": 1.2,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0016",
+        "perfil": "PGC 100x0.9",
+        "longitud": 1,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0017",
+        "perfil": "PGC 100x0.9",
+        "longitud": 1,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0018",
+        "perfil": "PGC 100x0.9",
+        "longitud": 1,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0019",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0020",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0021",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0022",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0023",
+        "perfil": "PGU 100x0.9",
+        "longitud": 4,
+        "cantidad": 2,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_north_0",
+        "muro": "wall_north",
+        "prioridadFabricacion": 1
+      },
+      {
+        "id": "PIEZA-0024",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0025",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0026",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0027",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0028",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0029",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0030",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0031",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0032",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0033",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0034",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.1,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0035",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.1,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0036",
+        "perfil": "PGC 100x0.9",
+        "longitud": 0.3,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0037",
+        "perfil": "PGC 100x0.9",
+        "longitud": 0.3,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0038",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0039",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0040",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0041",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0042",
+        "perfil": "PGU 100x0.9",
+        "longitud": 4,
+        "cantidad": 2,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_south_0",
+        "muro": "wall_south",
+        "prioridadFabricacion": 2
+      },
+      {
+        "id": "PIEZA-0043",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0044",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0045",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0046",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0047",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0048",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0049",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0050",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0051",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0052",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0053",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0054",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0055",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0056",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0057",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0058",
+        "perfil": "PGU 100x0.9",
+        "longitud": 4,
+        "cantidad": 2,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_east_0",
+        "muro": "wall_east",
+        "prioridadFabricacion": 3
+      },
+      {
+        "id": "PIEZA-0059",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0060",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0061",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0062",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0063",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0064",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0065",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0066",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0067",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0068",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0069",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0070",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0071",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0072",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0073",
+        "perfil": "PGC 100x0.9",
+        "longitud": 2.6,
+        "cantidad": 1,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      },
+      {
+        "id": "PIEZA-0074",
+        "perfil": "PGU 100x0.9",
+        "longitud": 4,
+        "cantidad": 2,
+        "anguloInicio": 0,
+        "anguloFin": 0,
+        "panel": "panel_wall_west_0",
+        "muro": "wall_west",
+        "prioridadFabricacion": 4
+      }
+    ]
+  },
+  "paneles": [
+    {
+      "panelId": "panel_wall_north_0",
+      "geometria": {
+        "id": "panel_wall_north_0",
+        "wallId": "wall_north",
+        "role": "structural",
+        "width": 4,
+        "height": 2.6,
+        "offset": 0,
+        "studs": [
+          {
+            "id": "stud_aoecgxmcf",
+            "role": "common",
+            "position": 0,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_q5184vx1c",
+            "role": "common",
+            "position": 0.4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_pfl4lepi7",
+            "role": "common",
+            "position": 0.8,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_xqf75l51v",
+            "role": "common",
+            "position": 2.4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_armnhl8u0",
+            "role": "common",
+            "position": 2.8,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_ba98ts1jt",
+            "role": "common",
+            "position": 3.1999999999999997,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_g9pyg9m66",
+            "role": "common",
+            "position": 3.5999999999999996,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_i8u5uffvg",
+            "role": "common",
+            "position": 4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_principal_photo2h99",
+            "role": "montante_principal",
+            "position": 0.95,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_principal_cr82y460u",
+            "role": "montante_principal",
+            "position": 2.25,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_apoyo_fm9tsh8tc",
+            "role": "montante_apoyo",
+            "position": 1,
+            "height": 2,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_apoyo_k7w4xdh5x",
+            "role": "montante_apoyo",
+            "position": 2.2,
+            "height": 2,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_corto_tflfvo2w1",
+            "role": "montante_corto_superior",
+            "position": 1.2000000000000002,
+            "height": 0.3999999999999999,
+            "yOffset": 2.2,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_corto_871oygpyw",
+            "role": "montante_corto_superior",
+            "position": 1.6,
+            "height": 0.3999999999999999,
+            "yOffset": 2.2,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_corto_nw8e2uw60",
+            "role": "montante_corto_superior",
+            "position": 2,
+            "height": 0.3999999999999999,
+            "yOffset": 2.2,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "solera_ventana_cqgcw59bg",
+            "role": "solera_ventana",
+            "position": 1,
+            "height": 1.2,
+            "yOffset": 1,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_corto_917vpzjc5",
+            "role": "montante_corto_inferior",
+            "position": 1.2000000000000002,
+            "height": 1,
+            "yOffset": 0,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_corto_qmqx5rdee",
+            "role": "montante_corto_inferior",
+            "position": 1.6,
+            "height": 1,
+            "yOffset": 0,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_corto_wmhclecv7",
+            "role": "montante_corto_inferior",
+            "position": 2,
+            "height": 1,
+            "yOffset": 0,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_iu9d7fw2o",
+            "role": "corner",
+            "position": 0.05,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_phw0h0zgz",
+            "role": "corner",
+            "position": 0.1,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_3ukr71gki",
+            "role": "corner",
+            "position": 3.95,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_vgpzmcbty",
+            "role": "corner",
+            "position": 3.9,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          }
+        ],
+        "aberturas": [
+          {
+            "id": "abertura_lphz3phmv",
+            "type": "ventana",
+            "width": 1.2,
+            "height": 1,
+            "position": 1,
+            "sillHeight": 1,
+            "dintel": {
+              "strategy": "provisional_boxed_header",
+              "span": 1.2,
+              "requiresStructuralValidation": true
+            }
+          }
+        ],
+        "junctions": []
+      },
+      "piezas": [
+        {
+          "id": "PIEZA-0000",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0001",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0002",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0003",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0004",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0005",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0006",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0007",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0008",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0009",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0010",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0011",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0012",
+          "perfil": "PGC 100x0.9",
+          "longitud": 0.4,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0013",
+          "perfil": "PGC 100x0.9",
+          "longitud": 0.4,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0014",
+          "perfil": "PGC 100x0.9",
+          "longitud": 0.4,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0015",
+          "perfil": "PGC 100x0.9",
+          "longitud": 1.2,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0016",
+          "perfil": "PGC 100x0.9",
+          "longitud": 1,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0017",
+          "perfil": "PGC 100x0.9",
+          "longitud": 1,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0018",
+          "perfil": "PGC 100x0.9",
+          "longitud": 1,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0019",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0020",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0021",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0022",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        },
+        {
+          "id": "PIEZA-0023",
+          "perfil": "PGU 100x0.9",
+          "longitud": 4,
+          "cantidad": 2,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_north_0",
+          "muro": "wall_north",
+          "prioridadFabricacion": 1
+        }
+      ],
+      "bomLocal": {
+        "aggregated": [
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "common",
+            "totalLinearMeters": 20.8
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "montante_principal",
+            "totalLinearMeters": 5.2
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "montante_apoyo",
+            "totalLinearMeters": 4
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "montante_corto_superior",
+            "totalLinearMeters": 1.2
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "solera_ventana",
+            "totalLinearMeters": 1.2
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "montante_corto_inferior",
+            "totalLinearMeters": 3
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "corner",
+            "totalLinearMeters": 10.4
+          },
+          {
+            "profileType": "PGU 100x0.9",
+            "thickness": 0.9,
+            "role": "track",
+            "totalLinearMeters": 8
+          }
+        ],
+        "cutList": [
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "montante_principal",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "montante_principal",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2,
+            "quantity": 1,
+            "role": "montante_apoyo",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2,
+            "quantity": 1,
+            "role": "montante_apoyo",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 0.4,
+            "quantity": 1,
+            "role": "montante_corto_superior",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 0.4,
+            "quantity": 1,
+            "role": "montante_corto_superior",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 0.4,
+            "quantity": 1,
+            "role": "montante_corto_superior",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 1.2,
+            "quantity": 1,
+            "role": "solera_ventana",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 1,
+            "quantity": 1,
+            "role": "montante_corto_inferior",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 1,
+            "quantity": 1,
+            "role": "montante_corto_inferior",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 1,
+            "quantity": 1,
+            "role": "montante_corto_inferior",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_north_0"
+          },
+          {
+            "profileType": "PGU 100x0.9",
+            "thickness": 0.9,
+            "length": 4,
+            "quantity": 2,
+            "role": "track",
+            "sourceEntityId": "panel_wall_north_0"
+          }
+        ]
+      },
+      "metadata": {
+        "muro": "wall_north",
+        "ancho": 4,
+        "alto": 2.6,
+        "rol": "structural"
+      }
+    },
+    {
+      "panelId": "panel_wall_south_0",
+      "geometria": {
+        "id": "panel_wall_south_0",
+        "wallId": "wall_south",
+        "role": "structural",
+        "width": 4,
+        "height": 2.6,
+        "offset": 0,
+        "studs": [
+          {
+            "id": "stud_5d2ge202f",
+            "role": "common",
+            "position": 0,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_f9at1l94l",
+            "role": "common",
+            "position": 0.4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_5m28bex4g",
+            "role": "common",
+            "position": 0.8,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_f285nrb58",
+            "role": "common",
+            "position": 1.2000000000000002,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_z3mjqjlf4",
+            "role": "common",
+            "position": 2.8,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_jt5e25od2",
+            "role": "common",
+            "position": 3.1999999999999997,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_dqj7w24wa",
+            "role": "common",
+            "position": 3.5999999999999996,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_yiupxltxm",
+            "role": "common",
+            "position": 4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_principal_cz5a74xmd",
+            "role": "montante_principal",
+            "position": 1.45,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_principal_4e9ka81wx",
+            "role": "montante_principal",
+            "position": 2.4499999999999997,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_apoyo_quylfiulo",
+            "role": "montante_apoyo",
+            "position": 1.5,
+            "height": 2.1,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_apoyo_77ieulqvz",
+            "role": "montante_apoyo",
+            "position": 2.4,
+            "height": 2.1,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_corto_8dcxnd47q",
+            "role": "montante_corto_superior",
+            "position": 1.6,
+            "height": 0.2999999999999998,
+            "yOffset": 2.3000000000000003,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "montante_corto_27n5f7fb2",
+            "role": "montante_corto_superior",
+            "position": 2,
+            "height": 0.2999999999999998,
+            "yOffset": 2.3000000000000003,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_w2or02rrf",
+            "role": "corner",
+            "position": 0.05,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_fqw75d5ob",
+            "role": "corner",
+            "position": 0.1,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_v2jkvijm9",
+            "role": "corner",
+            "position": 3.95,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_zpzpmq24v",
+            "role": "corner",
+            "position": 3.9,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          }
+        ],
+        "aberturas": [
+          {
+            "id": "abertura_9kr2h1fep",
+            "type": "puerta",
+            "width": 0.9,
+            "height": 2.1,
+            "position": 1.5,
+            "sillHeight": 0,
+            "dintel": {
+              "strategy": "provisional_boxed_header",
+              "span": 0.9,
+              "requiresStructuralValidation": true
+            }
+          }
+        ],
+        "junctions": []
+      },
+      "piezas": [
+        {
+          "id": "PIEZA-0024",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0025",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0026",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0027",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0028",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0029",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0030",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0031",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0032",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0033",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0034",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.1,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0035",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.1,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0036",
+          "perfil": "PGC 100x0.9",
+          "longitud": 0.3,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0037",
+          "perfil": "PGC 100x0.9",
+          "longitud": 0.3,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0038",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0039",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0040",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0041",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        },
+        {
+          "id": "PIEZA-0042",
+          "perfil": "PGU 100x0.9",
+          "longitud": 4,
+          "cantidad": 2,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_south_0",
+          "muro": "wall_south",
+          "prioridadFabricacion": 2
+        }
+      ],
+      "bomLocal": {
+        "aggregated": [
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "common",
+            "totalLinearMeters": 20.8
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "montante_principal",
+            "totalLinearMeters": 5.2
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "montante_apoyo",
+            "totalLinearMeters": 4.2
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "montante_corto_superior",
+            "totalLinearMeters": 0.6
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "corner",
+            "totalLinearMeters": 10.4
+          },
+          {
+            "profileType": "PGU 100x0.9",
+            "thickness": 0.9,
+            "role": "track",
+            "totalLinearMeters": 8
+          }
+        ],
+        "cutList": [
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "montante_principal",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "montante_principal",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.1,
+            "quantity": 1,
+            "role": "montante_apoyo",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.1,
+            "quantity": 1,
+            "role": "montante_apoyo",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 0.3,
+            "quantity": 1,
+            "role": "montante_corto_superior",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 0.3,
+            "quantity": 1,
+            "role": "montante_corto_superior",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_south_0"
+          },
+          {
+            "profileType": "PGU 100x0.9",
+            "thickness": 0.9,
+            "length": 4,
+            "quantity": 2,
+            "role": "track",
+            "sourceEntityId": "panel_wall_south_0"
+          }
+        ]
+      },
+      "metadata": {
+        "muro": "wall_south",
+        "ancho": 4,
+        "alto": 2.6,
+        "rol": "structural"
+      }
+    },
+    {
+      "panelId": "panel_wall_east_0",
+      "geometria": {
+        "id": "panel_wall_east_0",
+        "wallId": "wall_east",
+        "role": "structural",
+        "width": 4,
+        "height": 2.6,
+        "offset": 0,
+        "studs": [
+          {
+            "id": "stud_jtssbf0v0",
+            "role": "common",
+            "position": 0,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_yg9gtypl6",
+            "role": "common",
+            "position": 0.4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_wj57f42sq",
+            "role": "common",
+            "position": 0.8,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_fsikakf03",
+            "role": "common",
+            "position": 1.2000000000000002,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_t8txmfms4",
+            "role": "common",
+            "position": 1.6,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_8piwl97aq",
+            "role": "common",
+            "position": 2,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_oh0xhq890",
+            "role": "common",
+            "position": 2.4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_ldva5cnjg",
+            "role": "common",
+            "position": 2.8,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_4ypxnnysg",
+            "role": "common",
+            "position": 3.1999999999999997,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_mfur3biwo",
+            "role": "common",
+            "position": 3.5999999999999996,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_0gw1mzfmz",
+            "role": "common",
+            "position": 4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_hekbnbd1d",
+            "role": "corner",
+            "position": 0.05,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_xld4ohnht",
+            "role": "corner",
+            "position": 0.1,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_tye96723t",
+            "role": "corner",
+            "position": 3.95,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_a9jag8fql",
+            "role": "corner",
+            "position": 3.9,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          }
+        ],
+        "aberturas": [],
+        "junctions": []
+      },
+      "piezas": [
+        {
+          "id": "PIEZA-0043",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0044",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0045",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0046",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0047",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0048",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0049",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0050",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0051",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0052",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0053",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0054",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0055",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0056",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0057",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        },
+        {
+          "id": "PIEZA-0058",
+          "perfil": "PGU 100x0.9",
+          "longitud": 4,
+          "cantidad": 2,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_east_0",
+          "muro": "wall_east",
+          "prioridadFabricacion": 3
+        }
+      ],
+      "bomLocal": {
+        "aggregated": [
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "common",
+            "totalLinearMeters": 28.6
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "corner",
+            "totalLinearMeters": 10.4
+          },
+          {
+            "profileType": "PGU 100x0.9",
+            "thickness": 0.9,
+            "role": "track",
+            "totalLinearMeters": 8
+          }
+        ],
+        "cutList": [
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_east_0"
+          },
+          {
+            "profileType": "PGU 100x0.9",
+            "thickness": 0.9,
+            "length": 4,
+            "quantity": 2,
+            "role": "track",
+            "sourceEntityId": "panel_wall_east_0"
+          }
+        ]
+      },
+      "metadata": {
+        "muro": "wall_east",
+        "ancho": 4,
+        "alto": 2.6,
+        "rol": "structural"
+      }
+    },
+    {
+      "panelId": "panel_wall_west_0",
+      "geometria": {
+        "id": "panel_wall_west_0",
+        "wallId": "wall_west",
+        "role": "structural",
+        "width": 4,
+        "height": 2.6,
+        "offset": 0,
+        "studs": [
+          {
+            "id": "stud_os2vewqf4",
+            "role": "common",
+            "position": 0,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_pvl5ku11b",
+            "role": "common",
+            "position": 0.4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_f1ecgdbc9",
+            "role": "common",
+            "position": 0.8,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_r4ib05ll7",
+            "role": "common",
+            "position": 1.2000000000000002,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_228judkbx",
+            "role": "common",
+            "position": 1.6,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_xw0we6uoo",
+            "role": "common",
+            "position": 2,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_cilsskl0m",
+            "role": "common",
+            "position": 2.4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_aloda9drn",
+            "role": "common",
+            "position": 2.8,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_mpd0at1dr",
+            "role": "common",
+            "position": 3.1999999999999997,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_tcp5up45k",
+            "role": "common",
+            "position": 3.5999999999999996,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "stud_tdgk1mgan",
+            "role": "common",
+            "position": 4,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_lcp357780",
+            "role": "corner",
+            "position": 0.05,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_nlbg8xk0b",
+            "role": "corner",
+            "position": 0.1,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_7r1dheo5i",
+            "role": "corner",
+            "position": 3.95,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          },
+          {
+            "id": "corner_s8vsvjffb",
+            "role": "corner",
+            "position": 3.9,
+            "height": 2.6,
+            "profileType": "PGC 100x0.9"
+          }
+        ],
+        "aberturas": [],
+        "junctions": []
+      },
+      "piezas": [
+        {
+          "id": "PIEZA-0059",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0060",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0061",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0062",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0063",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0064",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0065",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0066",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0067",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0068",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0069",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0070",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0071",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0072",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0073",
+          "perfil": "PGC 100x0.9",
+          "longitud": 2.6,
+          "cantidad": 1,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        },
+        {
+          "id": "PIEZA-0074",
+          "perfil": "PGU 100x0.9",
+          "longitud": 4,
+          "cantidad": 2,
+          "anguloInicio": 0,
+          "anguloFin": 0,
+          "panel": "panel_wall_west_0",
+          "muro": "wall_west",
+          "prioridadFabricacion": 4
+        }
+      ],
+      "bomLocal": {
+        "aggregated": [
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "common",
+            "totalLinearMeters": 28.6
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "role": "corner",
+            "totalLinearMeters": 10.4
+          },
+          {
+            "profileType": "PGU 100x0.9",
+            "thickness": 0.9,
+            "role": "track",
+            "totalLinearMeters": 8
+          }
+        ],
+        "cutList": [
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "common",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGC 100x0.9",
+            "thickness": 0.9,
+            "length": 2.6,
+            "quantity": 1,
+            "role": "corner",
+            "sourceEntityId": "panel_wall_west_0"
+          },
+          {
+            "profileType": "PGU 100x0.9",
+            "thickness": 0.9,
+            "length": 4,
+            "quantity": 2,
+            "role": "track",
+            "sourceEntityId": "panel_wall_west_0"
+          }
+        ]
+      },
+      "metadata": {
+        "muro": "wall_west",
+        "ancho": 4,
+        "alto": 2.6,
+        "rol": "structural"
+      }
+    }
+  ],
+  "montaje": [
+    {
+      "muroId": "wall_north",
+      "pasos": [
+        {
+          "orden": 1,
+          "titulo": "Preparación de Muro: wall_north",
+          "descripcion": "Identificar y posicionar los paneles panel_wall_north_0.",
+          "panelesInvolucrados": [
+            "panel_wall_north_0"
+          ],
+          "advertencias": []
+        },
+        {
+          "orden": 2,
+          "titulo": "Montaje de Paneles",
+          "descripcion": "Fijar paneles a fundación según plano de anclajes.",
+          "panelesInvolucrados": [
+            "panel_wall_north_0"
+          ],
+          "advertencias": []
+        }
+      ]
+    },
+    {
+      "muroId": "wall_east",
+      "pasos": [
+        {
+          "orden": 1,
+          "titulo": "Preparación de Muro: wall_east",
+          "descripcion": "Identificar y posicionar los paneles panel_wall_east_0.",
+          "panelesInvolucrados": [
+            "panel_wall_east_0"
+          ],
+          "advertencias": []
+        },
+        {
+          "orden": 2,
+          "titulo": "Montaje de Paneles",
+          "descripcion": "Fijar paneles a fundación según plano de anclajes.",
+          "panelesInvolucrados": [
+            "panel_wall_east_0"
+          ],
+          "advertencias": []
+        }
+      ]
+    },
+    {
+      "muroId": "wall_south",
+      "pasos": [
+        {
+          "orden": 1,
+          "titulo": "Preparación de Muro: wall_south",
+          "descripcion": "Identificar y posicionar los paneles panel_wall_south_0.",
+          "panelesInvolucrados": [
+            "panel_wall_south_0"
+          ],
+          "advertencias": []
+        },
+        {
+          "orden": 2,
+          "titulo": "Montaje de Paneles",
+          "descripcion": "Fijar paneles a fundación según plano de anclajes.",
+          "panelesInvolucrados": [
+            "panel_wall_south_0"
+          ],
+          "advertencias": []
+        }
+      ]
+    },
+    {
+      "muroId": "wall_west",
+      "pasos": [
+        {
+          "orden": 1,
+          "titulo": "Preparación de Muro: wall_west",
+          "descripcion": "Identificar y posicionar los paneles panel_wall_west_0.",
+          "panelesInvolucrados": [
+            "panel_wall_west_0"
+          ],
+          "advertencias": []
+        },
+        {
+          "orden": 2,
+          "titulo": "Montaje de Paneles",
+          "descripcion": "Fijar paneles a fundación según plano de anclajes.",
+          "panelesInvolucrados": [
+            "panel_wall_west_0"
+          ],
+          "advertencias": []
+        }
+      ]
+    }
+  ],
+  "generadoEn": "2026-05-05T13:45:12.954Z"
+}

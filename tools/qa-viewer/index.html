@@ -93,8 +93,19 @@
     <div id="canvas-container"></div>
     
     <div id="ui-panel">
+        <h3>Modo de Visualización</h3>
+        <div class="control-group" style="display: flex; gap: 5px;">
+            <select id="mode-selector" style="flex: 1; padding: 8px; background: #333; color: #fff; border: 1px solid #555; border-radius: 4px; cursor: pointer;">
+                <option value="estandar">Estándar</option>
+                <option value="estructural">Estructural</option>
+                <option value="taller">Taller</option>
+                <option value="montaje">Montaje</option>
+                <option value="inspeccion">Inspección</option>
+            </select>
+            <button onclick="location.reload()" style="padding: 0 10px; background: #444; border: 1px solid #555; border-radius: 4px; color: #fff; cursor: pointer;">↻</button>
+        </div>
+
         <h3>Controles de QA</h3>
-        
         <div class="control-group">
             <label><input type="checkbox" id="toggle-wireframe"> Estructura Alámbrica</label>
             <label><input type="checkbox" id="toggle-grid" checked> Grilla de Referencia</label>
@@ -112,6 +123,16 @@
         <h3>Estadísticas de Escena</h3>
         <div class="control-group" id="stats-container" style="font-size: 13px; color: #aaa;">
             <!-- Populated dynamically -->
+        </div>
+
+        <h3>Exportaciones Industriales</h3>
+        <div class="control-group" id="exports-container" style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-download" data-file="bom.csv" style="padding: 8px; background: #2ecc71; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar BOM CSV</button>
+            <button class="btn-download" data-file="cutlist.csv" style="padding: 8px; background: #2ecc71; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar Lista de Corte CSV</button>
+            <button class="btn-download" data-file="proyecto_industrial.json" style="padding: 8px; background: #3498db; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar Paquete JSON</button>
+            <button class="btn-download" data-file="reporte.tsv" style="padding: 8px; background: #f1c40f; color: #000; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar Excel (TSV)</button>
+            <button class="btn-download" data-file="montaje.txt" style="padding: 8px; background: #e67e22; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Descargar Resumen Montaje</button>
+            <div id="export-status" style="font-size: 11px; color: #777; margin-top: 5px;"></div>
         </div>
     </div>
 

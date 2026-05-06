@@ -11,15 +11,18 @@ export function calculateBOM(panels: Panel[]): BillOfMaterials {
 
   panels.forEach(panel => {
     // 1. Add studs
-    panel.studs.forEach(stud => {
-      cutList.push({
-        profileType: stud.profileType,
-        thickness: defaultThickness,
-        length: round(stud.height),
-        quantity: 1,
-        role: stud.role
+    if (panel.studs) {
+      panel.studs.forEach(stud => {
+        cutList.push({
+          profileType: stud.profileType,
+          thickness: defaultThickness,
+          length: round(stud.height),
+          quantity: 1,
+          role: stud.role,
+          sourceEntityId: panel.id
+        });
       });
-    });
+    }
 
     // 2. Add tracks
     cutList.push({ 
@@ -27,23 +30,26 @@ export function calculateBOM(panels: Panel[]): BillOfMaterials {
         thickness: defaultThickness, 
         length: round(panel.width), 
         quantity: 2, 
-        role: 'track' 
+        role: 'track',
+        sourceEntityId: panel.id
     });
 
     // 3. Add headers (Dinteles)
-    // Consume metadata already generated during the construction phase
-    panel.openings.forEach(op => {
-        if (op.header) {
-            const headerPieces = 2; // Logic for provisional boxed header
-            cutList.push({ 
-                profileType: studProfile, 
-                thickness: defaultThickness, 
-                length: round(op.header.span + 0.1), 
-                quantity: headerPieces, 
-                role: op.header.strategy 
-            });
-        }
-    });
+    if (panel.aberturas) {
+      panel.aberturas.forEach(op => {
+          if (op.header) {
+              const headerPieces = 2; // Logic for provisional boxed header
+              cutList.push({ 
+                  profileType: studProfile, 
+                  thickness: defaultThickness, 
+                  length: round(op.header.span + 0.1), 
+                  quantity: headerPieces, 
+                  role: op.header.strategy,
+                  sourceEntityId: panel.id
+              });
+          }
+      });
+    }
   });
 
   // Aggregation

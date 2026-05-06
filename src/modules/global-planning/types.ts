@@ -49,6 +49,7 @@ export type GlobalPlanScore = {
 
 export type GlobalPlanCandidate = {
   id: string;
+  decidedWalls: string[];
   wallSelections: Record<string, PanelizationCandidate>;
   valid: boolean;
   rejectionReason?: string;

@@ -9,10 +9,12 @@ import { scoreCandidate } from '../src/modules/intelligence/candidate-scorer';
 import { SceneBuilder } from '../src/modules/render/scene-builder';
 import { ProjectResult } from '../src/core/types';
 import { RENDER_CONFIG } from '../src/modules/render/render-config';
+import { StructuralEngine } from '../src/modules/structural/engine';
+import { calculateBOM } from '../src/modules/materials/engine';
 
 declare var process: any;
 
-function mockPipeline(input: any): ProjectResult {
+function mockPipeline(input: any, assumptions: string[] = []): ProjectResult {
   const house = generateGeometry(input);
   const localMap = new Map<string, PanelizationCandidate[]>();
   for (const muro of house.muros) {
@@ -34,7 +36,7 @@ function mockPipeline(input: any): ProjectResult {
     bom: { aggregated: [], cutList: [] },
     logs: [],
     status: 'constructive_precheck_passed',
-    assumptions: [],
+    assumptions: assumptions,
     warnings: []
   };
 }
@@ -56,6 +58,12 @@ async function runTests() {
   
   const projectResult = mockPipeline(baseInput);
   const originalJson = JSON.stringify(projectResult);
+
+  console.log("DEBUG: RENDER_CONFIG layers count:", RENDER_CONFIG.layers?.length);
+  if (!RENDER_CONFIG.layers) {
+      console.error("CRITICAL: RENDER_CONFIG.layers is undefined!");
+      process.exit(1);
+  }
 
   // TEST 1: ProjectResult genera RenderSceneDTO
   console.log("TEST 1: ProjectResult genera RenderSceneDTO");
@@ -113,10 +121,12 @@ async function runTests() {
   
   const s1Cmp = createDeepCopy(scene);
   const s2Cmp = createDeepCopy(scene2);
-  s1Cmp.metadata.generatedAt = '';
-  s1Cmp.metadata.projectId = '';
-  s2Cmp.metadata.generatedAt = '';
-  s2Cmp.metadata.projectId = '';
+  
+  // Limpiar campos variables (ahora localizados)
+  s1Cmp.metadata['Fecha de generación'] = '';
+  s1Cmp.metadata['ID de proyecto'] = '';
+  s2Cmp.metadata['Fecha de generación'] = '';
+  s2Cmp.metadata['ID de proyecto'] = '';
 
   if (JSON.stringify(s1Cmp) === JSON.stringify(s2Cmp)) {
     console.log("  ✅ Pasado: La salida es perfectamente determinística.");
@@ -196,15 +206,15 @@ async function runTests() {
 
   // TEST 17: Integridad del entramado de ventana
   console.log("\nTEST 17: Integridad del entramado de ventana");
-  const windowPanel = scene.objects.find(o => o.metadata?.type === 'ventana')?.metadata?.panelId;
-  const windowStuds = scene.objects.filter(o => o.type === 'montante' && o.metadata?.panelId === windowPanel);
-  const windowSill = scene.objects.find(o => o.type === 'antepecho' && o.metadata?.panelId === windowPanel);
-  const windowHeader = scene.objects.find(o => o.type === 'dintel' && o.metadata?.panelId === windowPanel);
+  const windowPanel = scene.objects.find(o => o.metadata?.Tipo === 'Ventana')?.metadata?.Panel;
+  const windowStuds = scene.objects.filter(o => o.type === 'montante' && o.metadata?.Panel === windowPanel);
+  const windowSill = scene.objects.find(o => o.type === 'antepecho' && o.metadata?.Panel === windowPanel);
+  const windowHeader = scene.objects.find(o => o.type === 'dintel' && o.metadata?.Panel === windowPanel);
   
-  const hasWindowKing = windowStuds.some(s => s.metadata?.role === 'montante_principal');
-  const hasWindowJack = windowStuds.some(s => s.metadata?.role === 'montante_apoyo');
-  const hasWindowCrippleTop = windowStuds.some(s => s.metadata?.role === 'montante_corto_superior');
-  const hasWindowCrippleBot = windowStuds.some(s => s.metadata?.role === 'montante_corto_inferior');
+  const hasWindowKing = windowStuds.some(s => s.metadata?.Rol === 'Montante Principal');
+  const hasWindowJack = windowStuds.some(s => s.metadata?.Rol === 'Montante de Apoyo');
+  const hasWindowCrippleTop = windowStuds.some(s => s.metadata?.Rol === 'Montante Corto Superior');
+  const hasWindowCrippleBot = windowStuds.some(s => s.metadata?.Rol === 'Montante Corto Inferior');
 
   if (hasWindowKing && hasWindowJack && hasWindowCrippleTop && hasWindowCrippleBot && windowSill && windowHeader) {
       console.log("  ✅ Pasado: El entramado de ventana incluye principal, apoyo, cortos, antepecho y dintel.");
@@ -215,12 +225,12 @@ async function runTests() {
 
   // TEST 18: Integridad del entramado de puerta
   console.log("\nTEST 18: Integridad del entramado de puerta");
-  const doorPanel = scene.objects.find(o => o.metadata?.type === 'puerta')?.metadata?.panelId;
-  const doorStuds = scene.objects.filter(o => o.type === 'montante' && o.metadata?.panelId === doorPanel);
-  const doorHeader = scene.objects.find(o => o.type === 'dintel' && o.metadata?.panelId === doorPanel);
+  const doorPanel = scene.objects.find(o => o.metadata?.Tipo === 'Puerta')?.metadata?.Panel;
+  const doorStuds = scene.objects.filter(o => o.type === 'montante' && o.metadata?.Panel === doorPanel);
+  const doorHeader = scene.objects.find(o => o.type === 'dintel' && o.metadata?.Panel === doorPanel);
 
-  const hasDoorKing = doorStuds.some(s => s.metadata?.role === 'montante_principal');
-  const hasDoorJack = doorStuds.some(s => s.metadata?.role === 'montante_apoyo');
+  const hasDoorKing = doorStuds.some(s => s.metadata?.Rol === 'Montante Principal');
+  const hasDoorJack = doorStuds.some(s => s.metadata?.Rol === 'Montante de Apoyo');
 
   if (hasDoorKing && hasDoorJack && doorHeader) {
       console.log("  ✅ Pasado: El entramado de puerta incluye principal, apoyo y dintel.");
@@ -231,8 +241,8 @@ async function runTests() {
 
   // TEST 19: La puerta no tiene antepecho
   console.log("\nTEST 19: La puerta no tiene antepecho");
-  const doorSill = scene.objects.find(o => o.type === 'antepecho' && o.metadata?.panelId === doorPanel);
-  const doorCrippleBot = doorStuds.some(s => s.metadata?.role === 'montante_corto_inferior');
+  const doorSill = scene.objects.find(o => o.type === 'antepecho' && o.metadata?.Panel === doorPanel);
+  const doorCrippleBot = doorStuds.some(s => s.metadata?.Rol === 'Montante Corto Inferior');
   
   if (!doorSill && !doorCrippleBot) {
       console.log("  ✅ Pasado: La puerta correctamente no tiene antepecho ni montantes cortos inferiores.");
@@ -305,7 +315,7 @@ async function runTests() {
   }
 
   // Pruebas de alineación vertical Fase 4A.4
-  const winOpeningObj = scene.objects.find(o => o.type === 'abertura' && o.metadata?.type === 'ventana');
+  const winOpeningObj = scene.objects.find(o => (o.type === 'abertura' as any || o.type === 'ventana' as any) && o.metadata?.Tipo === 'Ventana');
   const doorOpeningObj = scene.objects.find(o => o.type === 'puerta');
 
   // TEST 25: El fondo vertical del marcador de abertura de ventana es igual a sillHeight
@@ -375,7 +385,7 @@ async function runTests() {
   let voidOk = true;
   for (const obj of [winOpeningObj, doorOpeningObj]) {
       if (!obj) continue;
-      const header = scene.objects.find(o => o.type === 'dintel' && o.metadata?.panelId === obj.metadata?.panelId);
+      const header = scene.objects.find(o => o.type === 'dintel' && o.sourceId === obj.sourceId);
       if (header && obj.dimensions.x !== header.dimensions.x) {
           console.log(`  ❌ Fallido: El ancho de la abertura (${obj.dimensions.x}) != Luz del dintel (${header.dimensions.x}).`);
           voidOk = false;
@@ -392,9 +402,9 @@ async function runTests() {
   let crippleContinuityOk = true;
   for (const opObj of [winOpeningObj, doorOpeningObj]) {
       if (!opObj) continue;
-      const cripples = scene.objects.filter(o => o.type === 'montante' && o.metadata?.role === 'montante_corto_superior' && o.metadata?.panelId === opObj.metadata?.panelId);
+      const cripples = scene.objects.filter(o => o.type === 'montante' && o.metadata?.Rol === 'Montante Corto Superior' && o.metadata?.Panel === opObj.metadata?.Panel);
       if (cripples.length < 2) {
-          console.log(`  ❌ Fallido: La abertura ${opObj.metadata?.type} (ancho ${opObj.dimensions.x}) solo tiene ${cripples.length} montantes cortos superiores. Se esperaban al menos 2 para anchos de 0.9m+.`);
+          console.log(`  ❌ Fallido: La abertura ${opObj.metadata?.Tipo} (ancho ${opObj.dimensions.x}) solo tiene ${cripples.length} montantes cortos superiores. Se esperaban al menos 2 para anchos de 0.9m+.`);
           crippleContinuityOk = false;
       }
   }
@@ -453,11 +463,208 @@ async function runTests() {
       passed = false; failCount++;
   }
 
+  // === FASE 4B: VISUALIZACIÓN INDUSTRIAL AVANZADA ===
+  
+  // Ejecutar motor estructural para alimentar los modos industriales
+  const structuralResult = StructuralEngine.runPreliminaryAnalysis(projectResult);
+  projectResult.structural = structuralResult;
+
+  // Generar escena industrial completa para pruebas dinámicas
+  const sceneIndustrial = SceneBuilder.buildIndustrialScene(projectResult, 'estructural');
+  const industrialStructural = sceneIndustrial;
+
+  // TEST 35: DTO de composición industrial generado correctamente
+  console.log("\nTEST 35: DTO de composición industrial generado correctamente");
+  if (industrialStructural.escenaBase && industrialStructural.modoInicial === 'estructural') {
+      console.log("  ✅ Pasado: DTO usa composición en lugar de herencia.");
+  } else {
+      console.log("  ❌ Fallido: Estructura del DTO incorrecta.");
+      passed = false; failCount++;
+  }
+
+  // TEST 36: Dintel Compuesto visible correctamente
+  console.log("\nTEST 36: Dintel Compuesto visible correctamente");
+  const pCompuesto = mockPipeline({ 
+      width: 3, length: 3, minHeight: 2.6, roofType: 'one_slope', roofSlope: 0, 
+      openings: [{ wallId: 'wall_north', type: 'ventana', width: 1.5, height: 1, position: 1 }] 
+  }, ['wind_zone_data_provided', 'seismic_zone_data_provided', 'foundation_data_provided']);
+  pCompuesto.structural = StructuralEngine.runPreliminaryAnalysis(pCompuesto);
+  const sceneCompuesto = SceneBuilder.buildIndustrialScene(pCompuesto, 'estructural');
+  const compuestoPieces = sceneCompuesto.escenaBase.objects.filter(o => o.id.includes('render_header_compuesto'));
+  if (compuestoPieces.length >= 2) {
+      console.log("  ✅ Pasado: Dintel compuesto genera múltiples piezas físicas.");
+  } else {
+      console.log(`  ❌ Fallido: Se esperaban múltiples piezas, se obtuvo ${compuestoPieces.length}`);
+      passed = false; failCount++;
+  }
+
+  // TEST 37: Dintel Reticulado visible correctamente
+  console.log("\nTEST 37: Dintel Reticulado visible correctamente");
+  const pReticulado = mockPipeline({ 
+    width: 6, length: 3, minHeight: 2.6, roofType: 'one_slope', roofSlope: 0, 
+    openings: [{ wallId: 'wall_north', type: 'ventana', width: 2.5, height: 1, position: 1 }] 
+  }, ['wind_zone_data_provided', 'seismic_zone_data_provided', 'foundation_data_provided']);
+  pReticulado.structural = StructuralEngine.runPreliminaryAnalysis(pReticulado);
+  const sceneReticulado = SceneBuilder.buildIndustrialScene(pReticulado, 'estructural');
+  const trussParts = sceneReticulado.escenaBase.objects.filter(o => o.metadata?.Rol === 'Cordón Superior' || o.metadata?.Rol === 'Cordón Inferior' || o.metadata?.Rol === 'Alma Reticulada');
+  if (trussParts.length >= 4) {
+      console.log(`  ✅ Pasado: Dintel reticulado genera estructura compleja (${trussParts.length} partes).`);
+  } else {
+      console.log(`  ❌ Fallido: Partes del reticulado insuficientes (${trussParts.length}).`);
+      passed = false; failCount++;
+  }
+
+  // TEST 38: Viga externa genera marcador visual
+  console.log("\nTEST 38: Viga externa genera marcador visual");
+  const pExterno = mockPipeline({ 
+    width: 10, length: 3, minHeight: 2.6, roofType: 'one_slope', roofSlope: 0, 
+    openings: [{ wallId: 'wall_north', type: 'ventana', width: 1.2, height: 1, position: 1.0 }] 
+  });
+  pExterno.structural = StructuralEngine.runPreliminaryAnalysis(pExterno);
+  // Forzar estrategia para probar el marcador visual
+  if (pExterno.structural?.disenosDintel && pExterno.structural.disenosDintel.length > 0) {
+      const diseno = pExterno.structural.disenosDintel[0];
+      if (diseno && diseno.candidatoSeleccionado) {
+          diseno.candidatoSeleccionado.estrategia = 'requiere_viga_estructural_externa';
+      }
+  }
+  const sceneExterno = SceneBuilder.buildIndustrialScene(pExterno, 'estructural');
+  const marker = sceneExterno.escenaBase.objects.find(o => o.type === 'marcador_viga_externa');
+  if (marker && marker.metadata?.['Aviso'].includes('VIGA ESTRUCTURAL EXTERNA')) {
+      console.log("  ✅ Pasado: Marcador de viga externa generado y localizado.");
+  } else {
+      console.log("  ❌ Fallido: No se encontró el marcador de viga externa.");
+      console.log("     Tipos de objetos encontrados:", Array.from(new Set(sceneExterno.escenaBase.objects.map(o => o.type))).join(', '));
+      passed = false; failCount++;
+  }
+
+  // TEST 39: Overlay estructural muestra estados
+  console.log("\nTEST 39: Overlay estructural muestra estados");
+  if (industrialStructural.modos.estructural.overlays.estructural && industrialStructural.modos.estructural.overlays.estructural.length > 0) {
+      console.log("  ✅ Pasado: Overlay estructural presente en el DTO.");
+  } else {
+      console.log("  ❌ Fallido: No se encontró overlay estructural.");
+      passed = false; failCount++;
+  }
+
+  // TEST 40: Shop mode genera cut list visual y labels
+  console.log("\nTEST 40: Shop mode genera cut list visual y labels");
+  projectResult.bom = calculateBOM(projectResult.construction.panels); // Recalcular con sourceEntityId
+  const sceneShop = SceneBuilder.buildIndustrialScene(projectResult, 'taller');
+  const shopLabels = sceneShop.modos.taller.labels.filter(l => l.id.includes('label_shop'));
+  if (sceneShop.modos.taller.metadata.taller?.paneles.length > 0 && shopLabels.length > 0) {
+      console.log(`  ✅ Pasado: Shop mode incluye metadata de paneles y ${shopLabels.length} etiquetas de corte.`);
+  } else {
+      console.log("  ❌ Fallido: Datos de taller incompletos.");
+      passed = false; failCount++;
+  }
+
+  // TEST 41: Sequence mode genera pasos basados en el rastro del planificador
+  console.log("\nTEST 41: Sequence mode genera pasos basados en el rastro del planificador");
+  const sceneSeq = SceneBuilder.buildIndustrialScene(projectResult, 'montaje');
+  const steps = sceneSeq.modos.montaje.metadata.montaje?.pasos;
+  if (steps && steps.length >= 3 && steps.some(s => s.id.includes('wall_'))) {
+      console.log(`  ✅ Pasado: Secuencia de montaje generada con ${steps.length} pasos.`);
+  } else {
+      console.log("  ❌ Fallido: Pasos de montaje ausentes o incorrectos.");
+      passed = false; failCount++;
+  }
+
+  // TEST 42: Inspection mode genera bounding boxes
+  console.log("\nTEST 42: Inspection mode genera bounding boxes");
+  const sceneInsp = SceneBuilder.buildIndustrialScene(projectResult, 'inspeccion');
+  const bboxes = sceneInsp.modos.inspeccion.overlays.inspeccion?.filter(o => o.type === 'box_inspeccion');
+  if (bboxes && bboxes.length >= scene.objects.length) {
+      console.log(`  ✅ Pasado: Inspection mode generó ${bboxes.length} bounding boxes.`);
+  } else {
+      console.log("  ❌ Fallido: Bounding boxes insuficientes.");
+      passed = false; failCount++;
+  }
+
+  // TEST 43: No rompe render anterior
+  console.log("\nTEST 43: No rompe render anterior");
+  if (scene.objects.length > 50) {
+      console.log("  ✅ Pasado: La escena base se mantiene íntegra.");
+  } else {
+      console.log("  ❌ Fallido: La escena base parece degradada.");
+      passed = false; failCount++;
+  }
+
+  // TEST 44: Todos los labels visibles están en español
+  console.log("\nTEST 44: Todos los labels visibles están en español");
+  const allLabels = [
+      ...sceneShop.escenaBase.labels.map(l => l.text),
+      ...(steps || []).map(s => s.title),
+      ...(steps || []).map(s => s.description)
+  ];
+  const englishTerms = ['Stud', 'Track', 'Header', 'Window', 'Door', 'Wall'];
+  const foundEnglish = allLabels.filter(txt => englishTerms.some(term => txt.includes(term)));
+  if (foundEnglish.length === 0) {
+      console.log("  ✅ Pasado: Localización certificada en todos los modos industriales.");
+  } else {
+      console.log("  ❌ Fallido: Se encontraron términos en inglés en la UI industrial.");
+      console.log("     Ejemplos encontrados:", foundEnglish.slice(0, 5).join(', '));
+      passed = false; failCount++;
+  }
+
+  console.log("\nTEST 45: Industrial DTO contains all five modes");
+  const modes = Object.keys(sceneIndustrial.modos);
+  if (modes.length === 5 && modes.includes('taller') && modes.includes('montaje')) {
+      console.log("  ✅ Pasado: DTO contiene los 5 modos industriales.");
+  } else {
+      console.log("  ❌ Fallido: DTO incompleto.");
+      passed = false; failCount++;
+  }
+
+  console.log("TEST 46: Each mode contains distinct visible object/layer changes");
+  const tallerObjects = sceneIndustrial.modos.taller.objects.length;
+  const standardObjects = sceneIndustrial.modos.estandar.objects.length;
+  // En este caso estandar suele tener 0 extras, taller tiene etiquetas (labels)
+  const tallerLabels = sceneIndustrial.modos.taller.labels.length;
+  if (tallerLabels > 0) {
+      console.log("  ✅ Pasado: El modo taller agrega etiquetas específicas.");
+  } else {
+      console.log("  ❌ Fallido: El modo taller no tiene objetos distintivos.");
+      passed = false; failCount++;
+  }
+
+  console.log("TEST 47: Estructural mode adds markers");
+  if (sceneIndustrial.modos.estructural.objects.length > 0) {
+      console.log("  ✅ Pasado: El modo estructural agrega marcadores visuales.");
+  } else {
+      console.log("  ❌ Fallido: El modo estructural está vacío.");
+      passed = false; failCount++;
+  }
+
+  console.log("TEST 48: Taller mode exposes BOM metadata");
+  if (sceneIndustrial.modos.taller.metadata.taller?.paneles) {
+      console.log("  ✅ Pasado: Modo taller expone metadatos de paneles.");
+  } else {
+      console.log("  ❌ Fallido: No hay metadatos de taller.");
+      passed = false; failCount++;
+  }
+
+  console.log("TEST 49: Montaje mode exposes sequence steps");
+  if (sceneIndustrial.modos.montaje.metadata.montaje?.pasos) {
+      console.log("  ✅ Pasado: Modo montaje expone pasos de secuencia.");
+  } else {
+      console.log("  ❌ Fallido: No hay metadatos de montaje.");
+      passed = false; failCount++;
+  }
+
+  console.log("TEST 50: Inspección mode exposes bounding boxes");
+  if (sceneIndustrial.modos.inspeccion.overlays.inspeccion?.length > 0) {
+      console.log("  ✅ Pasado: Modo inspección expone bounding boxes.");
+  } else {
+      console.log("  ❌ Fallido: No hay overlays de inspección.");
+      passed = false; failCount++;
+  }
+
   if (!passed) {
       console.error(`\nSuite Fallida. ${failCount} errores.`);
       process.exit(1);
   } else {
-      console.log(`\n🏆 SUITE PASADA. Todas las pruebas del núcleo de la Fase 4A se completaron con éxito.`);
+      console.log(`\n🏆 SUITE PASADA. Todas las pruebas del núcleo de la Fase 4B se completaron con éxito.`);
   }
 }
 

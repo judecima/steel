@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exportaciones — Steel Frame</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#0d0f14; --surface:#161b24; --border:#242d3d; --accent:#3b82f6; --text:#f1f5f9; --muted:#64748b; --success:#22c55e; --warning:#f59e0b; --danger:#ef4444; --radius:10px; --font:'Inter',sans-serif; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; }
+        header { background:var(--surface); border-bottom:1px solid var(--border); padding:14px 32px; display:flex; align-items:center; gap:16px; }
+        .logo { font-size:18px; font-weight:700; } .logo span { color:var(--accent); }
+        nav a { color:var(--muted); text-decoration:none; font-size:13px; }
+        main { max-width:900px; margin:0 auto; padding:40px 24px; }
+        h1 { font-size:26px; font-weight:700; margin-bottom:6px; }
+        .subtitle { color:var(--muted); font-size:14px; margin-bottom:32px; }
+        .export-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+        .export-card {
+            background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+            padding:20px; display:flex; flex-direction:column; gap:12px; transition:border-color 0.2s;
+        }
+        .export-card.disponible { border-color:rgba(34,197,94,0.4); }
+        .export-card.error { border-color:rgba(239,68,68,0.3); }
+        .card-icon { font-size:28px; }
+        .card-label { font-size:15px; font-weight:600; }
+        .card-file { font-size:11px; color:var(--muted); font-family:monospace; }
+        .card-status { font-size:12px; font-weight:500; }
+        .status-disponible { color:var(--success); }
+        .status-pendiente  { color:var(--warning); }
+        .status-error      { color:var(--danger); }
+        .btn {
+            padding:9px 16px; border-radius:8px; border:1px solid var(--border);
+            font-size:13px; font-weight:500; cursor:pointer; background:transparent;
+            color:var(--muted); font-family:var(--font); transition:all 0.2s; text-decoration:none;
+        }
+        .btn:hover { border-color:var(--accent); color:var(--text); }
+        .btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+        .cmd-box {
+            background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+            padding:20px; margin-top:28px;
+        }
+        .cmd-box h2 { font-size:14px; font-weight:600; margin-bottom:12px; }
+        pre { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:14px; font-size:13px; color:var(--accent); overflow-x:auto; }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">Steel<span>Frame</span></div>
+    <nav><a href="./proyecto-detalle.html" id="link-back">← Volver</a></nav>
+    <span id="proj-title" style="font-size:14px;color:var(--muted);margin-left:auto;"></span>
+</header>
+<main>
+    <h1>Centro de Exportación</h1>
+    <p class="subtitle">Descarga los archivos generados por el motor industrial.</p>
+    <div class="export-grid" id="export-grid">
+        <p style="color:var(--muted);font-size:14px;">Verificando archivos...</p>
+    </div>
+    <div class="cmd-box" id="planos-box">
+        <h2>Paquete de Planos Técnicos (Fase 8A)</h2>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Genera automáticamente el set de planos en formato PDF y JSON.</p>
+        <div id="planos-status" style="margin-bottom:16px;">
+            <button class="btn active" id="btn-generar-planos" onclick="generarPlanos()">Generar planos técnicos PDF</button>
+        </div>
+        <div id="planos-links" style="display:none; gap:12px; flex-wrap:wrap;">
+            <a id="link-pdf" class="btn active" href="#" download="planos-tecnicos.pdf">📄 Descargar PDF</a>
+            <a id="link-json" class="btn" href="#" download="planos-package.json">📦 Descargar JSON</a>
+        </div>
+    </div>
+    <div class="cmd-box">
+        <h2>¿Los archivos no están disponibles?</h2>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Ejecuta el siguiente comando para regenerar todos los archivos de exportación:</p>
+        <pre>npm run export:industrial</pre>
+    </div>
+</main>
+<script>
+const EXPORTS_BASE = '../../tools/qa-viewer/exports';
+const ARCHIVOS = [
+    { id:'bom',      icono:'📋', etiqueta:'Lista de Materiales',  archivo:'BOM.csv' },
+    { id:'corte',    icono:'✂️', etiqueta:'Lista de Corte',        archivo:'CUTLIST.csv' },
+    { id:'proyecto', icono:'🗂️', etiqueta:'Proyecto JSON',         archivo:'Proyecto.json' },
+    { id:'montaje',  icono:'📐', etiqueta:'Instrucciones Montaje', archivo:'Montaje.txt' },
+    { id:'reporte',  icono:'📊', etiqueta:'Reporte TSV',           archivo:'reporte.tsv' }
+];
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+if (id) {
+    document.getElementById('link-back').href = './proyecto-detalle.html?id=' + id;
+    const ps = JSON.parse(localStorage.getItem('steel_projects_v1') || '[]');
+    const p = ps.find(x => x.id === id);
+    if (p) document.getElementById('proj-title').textContent = p.nombre;
+} else {
+    document.getElementById('link-back').href = './proyectos.html';
+}
+
+async function verificar() {
+    const grid = document.getElementById('export-grid');
+    const resultados = await Promise.all(ARCHIVOS.map(async a => {
+        try {
+            const r = await fetch(`${EXPORTS_BASE}/${a.archivo}`, { method:'HEAD' });
+            return { ...a, disponible: r.ok };
+        } catch { return { ...a, disponible: false }; }
+    }));
+
+    grid.innerHTML = resultados.map(a => `
+        <div class="export-card ${a.disponible ? 'disponible' : 'error'}">
+            <div class="card-icon">${a.icono}</div>
+            <div>
+                <div class="card-label">${a.etiqueta}</div>
+                <div class="card-file">${a.archivo}</div>
+            </div>
+            <div class="card-status ${a.disponible ? 'status-disponible' : 'status-error'}">
+                ${a.disponible ? '✓ Disponible' : '✗ No disponible'}
+            </div>
+            ${a.disponible ? `<a class="btn active" href="${EXPORTS_BASE}/${a.archivo}" download="${a.archivo}">Descargar</a>` : '<button class="btn" disabled>No disponible</button>'}
+        </div>
+    `).join('');
+}
+
+async function generarPlanos() {
+    if (!id) return;
+    const btn = document.getElementById('btn-generar-planos');
+    const status = document.getElementById('planos-status');
+    const links = document.getElementById('planos-links');
+    
+    btn.disabled = true;
+    btn.textContent = 'Generando...';
+    
+    try {
+        const response = await fetch(`http://localhost:3001/api/proyectos/${id}/planos/exportar`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (data.ok) {
+            btn.textContent = '✓ Generado';
+            links.style.display = 'flex';
+            document.getElementById('link-pdf').href = data.pdf;
+            document.getElementById('link-json').href = data.json;
+            if (window.ProductNotifications) {
+                window.ProductNotifications.showToast('Planos generados correctamente', 'success');
+            }
+        } else {
+            throw new Error(data.error || 'Error desconocido');
+        }
+    } catch (e) {
+        console.error('Error generando planos:', e);
+        btn.textContent = '✗ Error';
+        btn.classList.remove('active');
+        btn.style.borderColor = 'var(--danger)';
+        if (window.ProductNotifications) {
+            window.ProductNotifications.showToast('Error al generar planos', 'error');
+        }
+    }
+}
+
+verificar();
+</script>
+</body>
+</html>

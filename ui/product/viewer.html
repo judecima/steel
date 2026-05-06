@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar — Steel Frame</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#0d0f14; --surface:#161b24; --border:#242d3d; --accent:#3b82f6; --text:#f1f5f9; --muted:#64748b; --font:'Inter',sans-serif; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { background:var(--bg); color:var(--text); font-family:var(--font); display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+        header { background:var(--surface); border-bottom:1px solid var(--border); padding:10px 24px; display:flex; align-items:center; gap:16px; flex-shrink:0; }
+        .logo { font-size:16px; font-weight:700; } .logo span { color:var(--accent); }
+        nav a { color:var(--muted); text-decoration:none; font-size:13px; margin-left:16px; }
+        .mode-tabs { display:flex; gap:4px; margin-left:auto; }
+        .mode-btn {
+            padding:7px 16px; border-radius:8px; border:1px solid var(--border);
+            background:transparent; color:var(--muted); font-size:13px; font-weight:500;
+            cursor:pointer; transition:all 0.2s; font-family:var(--font);
+        }
+        .mode-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+        .viewer-wrap { flex:1; position:relative; overflow:hidden; }
+        iframe { width:100%; height:100%; border:none; }
+        .viewer-overlay {
+            position:absolute; top:16px; right:16px; background:var(--surface);
+            border:1px solid var(--border); border-radius:10px; padding:16px; width:220px;
+            font-size:13px;
+        }
+        .overlay-title { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:12px; }
+        .overlay-info { color:var(--text); font-size:14px; margin-bottom:4px; }
+        .overlay-muted { color:var(--muted); font-size:12px; }
+        .mode-desc { font-size:12px; color:var(--muted); padding:8px 0; border-top:1px solid var(--border); margin-top:10px; }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">Steel<span>Frame</span></div>
+    <nav><a href="./proyecto-detalle.html" id="link-back">← Volver</a></nav>
+    <span id="proj-title" style="font-size:14px;color:var(--muted);"></span>
+    <div class="mode-tabs">
+        <button class="mode-btn active" data-modo="cliente" onclick="cambiarModo('cliente')">👤 Cliente</button>
+        <button class="mode-btn" data-modo="taller" onclick="cambiarModo('taller')">🔧 Taller</button>
+        <button class="mode-btn" data-modo="ingenieria" onclick="cambiarModo('ingenieria')">📐 Ingeniería</button>
+    </div>
+</header>
+<div class="viewer-wrap">
+    <iframe id="qa-iframe" src="../../tools/qa-viewer/index.html"></iframe>
+    <div class="viewer-overlay">
+        <div class="overlay-title">Modo Activo</div>
+        <div class="overlay-info" id="modo-nombre">Cliente</div>
+        <div class="mode-desc" id="modo-desc">Vista limpia para presentación al cliente.</div>
+    </div>
+</div>
+<script>
+const MODOS = {
+    cliente:    { label:'Cliente',    dtoMode:'estandar',    desc:'Vista limpia para presentación al cliente.' },
+    taller:     { label:'Taller',     dtoMode:'taller',      desc:'Detalle de cortes, IDs de panel y materiales.' },
+    ingenieria: { label:'Ingeniería', dtoMode:'estructural', desc:'Análisis estructural e inspección técnica.' }
+};
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+if (id) {
+    document.getElementById('link-back').href = './proyecto-detalle.html?id=' + id;
+    const ps = JSON.parse(localStorage.getItem('steel_projects_v1') || '[]');
+    const p = ps.find(x => x.id === id);
+    if (p) document.getElementById('proj-title').textContent = p.nombre;
+} else {
+    document.getElementById('link-back').href = './proyectos.html';
+}
+function cambiarModo(modo) {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`[data-modo="${modo}"]`).classList.add('active');
+    const info = MODOS[modo];
+    document.getElementById('modo-nombre').textContent = info.label;
+    document.getElementById('modo-desc').textContent = info.desc;
+    const iframe = document.getElementById('qa-iframe');
+    if (iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ tipo: 'SET_MODE', modo: info.dtoMode }, '*');
+    }
+}
+</script>
+</body>
+</html>

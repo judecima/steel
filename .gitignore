@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+.DS_Store
+*.log
+temp_test_projects/
+exports/
+tools/qa-viewer/exports/*.csv
+tools/qa-viewer/exports/*.json
+tools/qa-viewer/exports/*.pdf
+tools/qa-viewer/exports/*.txt

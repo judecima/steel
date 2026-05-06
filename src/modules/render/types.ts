@@ -26,7 +26,17 @@ export type RenderObjectType =
   | 'anclaje' | 'anchor'
   | 'fundacion' | 'foundation'
   | 'advertencia' | 'warning_marker'
-  | 'label_anchor';
+  | 'label_anchor'
+  | 'marcador_viga_externa'
+  | 'box_inspeccion'
+  | 'indicador_estructural';
+
+export type ModoVisualizacion = 
+  | 'estandar'
+  | 'estructural'
+  | 'taller'
+  | 'montaje'
+  | 'inspeccion';
 
 export type RenderObject = {
   id: string;
@@ -102,4 +112,34 @@ export type ShopPanelView = {
   labels: RenderLabel[];
   bomSummary: Record<string, number>;
   boundingBox: { min: Vector3; max: Vector3 };
+};
+
+export type OverlayEstructuralDTO = {
+  aberturaId: string;
+  estado: string;
+  color: string;
+  advertencias: string[];
+  requiereRevision: boolean;
+};
+
+export type ModeData = {
+  objects: RenderObject[];
+  labels: RenderLabel[];
+  overlays: {
+    estructural?: OverlayEstructuralDTO[];
+    inspeccion?: RenderObject[];
+  };
+  metadata: any;
+};
+
+export type RenderSceneIndustrialDTO = {
+  escenaBase: RenderSceneDTO;
+  modoInicial: ModoVisualizacion;
+  modos: {
+    estandar: ModeData;
+    estructural: ModeData;
+    taller: ModeData;
+    montaje: ModeData;
+    inspeccion: ModeData;
+  };
 };

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos — Steel Frame</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0f14; --surface: #161b24; --border: #242d3d;
+            --accent: #3b82f6; --accent-hover: #60a5fa;
+            --text: #f1f5f9; --muted: #64748b;
+            --success: #22c55e; --warning: #f59e0b; --danger: #ef4444;
+            --radius: 10px; --font: 'Inter', sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+        header {
+            background: var(--surface); border-bottom: 1px solid var(--border);
+            padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+        .logo span { color: var(--accent); }
+        nav a { color: var(--muted); text-decoration: none; font-size: 14px; margin-left: 24px; transition: color 0.2s; }
+        nav a:hover { color: var(--text); }
+        main { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        h1 { font-size: 28px; font-weight: 700; }
+        .subtitle { color: var(--muted); font-size: 14px; margin-top: 4px; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 20px; border-radius: var(--radius); font-size: 14px; font-weight: 500;
+            border: none; cursor: pointer; text-decoration: none; transition: all 0.2s;
+        }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+        .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .project-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 24px; cursor: pointer; transition: all 0.2s;
+            text-decoration: none; display: block; color: var(--text);
+        }
+        .project-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.12); }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .project-name { font-size: 16px; font-weight: 600; }
+        .project-client { color: var(--muted); font-size: 13px; margin-top: 4px; }
+        .badge {
+            font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .badge-borrador    { background: #1e293b; color: var(--muted); }
+        .badge-validado    { background: #14532d; color: var(--success); }
+        .badge-presupuestado { background: #451a03; color: var(--warning); }
+        .badge-fabricacion { background: #1e3a8a; color: var(--accent-hover); }
+        .badge-montaje     { background: #312e81; color: #a5b4fc; }
+        .badge-finalizado  { background: #1e1b4b; color: #818cf8; }
+        .card-meta { display: flex; gap: 16px; }
+        .meta-item { font-size: 12px; color: var(--muted); }
+        .meta-item strong { color: var(--text); display: block; font-size: 13px; }
+        .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); }
+        .empty-state h2 { font-size: 20px; color: var(--text); margin-bottom: 8px; }
+        .modal-bg {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            z-index: 100; align-items: center; justify-content: center;
+        }
+        .modal-bg.visible { display: flex; }
+        .modal {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+            padding: 32px; width: 480px; max-width: 95vw;
+        }
+        .modal h2 { font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+        input, select {
+            width: 100%; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text); font-size: 14px; font-family: var(--font);
+        }
+        input:focus, select:focus { outline: none; border-color: var(--accent); }
+        .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+    </style>
+</head>
+<body>
+<div id="product-layout-root">
+<header>
+    <div class="logo">Steel<span>Frame</span></div>
+    <nav>
+        <a href="./proyectos.html">Proyectos</a>
+        <a href="#ayuda">Ayuda</a>
+    </nav>
+</header>
+<main>
+    <div id="api-status-banner" style="display:none; background:var(--warning); color:#000; padding:10px; text-align:center; font-size:13px; font-weight:600; border-radius:8px; margin-bottom:20px;">
+        ⚠️ API local no disponible. Usando modo local temporal (LocalStorage).
+    </div>
+    <div class="page-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+            <div>
+                <h1>Mis Proyectos</h1>
+                <p class="subtitle">Gestión de proyectos de Steel Frame</p>
+            </div>
+            <div style="text-align: right; display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                <div id="data-source-indicator" style="padding:8px 12px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:8px;font-size:12px;color:var(--accent);max-width:300px;">
+                    📌 <strong>Cargando...</strong>
+                </div>
+                <button class="btn btn-ghost" style="padding: 4px 10px; font-size: 11px; color: var(--muted);" onclick="limpiarEstadoLocal()">🧹 Limpiar estado local temporal</button>
+            </div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:20px;" onclick="abrirModal()">+ Nuevo Proyecto</button>
+    </div>
+    <div class="projects-grid" id="projects-grid">
+        <div class="empty-state" id="empty-state">
+            <h2>No hay proyectos aún</h2>
+            <p>Crea tu primer proyecto con el botón "Nuevo Proyecto".</p>
+        </div>
+    </div>
+</main>
+
+<div class="modal-bg" id="modal-nuevo">
+    <div class="modal">
+        <h2>Nuevo Proyecto</h2>
+        <div class="form-group">
+            <label for="inp-nombre">Nombre del Proyecto</label>
+            <input id="inp-nombre" type="text" placeholder="Ej: Casa García — Lote 5">
+        </div>
+        <div class="form-group">
+            <label for="inp-cliente">Cliente</label>
+            <input id="inp-cliente" type="text" placeholder="Nombre del cliente">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="cerrarModal()">Cancelar</button>
+            <button class="btn btn-primary" onclick="crearProyecto()">Crear Proyecto</button>
+        </div>
+    </div>
+</div>
+
+<script src="./api-client.js"></script>
+<script>
+const STORAGE_KEY = 'steel_projects_v1';
+const RUTAS = {
+    dashboard: './index.html',
+    proyectos: './proyectos.html',
+    detalle: './proyecto-detalle.html',
+    viewer: './viewer.html',
+    exportaciones: './exportaciones.html',
+    presupuesto: './presupuesto.html',
+    produccion: './produccion.html'
+};
+
+let useApi = false;
+
+function normalizarListaProyectos(response) {
+    if (Array.isArray(response)) return response;
+    if (Array.isArray(response?.data)) return response.data;
+    if (Array.isArray(response?.proyectos)) return response.proyectos;
+    if (Array.isArray(response?.items)) return response.items;
+    return [];
+}
+
+async function cargarProyectos() {
+    let proyectos = [];
+    let fuente = 'localStorage';
+
+    if (useApi) {
+        try {
+            const response = await window.ApiClient.getProyectos();
+            proyectos = normalizarListaProyectos(response);
+            fuente = 'api';
+            document.getElementById('data-source-indicator').innerHTML = '✅ <strong>PostgreSQL:</strong> Datos sincronizados.';
+            document.getElementById('api-status-banner').style.display = 'none';
+        } catch (e) {
+            console.error('[PROYECTOS] Fallo carga API, usando local', e);
+            fuente = 'localStorage';
+            document.getElementById('api-status-banner').style.display = 'block';
+            document.getElementById('data-source-indicator').innerHTML = '⚠️ <strong>Modo Offline:</strong> Usando LocalStorage.';
+            proyectos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        }
+    } else {
+        proyectos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        document.getElementById('data-source-indicator').innerHTML = '⚠️ <strong>Modo Offline:</strong> Usando LocalStorage.';
+    }
+
+    console.log('[PROYECTOS] Fuente de datos:', fuente);
+    return proyectos;
+}
+
+function limpiarEstadoLocal() {
+    if (window.ProductActiveProject) {
+        window.ProductActiveProject.clearActiveProject();
+    }
+    localStorage.removeItem(STORAGE_KEY);
+    alert('Estado local temporal limpiado. Los proyectos en PostgreSQL no han sido afectados.');
+    window.location.reload();
+}
+
+async function guardarProyectos(list) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    // En Fase 7, el guardado masivo es reemplazado por POST/PUT individuales
+    // pero mantenemos esto para compatibilidad con el renderizado actual
+}
+
+const ESTADO_LABELS = {
+    borrador: 'Borrador', validado: 'Validado', presupuestado: 'Presupuestado',
+    fabricacion: 'Fabricación', montaje: 'Montaje', finalizado: 'Finalizado'
+};
+
+function getProyectoDetalleUrl(projectId) {
+    if (!projectId) return RUTAS.proyectos;
+    return `${RUTAS.detalle}?id=${encodeURIComponent(projectId)}`;
+}
+
+function abrirProyecto(id) {
+    if (!id) {
+        console.error('El servidor creó el proyecto pero no devolvió un ID válido.');
+        alert('El servidor creó el proyecto pero no devolvió un ID válido.');
+        return;
+    }
+    window.location.assign(getProyectoDetalleUrl(id));
+}
+
+async function renderProyectos() {
+    const grid = document.getElementById('projects-grid');
+    const empty = document.getElementById('empty-state');
+    const proyectos = await cargarProyectos();
+    
+    // Debug: log loaded state
+    console.log('[DEBUG] Proyectos en LocalStorage:', proyectos.map(p => ({id: p.id, nombre: p.nombre})));
+
+    if (!proyectos.length) { grid.innerHTML = ''; grid.appendChild(empty); return; }
+    
+    grid.innerHTML = proyectos.map(p => {
+        // Hard guard: if ID is missing, show error instead of broken link
+        if (!p.id) {
+            return `
+                <div class="project-card" style="border-color: var(--danger); opacity: 0.7; cursor: not-allowed;">
+                    <div style="color: var(--danger); font-weight: 600;">⚠️ Proyecto inválido: falta ID</div>
+                    <div style="font-size: 12px; color: var(--muted);">${p.nombre || 'Sin nombre'}</div>
+                </div>
+            `;
+        }
+
+        const url = getProyectoDetalleUrl(p.id);
+
+        return `
+            <a class="project-card" href="${url}" data-project-id="${p.id}">
+                <div class="card-header">
+                    <div>
+                        <div class="project-name">${p.nombre}</div>
+                        <div class="project-client">${p.cliente}</div>
+                        <div style="font-size: 9px; color: var(--muted); margin-top: 4px;">ID: ${p.id}</div>
+                    </div>
+                    <span class="badge badge-${p.estado}">${ESTADO_LABELS[p.estado] || p.estado}</span>
+                </div>
+                <div class="card-meta" style="justify-content: space-between; align-items: center;">
+                    <div style="display:flex; gap:16px;">
+                        <div class="meta-item"><strong>${new Date(p.fechaCreacion).toLocaleDateString('es-AR')}</strong>Creado</div>
+                        <div class="meta-item"><strong>${p.historialVersiones?.length || 1}</strong>Versión(es)</div>
+                    </div>
+                    <div class="btn btn-ghost" style="padding:6px 12px; font-size:12px; border-color:var(--accent); color:var(--accent); pointer-events: none;">
+                        Ver detalle →
+                    </div>
+                </div>
+            </a>
+        `;
+    }).join('');
+}
+
+function abrirModal() { document.getElementById('modal-nuevo').classList.add('visible'); }
+function cerrarModal() { document.getElementById('modal-nuevo').classList.remove('visible'); }
+
+async function crearProyecto() {
+    const nombre = document.getElementById('inp-nombre').value.trim();
+    const cliente = document.getElementById('inp-cliente').value.trim();
+    if (!nombre || !cliente) { alert('Completa todos los campos.'); return; }
+    
+    const now = new Date().toISOString();
+    const version = { 
+        id: 'v_' + Date.now(), 
+        fecha: now, 
+        configuracion: {
+            alturaMuro: 2.6, espesorPerfil: 0.9, separacionMontantes: 0.4,
+            tipoPerfil: 'PGC 100x0.9', material: 'acero_galvanizado',
+            tipoCubierta: 'one_slope', tipoFundacion: 'losa'
+        }, 
+        nota: 'Versión inicial' 
+    };
+
+    const nuevoProyecto = { 
+        id: 'proj_' + Date.now(), 
+        nombre, 
+        cliente, 
+        fechaCreacion: now, 
+        fechaActualizacion: now,
+        estado: 'borrador', 
+        versionActual: version.id, 
+        historialVersiones: [version] 
+    };
+
+    let creado = null;
+    if (useApi) {
+        try {
+            const response = await window.ApiClient.createProyecto(nuevoProyecto);
+            // Normalizar el proyecto creado (el backend devuelve el objeto creado)
+            creado = response?.id ? response : (response?.data?.id ? response.data : (response?.proyecto?.id ? response.proyecto : response));
+            console.log('[PROYECTOS] Proyecto creado en API:', creado);
+        } catch (e) {
+            console.error('[PROYECTOS] Error al guardar en API:', e);
+            alert('Error al conectar con la API. El proyecto se guardará localmente.');
+        }
+    }
+
+    // Si la API devolvió algo, usamos ese ID, si no el generado localmente
+    const proyectoParaGuardar = creado && creado.id ? creado : nuevoProyecto;
+    
+    // Guardar localmente para fallback/cache
+    const proyectos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const idx = proyectos.findIndex(p => p.id === proyectoParaGuardar.id);
+    if (idx >= 0) proyectos[idx] = proyectoParaGuardar;
+    else proyectos.push(proyectoParaGuardar);
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(proyectos));
+
+    console.log('[CREAR PROYECTO]', {
+        id: proyectoParaGuardar.id,
+        redirectUrl: getProyectoDetalleUrl(proyectoParaGuardar.id)
+    });
+
+    cerrarModal();
+    localStorage.setItem('steel_last_project_id', proyectoParaGuardar.id);
+    
+    // Recargar la lista antes de navegar para asegurar sincronía visual
+    await renderProyectos();
+    
+    window.location.assign(getProyectoDetalleUrl(proyectoParaGuardar.id));
+}
+
+async function init() {
+    try {
+        const health = await window.ApiClient.health();
+        console.log('[PROYECTOS] API health:', health);
+        if (health && health.status === 'ok') {
+            useApi = true;
+            console.log('[API] Conectado a PostgreSQL via API');
+        } else {
+            throw new Error('Health check failed');
+        }
+    } catch (e) {
+        console.warn('[API] No se pudo conectar al servidor API. Usando LocalStorage.');
+        document.getElementById('api-status-banner').style.display = 'block';
+        document.getElementById('data-source-indicator').innerHTML = '⚠️ <strong>Modo Offline:</strong> Usando LocalStorage.';
+    }
+    await renderProyectos();
+}
+</script>
+</div>
+
+<script src="/ui/product/shared/product-routes.js"></script>
+<script src="/ui/product/shared/product-api-status.js"></script>
+<script src="/ui/product/shared/product-active-project.js"></script>
+<script src="/ui/product/shared/product-notifications.js"></script>
+<script src="/ui/product/shared/product-layout.js"></script>
+<script>
+// Exponer funciones al scope global para onclick inline
+window.abrirModal = abrirModal;
+window.cerrarModal = cerrarModal;
+window.crearProyecto = crearProyecto;
+window.abrirProyecto = abrirProyecto;
+window.limpiarEstadoLocal = limpiarEstadoLocal;
+
+// Iniciar aplicación
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('action') === 'new') abrirModal();
+    init();
+    if (window.ProductLayout) {
+        window.ProductLayout.init();
+    }
+});
+</script>
+</body>
+</html>

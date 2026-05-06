@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Proyecto — Steel Frame</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0f14; --surface: #161b24; --border: #242d3d;
+            --accent: #3b82f6; --text: #f1f5f9; --muted: #64748b;
+            --success: #22c55e; --warning: #f59e0b; --danger: #ef4444;
+            --radius: 10px; --font: 'Inter', sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+        header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 32px; display: flex; align-items: center; gap: 16px; }
+        .logo { font-size: 18px; font-weight: 700; } .logo span { color: var(--accent); }
+        nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
+        nav a:hover { color: var(--text); }
+        .breadcrumb { color: var(--muted); font-size: 13px; margin-left: auto; }
+        .layout { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 57px); }
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 24px; }
+        .sidebar h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 16px; }
+        .sidebar nav a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 8px; margin-bottom: 4px;
+            color: var(--muted); text-decoration: none; font-size: 14px; transition: all 0.2s;
+        }
+        .sidebar nav a:hover, .sidebar nav a.active { background: rgba(59,130,246,0.12); color: var(--text); }
+        .content { padding: 32px; }
+        .page-title { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+        .meta-row { display: flex; gap: 20px; color: var(--muted); font-size: 13px; margin-bottom: 28px; align-items: center; }
+        .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; }
+        .badge-borrador { background: #1e293b; color: var(--muted); }
+        .badge-validado { background: #14532d; color: var(--success); }
+        .section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+        .section-title { font-size: 14px; font-weight: 600; margin-bottom: 20px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { margin-bottom: 0; }
+        label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+        input, select {
+            width: 100%; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text); font-size: 14px; font-family: var(--font);
+        }
+        input:focus, select:focus { outline: none; border-color: var(--accent); }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 500;
+            border: none; cursor: pointer; text-decoration: none; transition: all 0.2s;
+        }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: #60a5fa; }
+        .btn-warning { background: var(--warning); color: #000; }
+        .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+        .btn-ghost:hover { color: var(--text); }
+        .regen-banner {
+            background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
+            border-radius: 8px; padding: 14px 18px; display: flex; align-items: center;
+            justify-content: space-between; gap: 16px; margin-bottom: 20px;
+        }
+        .regen-banner.hidden { display: none; }
+        .regen-msg { font-size: 14px; color: var(--warning); }
+        .version-list { }
+        .version-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+        .version-item:last-child { border-bottom: none; }
+        .version-nota { color: var(--muted); }
+        .version-fecha { color: var(--accent); font-weight: 500; }
+    </style>
+</head>
+<body>
+<div id="product-layout-root">
+<header>
+    <div class="logo">Steel<span>Frame</span></div>
+    <nav style="margin-left: 24px;"><a href="./proyectos.html">← Volver a Proyectos</a></nav>
+    <div id="api-status-banner" style="display:none; background:var(--warning); color:#000; padding:10px; text-align:center; font-size:13px; font-weight:600; border-radius:8px; margin: 10px 24px;">
+        ⚠️ API local no disponible. Usando modo local temporal (LocalStorage).
+    </div>
+    <span class="breadcrumb" id="breadcrumb">...</span>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Secciones</h2>
+        <nav id="sidebar-nav">
+            <a href="./proyecto-detalle.html" class="active" id="link-config">⚙️ Configuración</a>
+            <a href="./viewer.html" id="link-viewer">🔭 Visualizar</a>
+            <a href="./presupuesto.html" id="link-presupuesto">💰 Presupuesto</a>
+            <a href="./exportaciones.html" id="link-export">📦 Exportaciones</a>
+            <a href="./produccion.html" id="link-produccion">🏗️ Producción</a>
+        </nav>
+    </aside>
+
+    <div class="content">
+        <div class="page-title" id="project-name">Cargando...</div>
+        <div class="meta-row">
+            <span id="project-client"></span>
+            <span class="badge badge-borrador" id="project-estado"></span>
+            <span id="project-fecha"></span>
+        </div>
+
+        <div class="regen-banner hidden" id="regen-banner">
+            <span class="regen-msg">⚠️ La configuración ha cambiado. Se requiere regenerar el proyecto para aplicar los cambios.</span>
+            <button class="btn btn-warning" onclick="regenerarProyecto()">Regenerar Proyecto</button>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Configuración Dimensional</div>
+            <div class="form-grid">
+                <div class="form-group"><label>Altura de Muro (m)</label>
+                    <input type="number" id="cfg-altura" step="0.05" min="2.0" max="6.0" onchange="marcarCambioPendiente()"></div>
+                <div class="form-group"><label>Separación de Montantes (m)</label>
+                    <input type="number" id="cfg-sep" step="0.05" min="0.3" max="0.6" onchange="marcarCambioPendiente()"></div>
+                <div class="form-group"><label>Tipo de Perfil</label>
+                    <input type="text" id="cfg-perfil" onchange="marcarCambioPendiente()"></div>
+                <div class="form-group"><label>Tipo de Cubierta</label>
+                    <select id="cfg-cubierta" onchange="marcarCambioPendiente()">
+                        <option value="one_slope">A un agua</option>
+                        <option value="two_slope">A dos aguas</option>
+                    </select></div>
+                <div class="form-group"><label>Fundación</label>
+                    <input type="text" id="cfg-fundacion" onchange="marcarCambioPendiente()"></div>
+                <div class="form-group"><label>Material</label>
+                    <input type="text" id="cfg-material" onchange="marcarCambioPendiente()"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Cambiar Estado</div>
+            <div class="actions">
+                <select id="sel-estado" style="width:200px;">
+                    <option value="borrador">Borrador</option>
+                    <option value="validado">Validado</option>
+                    <option value="presupuestado">Presupuestado</option>
+                    <option value="fabricacion">Fabricación</option>
+                    <option value="montaje">Montaje</option>
+                    <option value="finalizado">Finalizado</option>
+                </select>
+                <button class="btn btn-primary" onclick="cambiarEstado()">Aplicar Estado</button>
+                <button class="btn btn-ghost" id="btn-regen-api" onclick="probarRegenerarAPI()">🚀 Regenerar (API)</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Historial de Versiones</div>
+            <div class="version-list" id="version-list"></div>
+        </div>
+    </div>
+</div>
+
+<div id="error-panel" style="display:none; position:fixed; top:0; left:0; right:0; background:var(--danger); color:white; padding:12px 24px; z-index:1000; font-size:14px; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span id="error-msg">⚠️ Ha ocurrido un error en la aplicación.</span>
+        <button onclick="document.getElementById('error-panel').style.display='none'" style="background:transparent; border:1px solid white; color:white; cursor:pointer; padding:2px 8px; border-radius:4px;">Cerrar</button>
+    </div>
+</div>
+
+<script>
+window.onerror = function(msg, url, line) {
+    const panel = document.getElementById('error-panel');
+    const msgEl = document.getElementById('error-msg');
+    panel.style.display = 'block';
+    if (msg.includes('is not defined') || msg.includes('no está definida')) {
+        msgEl.textContent = `⚠️ Error de interfaz: función no disponible. (${msg})`;
+    } else {
+        msgEl.textContent = `❌ Error: ${msg} (Línea: ${line})`;
+    }
+    console.error('GLOBAL ERROR:', {msg, url, line});
+    return false;
+};
+window.onunhandledrejection = (event) => {
+    console.error('UNHANDLED REJECTION:', event.reason);
+};
+</script>
+<script src="./api-client.js"></script>
+<script>
+let useApi = false;
+const STORAGE_KEY = 'steel_projects_v1';
+
+function getParams() { 
+    const params = new URLSearchParams(window.location.search);
+    console.log('[DIAG] URL:', window.location.href);
+    console.log('[DIAG] ID Param:', params.get('id'));
+    return params; 
+}
+
+// Guardia de extensión: asegurar que la URL sea explícita (.html) para evitar limpieza de parámetros por el servidor
+const path = window.location.pathname;
+const search = window.location.search || '';
+
+if (path.endsWith('/proyecto-detalle') && search) {
+    const fixedUrl = './proyecto-detalle.html' + search;
+    console.log('[GUARD] Redirigiendo a URL explícita:', fixedUrl);
+    window.location.replace(fixedUrl);
+}
+
+let id = getParams().get('id');
+
+// Fallback para persistencia local si el parámetro se pierde
+if (!id) {
+    id = localStorage.getItem('steel_last_project_id');
+    if (id) console.log('[DIAG] ID recuperado de persistencia local:', id);
+}
+
+async function cargarProyectos() { 
+    if (useApi) {
+        try { return await window.ApiClient.getProyectos(); }
+        catch { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    }
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); 
+}
+
+async function guardarProyecto(p) {
+    if (useApi) {
+        try {
+            await window.ApiClient.updateProyecto(p.id, p);
+        } catch (e) { console.error('Error API guardarProyecto:', e); }
+    }
+    
+    // Fallback sync local
+    const list = await cargarProyectos();
+    const idx = list.findIndex(x => x.id === p.id);
+    if (idx >= 0) list[idx] = p;
+    else list.push(p);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+let proyecto = null;
+let cambioPendiente = false;
+
+async function cargar() {
+    if (useApi && id) {
+        try {
+            proyecto = await window.ApiClient.getProyecto(id);
+        } catch (e) {
+            if (e.status === 404) {
+                console.error('[DETALLE] Proyecto no encontrado en API (404).');
+                if (window.ProductActiveProject) window.ProductActiveProject.clearActiveProject();
+                proyecto = null;
+            } else {
+                console.warn('[DETALLE] Fallo conexión API, intentando local');
+                const proyectos = await cargarProyectos();
+                proyecto = proyectos.find(p => p.id === id);
+            }
+        }
+    } else {
+        const proyectos = await cargarProyectos();
+        proyecto = proyectos.find(p => p.id === id);
+    }
+    
+    console.log('[DIAG] Proyecto encontrado:', proyecto);
+
+    if (!id) {
+        document.body.innerHTML = `
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);text-align:center;padding:20px;">
+                <h1 style="font-size:48px;margin-bottom:16px;">📂</h1>
+                <h2 style="font-size:24px;margin-bottom:12px;">No se seleccionó ningún proyecto.</h2>
+                <p style="color:var(--muted);margin-bottom:32px;">Para ver el detalle debe seleccionar un proyecto desde la lista de proyectos.</p>
+                <div style="display:flex;gap:16px;">
+                    <a href="./proyectos.html" class="btn btn-primary" style="text-decoration:none;">Ir a Proyectos</a>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    if (!proyecto) {
+        document.body.innerHTML = `
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);text-align:center;padding:20px;">
+                <h1 style="font-size:48px;margin-bottom:16px;">⚠️</h1>
+                <h2 style="font-size:24px;margin-bottom:12px;">El proyecto solicitado no existe en PostgreSQL o fue eliminado.</h2>
+                <p style="color:var(--muted);margin-bottom:32px;">El ID del proyecto <strong>${id}</strong> no pudo ser encontrado en el sistema.</p>
+                <div style="display:flex;gap:16px;">
+                    <a href="./proyectos.html" class="btn btn-primary" style="text-decoration:none;">Volver a Proyectos</a>
+                    <button class="btn btn-ghost" onclick="window.location.href='./proyectos.html?action=new'">Crear nuevo proyecto</button>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    // Normalización de forma del objeto
+    if (!proyecto.nombre) proyecto.nombre = 'Proyecto sin nombre';
+    if (!proyecto.cliente) proyecto.cliente = 'Cliente no especificado';
+    if (!proyecto.estado) proyecto.estado = 'borrador';
+    if (!proyecto.fechaCreacion) proyecto.fechaCreacion = new Date().toISOString();
+    
+    const historial = Array.isArray(proyecto.historialVersiones) ? proyecto.historialVersiones : [];
+    const vActual = historial.find(v => v.id === proyecto.versionActual) || historial[0] || null;
+
+    // Nav links: Preservar ID en la navegación o redirigir a proyectos si no hay ID
+    ['link-config', 'link-viewer','link-presupuesto','link-export','link-produccion'].forEach(l => {
+        const el = document.getElementById(l);
+        if (el) {
+            if (id) {
+                el.href = el.href.split('?')[0] + '?id=' + id;
+            } else {
+                el.href = './proyectos.html';
+            }
+        }
+    });
+
+    document.getElementById('breadcrumb').textContent = proyecto.nombre;
+    document.getElementById('project-name').textContent = proyecto.nombre;
+    document.getElementById('project-client').textContent = '👤 ' + proyecto.cliente;
+    document.getElementById('project-fecha').textContent = 'Creado: ' + new Date(proyecto.fechaCreacion).toLocaleDateString('es-AR');
+    
+    const estadoEl = document.getElementById('project-estado');
+    estadoEl.textContent = proyecto.estado;
+    estadoEl.className = 'badge badge-' + proyecto.estado;
+    document.getElementById('sel-estado').value = proyecto.estado;
+
+    const versionList = document.getElementById('version-list');
+    
+    if (historial.length === 0) {
+        versionList.innerHTML = `
+            <div style="padding:20px; text-align:center; color:var(--muted);">
+                Este proyecto no tiene versiones todavía.
+                <br><br>
+                <button class="btn btn-primary btn-sm" onclick="regenerarProyecto()">Crear versión inicial</button>
+            </div>
+        `;
+    } else {
+        versionList.innerHTML = [...historial].reverse().map(v => `
+            <div class="version-item">
+                <div class="version-fecha">${new Date(v.fecha).toLocaleString('es-AR')}</div>
+                <div class="version-nota">${v.nota || ''}</div>
+                ${v.id === proyecto.versionActual ? '<span style="color:#22c55e;font-size:11px;">● Activa</span>' : ''}
+            </div>
+        `).join('');
+    }
+
+    if (vActual && vActual.configuracion) {
+        const c = vActual.configuracion;
+        document.getElementById('cfg-altura').value = c.alturaMuro || 2.6;
+        document.getElementById('cfg-sep').value = c.separacionMontantes || 0.4;
+        document.getElementById('cfg-perfil').value = c.tipoPerfil || '';
+        document.getElementById('cfg-cubierta').value = c.tipoCubierta || 'one_slope';
+        document.getElementById('cfg-fundacion').value = c.tipoFundacion || '';
+        document.getElementById('cfg-material').value = c.material || '';
+    } else if (historial.length > 0) {
+        // Tiene versiones pero falta configuración en la actual
+        const section = document.querySelector('.form-grid').parentElement;
+        section.innerHTML += `
+            <div style="background:rgba(239,68,68,0.1); padding:16px; border-radius:8px; margin-top:16px; text-align:center;">
+                <p style="color:var(--danger); font-size:13px; margin-bottom:12px;">⚠️ La versión seleccionada no tiene configuración válida.</p>
+                <button class="btn btn-danger btn-sm" onclick="regenerarProyecto()">Crear configuración por defecto</button>
+            </div>
+        `;
+    }
+}
+
+function marcarCambioPendiente() {
+    cambioPendiente = true;
+    document.getElementById('regen-banner').classList.remove('hidden');
+}
+
+function regenerarProyecto() {
+    const nuevaConfig = {
+        alturaMuro: parseFloat(document.getElementById('cfg-altura')?.value || '2.6'),
+        separacionMontantes: parseFloat(document.getElementById('cfg-sep')?.value || '0.4'),
+        tipoPerfil: document.getElementById('cfg-perfil')?.value || 'PGC 100x0.9',
+        tipoCubierta: document.getElementById('cfg-cubierta')?.value || 'one_slope',
+        tipoFundacion: document.getElementById('cfg-fundacion')?.value || 'losa',
+        material: document.getElementById('cfg-material')?.value || 'acero_galvanizado',
+        espesorPerfil: 0.9
+    };
+    const nuevaVersion = { id: 'v_' + Date.now(), fecha: new Date().toISOString(), configuracion: nuevaConfig, nota: 'Regeneración manual' };
+    
+    if (!Array.isArray(proyecto.historialVersiones)) proyecto.historialVersiones = [];
+    proyecto.historialVersiones.push(nuevaVersion);
+    proyecto.versionActual = nuevaVersion.id;
+    proyecto.fechaActualizacion = new Date().toISOString();
+    
+    guardarProyecto(proyecto);
+    cambioPendiente = false;
+    document.getElementById('regen-banner').classList.add('hidden');
+    cargar();
+}
+
+function cambiarEstado() {
+    proyecto.estado = document.getElementById('sel-estado').value;
+    proyecto.fechaActualizacion = new Date().toISOString();
+    guardarProyecto(proyecto);
+    cargar();
+}
+
+async function init() {
+    try {
+        const health = await window.ApiClient.health();
+        if (health.status === 'ok') {
+            useApi = true;
+            console.log('[API] Conectado a PostgreSQL via API');
+        }
+    } catch (e) {
+        console.warn('[API] No se pudo conectar al servidor API. Usando LocalStorage.');
+        document.getElementById('api-status-banner').style.display = 'block';
+    }
+    await cargar();
+}
+
+// Exponer funciones al scope global para asegurar disponibilidad en onclick inline
+window.marcarCambioPendiente = marcarCambioPendiente;
+window.regenerarProyecto = regenerarProyecto;
+window.cambiarEstado = cambiarEstado;
+window.init = init;
+</script>
+</div>
+
+<script src="/ui/product/shared/product-routes.js"></script>
+<script src="/ui/product/shared/product-api-status.js"></script>
+<script src="/ui/product/shared/product-active-project.js"></script>
+<script src="/ui/product/shared/product-notifications.js"></script>
+<script src="/ui/product/shared/product-layout.js"></script>
+<script>
+async function probarRegenerarAPI() {
+    const activeId = await window.ProductActiveProject.getActiveId();
+    if (!activeId) return;
+    try {
+        const response = await fetch(`http://localhost:3001/api/proyectos/${activeId}/regenerar`, { method: 'POST' });
+        const data = await response.json();
+        if (window.ProductNotifications) {
+            window.ProductNotifications.showToast(data.message, 'info');
+        } else {
+            alert(data.message);
+        }
+    } catch (e) {
+        const msg = 'Regeneración pendiente de implementar en Fase 8.';
+        if (window.ProductNotifications) {
+            window.ProductNotifications.showToast(msg, 'warning');
+        } else {
+            alert(msg);
+        }
+    }
+}
+
+// Exponer funciones adicionales
+window.probarRegenerarAPI = probarRegenerarAPI;
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.init) {
+        window.init();
+    }
+    if (window.ProductLayout) {
+        window.ProductLayout.init();
+    }
+});
+</script>
+</body>
+</html>

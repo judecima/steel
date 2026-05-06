@@ -132,6 +132,7 @@ export type BOMItem = {
   length: number;
   quantity: number;
   role: StudRole | string;
+  sourceEntityId?: string; // ID del panel o componente origen
 };
 
 export type BillOfMaterials = {
@@ -153,6 +154,8 @@ export type DebugEvent = {
   values?: Record<string, any>;
 };
 
+import { StructuralAnalysisResult } from '../modules/structural/types';
+
 export type ProjectResult = {
   input: HouseInput;
   house: HouseModel;
@@ -162,6 +165,7 @@ export type ProjectResult = {
       candidatesEvaluated: Record<string, PanelizationCandidate>;
     };
   };
+  structural?: StructuralAnalysisResult;
   bom: BillOfMaterials;
   logs: DebugEvent[];
   status: ProjectStatus;

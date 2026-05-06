@@ -60,14 +60,14 @@ function exportScene() {
   console.log('Generating sample project...');
   const project = buildSampleProject();
   
-  console.log('Building RenderSceneDTO...');
-  const sceneDTO = SceneBuilder.buildScene(project);
+  console.log('Building RenderSceneIndustrialDTO...');
+  const sceneDTO = SceneBuilder.buildIndustrialScene(project);
   
   const outputPath = path.join(process.cwd(), 'render-scene.json');
   fs.writeFileSync(outputPath, JSON.stringify(sceneDTO, null, 2), 'utf-8');
   
-  console.log(`✅ RenderSceneDTO exported successfully to ${outputPath}`);
-  console.log(`Metadata: ${sceneDTO.objects.length} objects, ${sceneDTO.labels.length} labels.`);
+  console.log(`✅ RenderSceneIndustrialDTO exported successfully to ${outputPath}`);
+  console.log(`Metadata: ${sceneDTO.escenaBase.objects.length} base objects, 5 visualization modes populated.`);
 }
 
 exportScene();
