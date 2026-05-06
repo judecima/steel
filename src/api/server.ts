@@ -1,3 +1,6 @@
+// [LEGACY] This Express API is now deprecated.
+// All API functionality has been migrated to Next.js Route Handlers in /apps/product-ui/src/app/api.
+// Maintain this for backward compatibility with legacy HTML UI if needed during transition.
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';

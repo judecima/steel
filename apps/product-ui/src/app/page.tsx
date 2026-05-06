@@ -1,17 +1,19 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { ApiClient } from '@/lib/api';
 import ApiStatusBadge from '@/components/ApiStatusBadge';
 import Link from 'next/link';
 import { PlusCircle, List, ArrowRight } from 'lucide-react';
 
-export default async function DashboardPage() {
-  let projectCount = 0;
-  try {
-    const projects = await ApiClient.getProjects();
-    projectCount = projects.length;
-  } catch (e) {
-    // API might be down, handled by component or error state
-  }
+export default function DashboardPage() {
+  const [projectCount, setProjectCount] = useState(0);
+
+  useEffect(() => {
+    ApiClient.getProjects()
+      .then(projects => setProjectCount(projects.length))
+      .catch(() => {});
+  }, []);
 
   return (
     <main className="dashboard-container animate-fade">

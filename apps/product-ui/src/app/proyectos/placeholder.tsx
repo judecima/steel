@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Sidebar from '@/components/Sidebar';
 import { Construction } from 'lucide-react';

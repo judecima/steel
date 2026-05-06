@@ -32,6 +32,7 @@
     "product:next:build": "cd apps/product-ui && npm run build",
     "product:next:start": "cd apps/product-ui && npm run start",
     "product:next:test": "npx ts-node --transpile-only scripts/next_product_ui_tests.ts",
+    "product:next:test-api": "npx ts-node --transpile-only scripts/next_api_tests.ts",
     "build": "tsc"
   },
   "dependencies": {

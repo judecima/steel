@@ -1,6 +1,6 @@
 import { Project, ApiHealth } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001/api';
+const API_BASE_URL = '/api';
 
 async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE_URL}${path}`;
@@ -68,4 +68,69 @@ export const ApiClient = {
       method: 'POST',
     });
   },
+
+  async regenerarProyecto(projectId: string): Promise<any> {
+    return apiRequest<any>(`/proyectos/${projectId}/regenerar`, {
+      method: 'POST',
+    });
+  },
+
+  async getIndustrialExports(projectId: string): Promise<any> {
+    // Note: For 9D, these are the standard secure download paths
+    return {
+      bom: '/api/exports/bom-industrial.csv',
+      cutlist: '/api/exports/cutlist-paneles.csv',
+      json: '/api/exports/proyecto-render.json',
+      txt: '/api/exports/secuencia-montaje.txt',
+      pdf: '/api/exports/planos-tecnicos.pdf',
+      package: '/api/exports/planos-package.json'
+    };
+  },
+
+  async getProduction(projectId: string): Promise<any> {
+    return apiRequest<any>(`/proyectos/${projectId}/produccion`);
+  },
+
+  async updateProduction(projectId: string, payload: any): Promise<any> {
+    return apiRequest<any>(`/proyectos/${projectId}/produccion`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async getCatalog(): Promise<any[]> {
+    return apiRequest<any[]>('/costos/catalogo');
+  },
+
+  async updateCatalog(payload: any[]): Promise<any> {
+    return apiRequest<any>('/costos/catalogo', {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async getBudget(projectId: string): Promise<any> {
+    return apiRequest<any>(`/proyectos/${projectId}/presupuesto`);
+  },
+
+  async saveBudget(projectId: string, payload: any): Promise<any> {
+    return apiRequest<any>(`/proyectos/${projectId}/presupuesto`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  async getExportHistory(projectId: string): Promise<any[]> {
+    return apiRequest<any[]>(`/proyectos/${projectId}/exportaciones`);
+  },
+
+  async generateAllExports(projectId: string): Promise<any> {
+    return apiRequest<any>(`/proyectos/${projectId}/exportaciones/generar`, {
+      method: 'POST',
+    });
+  },
+
+  async getFilesStatus(): Promise<any[]> {
+    return apiRequest<any[]>('/exports');
+  }
 };

@@ -16,6 +16,8 @@ export class PlanoPackageBuilder {
         const projectResult = version?.resultadoMotor;
         const panels = projectResult?.construction?.panels || [];
         
+        console.log(`[PDF-BUILD] Proyecto: ${metadata.nombre}, Version: ${version?.id}, Panels: ${panels.length}`);
+        
         const packageDto: PlanosPackageDTO = {
             proyectoId: proyecto.id || 'temp',
             nombreProyecto: metadata.nombre,

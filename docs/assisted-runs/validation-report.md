@@ -111,11 +111,46 @@ Command: npx ts-node --transpile-only scripts/next_product_ui_tests.ts
 Result: Passed (10/10)
 | F9A-148 | App Existence | PASSED | apps/product-ui inicializado |
 | F9A-150 | No LocalStorage | PASSED | PostgreSQL es fuente única |
-| F9A-151 | App Router Slugs | PASSED | /, /proyectos, /proyectos/nuevo, /proyectos/[id] |
-| F9A-157 | Legacy Redirection | PASSED | Banner en index.html legacy |
+| F9A-167 | Relative Paths | PASSED | UI consume /api sin host hardcoded |
+
+## Next.js API Unification (Phase 9C)
+Last run: 2026-05-06
+Command: npx ts-node --transpile-only scripts/next_api_tests.ts
+Result: Passed (10/10)
+| F9A-158 | Health Check | PASSED | Conexión DB verificada en Next |
+| F9A-160 | Create & Detail | PASSED | Flujo completo sin Express 3001 |
+| F9A-166 | Planos Export | PASSED | PDF generado vía Route Handler |
+
+## Advanced UI Features (Phase 9B)
+Last run: 2026-05-06
+Command: npx ts-node --transpile-only scripts/next_product_ui_tests.ts
+Result: Passed (10/10)
+| F9B-168 | Viewer Iframe | PASSED | QA Viewer embebido y navegable |
+| F9B-170 | Mode Switching | PASSED | postMessage enviado a Three.js |
+| F9B-172 | Planos Export UI | PASSED | Trigger POST /exportar desde card |
+| F9B-174 | Budget Calculation | PASSED | Totales dinámicos según BOM |
+| F9B-176 | Production Tracking | PASSED | Seguimiento por panel (temporal) |
+
+## Advanced Persistence & Production (Phase 9D)
+Last run: 2026-05-06
+Command: npx ts-node --transpile-only scripts/next_persistence_tests.ts
+Result: Passed (10/10)
+| F9D-178 | Production Tracking | PASSED | Persistencia por muro y panel en DB |
+| F9D-181 | Cost Catalog | PASSED | Precios globales sincronizados |
+| F9D-184 | Budget Snapshots | PASSED | Historial de presupuestos guardado |
+| F9D-186 | Export History | PASSED | Auditoría de archivos generados |
+
+## Real Export Files & PDF Repair (Phase 9D.1)
+Last run: 2026-05-06
+Command: npx ts-node --transpile-only scripts/next_exports_real_tests.ts
+Result: Passed (14/14)
+| E-01 | Consolidated Generation | PASSED | Crea todos los activos industriales |
+| E-08 | PDF Integrity | PASSED | PDF > 5KB con geometría técnica |
+| E-09 | Real-time Status API | PASSED | UI verifica existencia física |
+| E-12 | Secure JSON 404 | PASSED | Sin error HTML en descargas fallidas |
 
 ## Known Validation Gaps
 - Non-deterministic output in Test 2 (ProjectResult compare) still being monitored.
 
 ## Current Certification Level
-**Phase 9A Certified (Next.js Product UI Migration).**
+**Phase 9D.1 Certified (Real Industrial Exports & Persistence).**

@@ -4,6 +4,9 @@ import { PLANO_CONFIG } from './plano-config';
 
 export class PdfExporter {
     static async export(pkg: PlanosPackageDTO): Promise<Uint8Array> {
+        if (!pkg.hojas || pkg.hojas.length === 0) {
+            throw new Error("No hay hojas técnicas para exportar en este proyecto.");
+        }
         const pdfDoc = await PDFDocument.create();
         const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
         const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);

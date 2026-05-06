@@ -56,12 +56,38 @@ const MIGRATIONS: string[] = [
     UNIQUE(proyecto_id, muro_id)
 )`,
 
+`CREATE TABLE IF NOT EXISTS produccion_proyectos (
+    proyecto_id TEXT PRIMARY KEY REFERENCES proyectos(id) ON DELETE CASCADE,
+    estado_global TEXT NOT NULL DEFAULT 'pendiente',
+    avance_porcentaje NUMERIC(5,2) DEFAULT 0,
+    fecha_actualizacion TIMESTAMPTZ NOT NULL DEFAULT NOW()
+)`,
+
 `CREATE TABLE IF NOT EXISTS catalogo_costos (
     id SERIAL PRIMARY KEY,
     codigo TEXT NOT NULL UNIQUE,
     descripcion TEXT,
-    precio_unitario NUMERIC(12,2)
+    unidad TEXT,
+    precio_unitario NUMERIC(12,2),
+    moneda TEXT DEFAULT 'USD',
+    fecha_actualizacion TIMESTAMPTZ DEFAULT NOW()
 )`,
+
+`ALTER TABLE catalogo_costos ADD COLUMN IF NOT EXISTS unidad TEXT`,
+`ALTER TABLE catalogo_costos ADD COLUMN IF NOT EXISTS moneda TEXT DEFAULT 'USD'`,
+`ALTER TABLE catalogo_costos ADD COLUMN IF NOT EXISTS fecha_actualizacion TIMESTAMPTZ DEFAULT NOW()`,
+
+`CREATE TABLE IF NOT EXISTS presupuestos (
+    id SERIAL PRIMARY KEY,
+    proyecto_id TEXT NOT NULL REFERENCES proyectos(id) ON DELETE CASCADE,
+    items_json JSONB NOT NULL,
+    total NUMERIC(15,2) NOT NULL,
+    moneda TEXT DEFAULT 'USD',
+    estado TEXT DEFAULT 'borrador',
+    fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT NOW()
+)`,
+
+`ALTER TABLE exportaciones ADD COLUMN IF NOT EXISTS fecha_creacion TIMESTAMPTZ DEFAULT NOW()`,
 
 `CREATE TABLE IF NOT EXISTS migraciones_ejecutadas (
     id SERIAL PRIMARY KEY,

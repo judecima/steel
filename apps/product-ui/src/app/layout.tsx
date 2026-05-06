@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
+import StyledJsxRegistry from "@/lib/registry";
 
 export const metadata: Metadata = {
   title: "Steel Frame — Product UI",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <AppShell>{children}</AppShell>
+        <StyledJsxRegistry>
+          <AppShell>{children}</AppShell>
+        </StyledJsxRegistry>
       </body>
     </html>
   );

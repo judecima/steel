@@ -1,156 +1,16 @@
 HOJA: BOM
-profileType	thickness	length	quantity	role	sourceEntityId	codigo	descripcion	muro	panel
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_north_0	PGC 100x0.9-90	Montante Estándar	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_north_0	PGC 100x0.9-90	Montante Estándar	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_north_0	PGC 100x0.9-90	Montante Estándar	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_north_0	PGC 100x0.9-90	Montante Estándar	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_north_0	PGC 100x0.9-90	Montante Estándar	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_north_0	PGC 100x0.9-90	Montante Estándar	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_north_0	PGC 100x0.9-90	Montante Estándar	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_north_0	PGC 100x0.9-90	Montante Estándar	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	montante_principal	panel_wall_north_0	PGC 100x0.9-90	Montante Principal (King)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	montante_principal	panel_wall_north_0	PGC 100x0.9-90	Montante Principal (King)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2	1	montante_apoyo	panel_wall_north_0	PGC 100x0.9-90	Montante de Apoyo (Jack)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2	1	montante_apoyo	panel_wall_north_0	PGC 100x0.9-90	Montante de Apoyo (Jack)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	0.4	1	montante_corto_superior	panel_wall_north_0	PGC 100x0.9-90	Montante Corto Superior (Cripple)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	0.4	1	montante_corto_superior	panel_wall_north_0	PGC 100x0.9-90	Montante Corto Superior (Cripple)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	0.4	1	montante_corto_superior	panel_wall_north_0	PGC 100x0.9-90	Montante Corto Superior (Cripple)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	1.2	1	solera_ventana	panel_wall_north_0	PGC 100x0.9-90	Solera de Ventana	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	1	1	montante_corto_inferior	panel_wall_north_0	PGC 100x0.9-90	Montante Corto Inferior (Cripple)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	1	1	montante_corto_inferior	panel_wall_north_0	PGC 100x0.9-90	Montante Corto Inferior (Cripple)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	1	1	montante_corto_inferior	panel_wall_north_0	PGC 100x0.9-90	Montante Corto Inferior (Cripple)	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_north_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_north_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_north_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_north_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_north	panel_wall_north_0
-PGU 100x0.9	0.9	4	2	track	panel_wall_north_0	PGU 100x0.9-90	Solera	wall_north	panel_wall_north_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_south_0	PGC 100x0.9-90	Montante Estándar	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_south_0	PGC 100x0.9-90	Montante Estándar	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_south_0	PGC 100x0.9-90	Montante Estándar	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_south_0	PGC 100x0.9-90	Montante Estándar	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_south_0	PGC 100x0.9-90	Montante Estándar	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_south_0	PGC 100x0.9-90	Montante Estándar	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_south_0	PGC 100x0.9-90	Montante Estándar	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_south_0	PGC 100x0.9-90	Montante Estándar	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	montante_principal	panel_wall_south_0	PGC 100x0.9-90	Montante Principal (King)	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	montante_principal	panel_wall_south_0	PGC 100x0.9-90	Montante Principal (King)	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.1	1	montante_apoyo	panel_wall_south_0	PGC 100x0.9-90	Montante de Apoyo (Jack)	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.1	1	montante_apoyo	panel_wall_south_0	PGC 100x0.9-90	Montante de Apoyo (Jack)	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	0.3	1	montante_corto_superior	panel_wall_south_0	PGC 100x0.9-90	Montante Corto Superior (Cripple)	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	0.3	1	montante_corto_superior	panel_wall_south_0	PGC 100x0.9-90	Montante Corto Superior (Cripple)	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_south_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_south_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_south_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_south_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_south	panel_wall_south_0
-PGU 100x0.9	0.9	4	2	track	panel_wall_south_0	PGU 100x0.9-90	Solera	wall_south	panel_wall_south_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_east_0	PGC 100x0.9-90	Montante Estándar	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_east_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_east_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_east_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_east_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_east	panel_wall_east_0
-PGU 100x0.9	0.9	4	2	track	panel_wall_east_0	PGU 100x0.9-90	Solera	wall_east	panel_wall_east_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	common	panel_wall_west_0	PGC 100x0.9-90	Montante Estándar	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_west_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_west_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_west_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_west	panel_wall_west_0
-PGC 100x0.9	0.9	2.6	1	corner	panel_wall_west_0	PGC 100x0.9-90	Perfil PGC 100x0.9 - corner	wall_west	panel_wall_west_0
-PGU 100x0.9	0.9	4	2	track	panel_wall_west_0	PGU 100x0.9-90	Solera	wall_west	panel_wall_west_0
+role	length	quantity	thickness	profileType	sourceEntityId	codigo	descripcion	muro	panel
+common	2.4	2	0.9	PGC100	PANEL_1	PGC100-90	Montante Estándar	wall_1	PANEL_1
+common	2.4	2	0.9	PGC100	PANEL_2	PGC100-90	Montante Estándar	wall_1	PANEL_2
+common	2.4	2	0.9	PGC100	PANEL_3	PGC100-90	Montante Estándar	wall_1	PANEL_3
+common	2.4	2	0.9	PGC100	PANEL_4	PGC100-90	Montante Estándar	wall_1	PANEL_4
+common	2.4	2	0.9	PGC100	PANEL_5	PGC100-90	Montante Estándar	wall_1	PANEL_5
 
 HOJA: Lista de Corte
 id	perfil	longitud	cantidad	anguloInicio	anguloFin	panel	muro	prioridadFabricacion
-PIEZA-0000	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0001	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0002	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0003	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0004	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0005	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0006	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0007	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0008	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0009	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0010	PGC 100x0.9	2	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0011	PGC 100x0.9	2	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0012	PGC 100x0.9	0.4	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0013	PGC 100x0.9	0.4	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0014	PGC 100x0.9	0.4	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0015	PGC 100x0.9	1.2	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0016	PGC 100x0.9	1	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0017	PGC 100x0.9	1	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0018	PGC 100x0.9	1	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0019	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0020	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0021	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0022	PGC 100x0.9	2.6	1	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0023	PGU 100x0.9	4	2	0	0	panel_wall_north_0	wall_north	1
-PIEZA-0024	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0025	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0026	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0027	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0028	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0029	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0030	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0031	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0032	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0033	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0034	PGC 100x0.9	2.1	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0035	PGC 100x0.9	2.1	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0036	PGC 100x0.9	0.3	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0037	PGC 100x0.9	0.3	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0038	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0039	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0040	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0041	PGC 100x0.9	2.6	1	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0042	PGU 100x0.9	4	2	0	0	panel_wall_south_0	wall_south	2
-PIEZA-0043	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0044	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0045	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0046	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0047	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0048	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0049	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0050	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0051	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0052	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0053	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0054	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0055	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0056	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0057	PGC 100x0.9	2.6	1	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0058	PGU 100x0.9	4	2	0	0	panel_wall_east_0	wall_east	3
-PIEZA-0059	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0060	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0061	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0062	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0063	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0064	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0065	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0066	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0067	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0068	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0069	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0070	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0071	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0072	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0073	PGC 100x0.9	2.6	1	0	0	panel_wall_west_0	wall_west	4
-PIEZA-0074	PGU 100x0.9	4	2	0	0	panel_wall_west_0	wall_west	4
+PIEZA-0000	PGC100	2.4	2	0	0	PANEL_1	wall_1	1
+PIEZA-0001	PGC100	2.4	2	0	0	PANEL_2	wall_1	2
+PIEZA-0002	PGC100	2.4	2	0	0	PANEL_3	wall_1	3
+PIEZA-0003	PGC100	2.4	2	0	0	PANEL_4	wall_1	4
+PIEZA-0004	PGC100	2.4	2	0	0	PANEL_5	wall_1	5
 

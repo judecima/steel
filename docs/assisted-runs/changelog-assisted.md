@@ -1,5 +1,36 @@
 # Changelog Assisted
 
+## [2026-05-06] - Fase 9D.1: Real Export Files & PDF Repair
+- Implementación de generador consolidado: `POST /api/proyectos/[id]/exportaciones/generar` crea todos los activos industriales.
+- Corrección de PDF vacío: validación de hojas y agregado de advertencias técnicas si falta geometría.
+- API de estado real: `GET /api/exports` permite a la UI verificar la existencia física de los archivos.
+- UI reactiva: botón "Generar Paquete Completo" y actualización dinámica de estado (Disponible/Pendiente).
+- Normalización de nombres: BOM.csv, CUTLIST.csv, Proyecto.json, Montaje.txt, reporte.tsv.
+- Certificación de 14 tests de integridad de archivos y MIME types.
+
+## [2026-05-06] - Fase 9D: Advanced Persistence & Production
+- Implementación de persistencia completa en PostgreSQL para Seguimiento de Producción (paneles y global).
+- Sistema de snapshots de Presupuesto con almacenamiento de ítems y totales.
+- Catálogo de Costos centralizado y persistente con gestión de precios desde la UI.
+- Historial de Exportaciones dinámico con registro de cada generación técnica.
+- Corrección de bug crítico de descargas: implementación de `/api/exports/[filename]` seguro.
+- Certificación de 14 nuevos tests de persistencia y descargas industriales.
+
+## [2026-05-06] - Fase 9B: Advanced UI Features
+- Migración de pantallas Viewer, Exportaciones, Presupuesto y Producción a Next.js.
+- Integración de QA Viewer legado mediante iframe y `postMessage`.
+- Implementación de calculadoras reactivas y visualizadores de progreso.
+- Solución a errores de `styled-jsx` "client-only" mediante `StyledJsxRegistry`.
+- Certificación de 10 tests de UI avanzada y paridad de funciones.
+
+## [2026-05-06] - Fase 9C: Migración API Express a Next.js
+- Unificación de UI y API en `apps/product-ui` (puerto 3002).
+- Implementación de 9 Route Handlers portando lógica de Express.
+- Reutilización de módulos del motor (`PostgresStorageAdapter`, `PlanoPackageBuilder`).
+- Actualización de `ApiClient` a rutas relativas `/api`.
+- Servidor Express marcado como Legacy.
+- Certificación de 10 tests de backend unificado.
+
 ## [2026-05-06] - Fase 9A: Migración Product UI a Next.js
 - Inicialización de aplicación Next.js 14 en `apps/product-ui`.
 - Implementación de Dashboard, Listado de Proyectos, Creación y Detalle.

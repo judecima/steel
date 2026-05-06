@@ -35,8 +35,9 @@ export class PostgresStorageAdapter implements ProjectStorage {
         }
 
         // Upsert all versions
-        for (let i = 0; i < project.historialVersiones.length; i++) {
-            const v = project.historialVersiones[i];
+        const versiones = project.historialVersiones || [];
+        for (let i = 0; i < versiones.length; i++) {
+            const v = versiones[i];
             await pool.query(
                 `INSERT INTO versiones_proyecto (id, proyecto_id, numero_version, snapshot_json, fecha_creacion)
                  VALUES ($1, $2, $3, $4, $5)
@@ -46,7 +47,7 @@ export class PostgresStorageAdapter implements ProjectStorage {
         }
 
         // Upsert configuracion
-        const vActual = project.historialVersiones.find(v => v.id === project.versionActual);
+        const vActual = versiones.find(v => v.id === project.versionActual);
         if (vActual?.configuracion) {
             await pool.query(
                 `INSERT INTO configuraciones (proyecto_id, configuracion_json)

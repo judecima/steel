@@ -16,9 +16,13 @@
 - Phase 7.5A — Product UX Stabilization (Certified)
 - Phase 8A — Generador Base de Planos Técnicos (Certified)
 - Phase 9A — Migración Product UI a Next.js (Certified)
+- Phase 9C — Migración API Express a Next.js (Certified)
+- Phase 9B — Advanced UI Features (Certified)
+- Phase 9D — Advanced Persistence & Production (Certified)
+- Phase 9D.1 — Real Export Files & PDF Repair (Certified)
 
 ## Current Phase
-*   **Fase 9B: Advanced UI Features** - PENDIENTE
+*   **Fase 10: Visual Editor & BIM Export** - PENDIENTE
 
 ## Current Capabilities
 - Modular foundation geometry generation

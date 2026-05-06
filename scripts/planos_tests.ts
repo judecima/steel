@@ -11,11 +11,11 @@ const JSON_PATH = path.join(EXPORTS_DIR, 'planos-package.json');
 async function runTests() {
     // TRIGGER EXPORT VIA API FIRST
     try {
-        const res = await axios.get('http://localhost:3001/api/proyectos');
+        const res = await axios.get('http://localhost:3002/api/proyectos');
         const firstProj = res.data[0];
         if (firstProj) {
             console.log(`[INIT] Disparando exportación para proyecto: ${firstProj.id}`);
-            const postRes = await axios.post(`http://localhost:3001/api/proyectos/${firstProj.id}/planos/exportar`);
+            const postRes = await axios.post(`http://localhost:3002/api/proyectos/${firstProj.id}/planos/exportar`);
             console.log(`TEST 140: ${postRes.data.ok ? 'PASSED' : 'FAILED'} (API endpoint exporta planos)`);
         } else {
             console.log('TEST 140: SKIPPED (No hay proyectos para probar API)');

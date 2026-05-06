@@ -1,21 +1,32 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { ApiClient } from '@/lib/api';
 import ProjectCard from '@/components/ProjectCard';
 import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
+import LoadingState from '@/components/LoadingState';
 import Link from 'next/link';
 import { PlusCircle } from 'lucide-react';
 
-export default async function ProyectosPage() {
-  let projects = [];
-  let error = null;
+export default function ProyectosPage() {
+  const [projects, setProjects] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  try {
-    projects = await ApiClient.getProjects();
-  } catch (e: any) {
-    error = e.message;
-  }
+  useEffect(() => {
+    ApiClient.getProjects()
+      .then(p => {
+        setProjects(p);
+        setLoading(false);
+      })
+      .catch(e => {
+        setError(e.message);
+        setLoading(false);
+      });
+  }, []);
 
+  if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
 
   return (

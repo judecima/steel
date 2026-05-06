@@ -15,7 +15,7 @@ export default function Sidebar({ projectId }: SidebarProps) {
   const menuItems = [
     { label: 'Configuración', icon: Settings, href: `/proyectos/${projectId}` },
     { label: 'Visualizar', icon: Eye, href: `/proyectos/${projectId}/viewer` },
-    { label: 'Presupuesto', icon: DollarSign, href: `/proyectos/${projectId}/presupuesto' },
+    { label: 'Presupuesto', icon: DollarSign, href: `/proyectos/${projectId}/presupuesto` },
     { label: 'Exportaciones', icon: Package, href: `/proyectos/${projectId}/exportaciones` },
     { label: 'Producción', icon: Construction, href: `/proyectos/${projectId}/produccion` },
   ];

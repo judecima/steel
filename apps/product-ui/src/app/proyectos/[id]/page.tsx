@@ -1,7 +1,10 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { ApiClient } from '@/lib/api';
 import Sidebar from '@/components/Sidebar';
 import ErrorState from '@/components/ErrorState';
+import LoadingState from '@/components/LoadingState';
 import { formatDateTime, ESTADO_LABELS, getEstadoColor } from '@/lib/format';
 import { Calendar, User, Clock, Rocket } from 'lucide-react';
 
@@ -9,21 +12,29 @@ interface ProjectPageProps {
   params: { id: string };
 }
 
-export default async function ProjectDetailPage({ params }: ProjectPageProps) {
+export default function ProjectDetailPage({ params }: ProjectPageProps) {
   const { id } = params;
-  let project = null;
-  let error = null;
+  const [project, setProject] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  try {
-    project = await ApiClient.getProject(id);
-  } catch (e: any) {
-    if (e.status === 404) {
-      error = 'El proyecto solicitado no existe en PostgreSQL o fue eliminado.';
-    } else {
-      error = e.message;
-    }
-  }
+  useEffect(() => {
+    ApiClient.getProject(id)
+      .then(p => {
+        setProject(p);
+        setLoading(false);
+      })
+      .catch(e => {
+        if (e.status === 404) {
+          setError('El proyecto solicitado no existe en PostgreSQL o fue eliminado.');
+        } else {
+          setError(e.message);
+        }
+        setLoading(false);
+      });
+  }, [id]);
 
+  if (loading) return <LoadingState />;
   if (error || !project) {
     return <ErrorState message={error || 'No se encontró el proyecto'} />;
   }

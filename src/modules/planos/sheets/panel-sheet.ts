@@ -20,6 +20,11 @@ export class PanelSheet {
             350
         );
 
+        const warnings = ['Verificar escuadría del panel antes de fijar.'];
+        if (rows.length === 0) {
+            warnings.push("Hoja generada sin geometría técnica disponible (Faltan Studs)");
+        }
+
         return {
             id: `sheet-${panel.id}`,
             numeroHoja: 10, // Dynamic later
@@ -39,7 +44,7 @@ export class PanelSheet {
                 `P-${panel.id.split('_')[1]}`,
                 '--'
             ),
-            warnings: ['Verificar escuadría del panel antes de fijar.']
+            warnings: warnings
         };
     }
 }
