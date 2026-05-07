@@ -13,6 +13,12 @@ export class PdfExporter {
             throw error;
         }
 
+        console.log("[FLOW_PDF] pkg", { 
+            id: pkg.proyectoId, 
+            hojasCount: pkg.hojas?.length,
+            hojasKeys: pkg?.hojas?.map(h => h.id)
+        });
+
         const pdfDoc = await PDFDocument.create();
         const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
         const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
@@ -92,6 +98,10 @@ export class PdfExporter {
                 if (entity.type === 'line' && entity.points && entity.points.length >= 2) {
                     const geometry = normalizePanelGeometry(entity);
                     if (geometry.start && geometry.end) {
+                        console.log("[FLOW_PDF] drawing line", { 
+                            start: geometry.start, 
+                            end: geometry.end 
+                        });
                         page.drawLine({
                             start: { x: 300 + geometry.start.x * 20, y: 300 + geometry.start.y * 20 },
                             end: { x: 300 + geometry.end.x * 20, y: 300 + geometry.end.y * 20 },
@@ -130,13 +140,18 @@ export class PdfExporter {
                     const x2 = geometry.end.x;
                     const y2 = geometry.end.y;
 
+                    if (Number.isNaN(x1) || Number.isNaN(x2)) {
+                        console.warn("[PDF_EXPORT] skipping invalid dimension coords");
+                        continue;
+                    }
+
                     page.drawLine({
                         start: { x: x1, y: y1 },
                         end: { x: x2, y: y2 },
                         color: rgb(0, 0, 1),
                         thickness: 0.5
                     });
-                    page.drawText(dim.value || dim.text || '', {
+                    page.drawText(dim.value || (dim as any).text || '', {
                         x: (x1 + x2) / 2,
                         y: (y1 + y2) / 2 + 5,
                         size: 8,
@@ -157,8 +172,8 @@ export class PdfExporter {
             });
             
             // Draw Tables
-            for (const table of sheet.tables) {
-                if (!table.position) {
+            for (const table of (sheet.tables || [])) {
+                if (!table?.position) {
                     console.warn("[PDF_EXPORT] skipping table due to missing position");
                     continue;
                 }

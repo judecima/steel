@@ -4,6 +4,8 @@ import { normalizarConfiguracionParametrica } from '../../../../../lib/parametri
 import { ensureActiveVersion } from '../../../../../lib/project-repair';
 import { generateId } from '../../../../../../../../src/utils/ids';
 import { EngineFacade } from '../../../../../../../../src/modules/product/engine-facade';
+import { mapUIConfigToEngineInput } from '../../../../../../../../src/modules/product/map-ui-config-to-engine-input';
+import { ensureProjectPersistenceDefaults } from '../../../../../../../../src/modules/product/storage/storage-utils';
 
 const storage = new PostgresStorageAdapter();
 
@@ -51,46 +53,33 @@ export async function POST(
       aberturas: []
     };
 
-    if (!config.murosInternos) config.murosInternos = [];
-    config.murosInternos.push(nuevoMuro);
-    
-    repaired.historialVersiones[activeVersionIndex].configuracion = config;
-    repaired.fechaActualizacion = new Date().toISOString();
-    
-    // Auto-Regenerar (Phase 9F Requirement)
-    const input = {
-      width: config.anchoVivienda,
-      length: config.largoVivienda,
-      minHeight: config.alturaMuro,
-      roofType: config.tipoCubierta,
-      roofSlope: config.pendienteTecho,
-      openings: config.aberturas?.map(a => ({
-          wallId: a.wallId,
-          type: a.tipo === 'puerta' ? 'door' : 'window',
-          width: a.ancho,
-          height: a.alto,
-          position: a.posicion,
-          sillHeight: a.antepecho
-      })),
-      internalWalls: config.murosInternos.map(mw => ({
-          id: mw.id,
-          startXmm: mw.startX * 1000,
-          startZmm: mw.startZ * 1000,
-          endXmm: mw.endX * 1000,
-          endZmm: mw.endZ * 1000,
-          heightMm: mw.height * 1000,
-          thicknessMm: mw.thickness * 1000,
-          openings: []
-      }))
-    } as any;
+    // --- ATOMIC REGENERATION CHECK ---
+    const tempConfig = JSON.parse(JSON.stringify(config));
+    if (!tempConfig.murosInternos) tempConfig.murosInternos = [];
+    tempConfig.murosInternos.push(nuevoMuro);
 
-    const result = EngineFacade.generate(input);
-    repaired.historialVersiones[activeVersionIndex].resultadoMotor = result;
+    const input = mapUIConfigToEngineInput(tempConfig);
 
-    await storage.saveProject(repaired);
+    try {
+        const result = EngineFacade.generate(input);
+        
+        repaired.historialVersiones[activeVersionIndex].configuracion = tempConfig;
+        repaired.historialVersiones[activeVersionIndex].resultadoMotor = result;
+        
+        const finalProject = ensureProjectPersistenceDefaults(repaired);
+        await storage.saveProject(finalProject);
 
-    return NextResponse.json({ ok: true, wall: nuevoMuro, renderScene: result });
-  } catch (error: any) {
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
-  }
+        return NextResponse.json({ ok: true, wall: nuevoMuro, renderScene: result });
+    } catch (regError: any) {
+        console.error("[INTERNAL_WALL_REG] Structural validation failed:", regError.message);
+        return NextResponse.json({ 
+            ok: false, 
+            code: "STRUCTURAL_VALIDATION_FAILED", 
+            message: regError.message 
+        }, { status: 200 });
+    }
+    } catch (error: any) {
+        console.error("[INTERNAL_WALL_POST] Error:", error.message);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 }

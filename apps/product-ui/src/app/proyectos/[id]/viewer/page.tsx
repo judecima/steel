@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { ApiClient, apiPost } from '@/lib/api';
+import { normalizeWallId } from '../../../../../../../src/modules/validation/wall-utils';
 import Sidebar from '@/components/Sidebar';
 import ModeTabs from '@/components/ModeTabs';
 import ErrorState from '@/components/ErrorState';
@@ -17,7 +18,7 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const timeoutRef = useRef<any>(null);
   const [showOpeningModal, setShowOpeningModal] = useState(false);
-  const [modalData, setModalData] = useState<any>(null);
+  const [openingDraft, setOpeningDraft] = useState<any>(null);
   const [newOpening, setNewOpening] = useState({
     tipo: 'ventana',
     ancho: 1.2,
@@ -25,14 +26,15 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
     antepecho: 0.9,
     posicion: 0
   });
+
   const [showInternalWallModal, setShowInternalWallModal] = useState(false);
-  const [internalWallData, setInternalWallData] = useState({
-    startX: 0,
-    startZ: 0,
-    endX: 0,
-    endZ: 0,
-    height: 2.6
-  });
+  const [internalWallDraft, setInternalWallDraft] = useState<any>(null);
+  
+  const [showOpeningEditModal, setShowOpeningEditModal] = useState(false);
+  const [openingEditDraft, setOpeningEditDraft] = useState<any>(null);
+
+  const [showInternalWallActionModal, setShowInternalWallActionModal] = useState(false);
+  const [internalWallActionDraft, setInternalWallActionDraft] = useState<any>(null);
 
   useEffect(() => {
     console.log('[VIEWER] projectId', id);
@@ -80,38 +82,64 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data.type === 'VIEWER_DOUBLE_CLICK' || event.data.type === 'VIEWER_WALL_CLICK') {
-        const { wallId, metadata, point } = event.data;
-        if (!metadata) return;
+      const { type, data } = event.data;
+      
+      switch (event.data?.type) {
+        case "VIEWER_EXTERNAL_WALL_DBLCLICK":
+          // Calcular posición relativa si es posible
+          setOpeningDraft({
+            wallId: event.data.wallId,
+            point: event.data.point,
+            displayWallName: event.data.displayWallName,
+            metadata: event.data.metadata
+          });
+          
+          // Tanteo de posición relativa
+          const meta = event.data.metadata;
+          if (meta && meta.startX !== undefined) {
+              const dx = meta.endX - meta.startX;
+              const dy = meta.endZ - meta.startZ;
+              const len = Math.sqrt(dx*dx + dy*dy);
+              const dpx = event.data.point.x - meta.startX;
+              const dpy = event.data.point.z - meta.startZ;
+              let posRel = (dpx * dx + dpy * dy) / len;
+              if (posRel < 0) posRel = 0;
+              if (posRel > len) posRel = len;
+              setNewOpening(prev => ({ ...prev, posicion: Math.round(posRel * 100) / 100 }));
+          }
+          
+          setShowOpeningModal(true);
+          break;
 
-        const dx = metadata.endX - metadata.startX;
-        const dy = metadata.endY - metadata.startY;
-        const len = Math.sqrt(dx*dx + dy*dy);
-        
-        const dpx = point.x - metadata.startX;
-        const dpy = point.z - metadata.startY;
-        
-        let posRel = (dpx * dx + dpy * dy) / len;
-        if (posRel < 0) posRel = 0;
-        if (posRel > len) posRel = len;
+        case "VIEWER_INTERIOR_PANEL_DBLCLICK":
+        case "VIEWER_FLOOR_DBLCLICK":
+          setInternalWallDraft({
+            startX: Math.round(event.data.point.x * 10) / 10,
+            startZ: Math.round(event.data.point.z * 10) / 10,
+            endX: Math.round((event.data.point.x + 3) * 10) / 10,
+            endZ: Math.round(event.data.point.z * 10) / 10,
+            height: project?.historialVersiones?.[0]?.configuracion?.alturaMuro || 2.6,
+            thickness: 0.1
+          });
+          setShowInternalWallModal(true);
+          break;
 
-        setModalData({ wallId, wallLength: len });
-        setNewOpening(prev => ({ ...prev, posicion: Math.round(posRel * 100) / 100 }));
-        setShowOpeningModal(true);
-      } else if (event.data.type === 'VIEWER_OPENING_CLICK') {
-        const { openingId, wallId, metadata } = event.data;
-        // Lógica para editar abertura existente
-        alert(`Editar abertura ${openingId} en muro ${wallId}`);
-      } else if (event.data.type === 'VIEWER_FLOOR_CLICK') {
-        const { point } = event.data;
-        setInternalWallData({
-          startX: Math.round(point.x * 10) / 10,
-          startZ: Math.round(point.z * 10) / 10,
-          endX: Math.round((point.x + 3) * 10) / 10,
-          endZ: Math.round(point.z * 10) / 10,
-          height: project?.historialVersiones?.[0]?.configuracion?.alturaMuro || 2.6
-        });
-        setShowInternalWallModal(true);
+        case "VIEWER_INTERNAL_WALL_DBLCLICK":
+          setInternalWallActionDraft({
+            internalWallId: event.data.internalWallId,
+            point: event.data.point,
+          });
+          setShowInternalWallActionModal(true);
+          break;
+
+        case "VIEWER_OPENING_DBLCLICK":
+          setOpeningEditDraft({
+            openingId: event.data.openingId,
+            wallId: event.data.wallId,
+            metadata: event.data.metadata
+          });
+          setShowOpeningEditModal(true);
+          break;
       }
     };
 
@@ -122,9 +150,15 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
   const handleSaveOpening = async () => {
     try {
       setStatus('loading');
+      const canonicalWallId = normalizeWallId(openingDraft.wallId);
+      
+      if (!canonicalWallId || !["wall_north", "wall_south", "wall_east", "wall_west"].includes(canonicalWallId)) {
+        throw new Error(`Identificador de muro no reconocido: ${openingDraft.wallId}`);
+      }
+
       const res: any = await apiPost(`/proyectos/${id}/aberturas`, {
         ...newOpening,
-        wallId: modalData.wallId
+        wallId: canonicalWallId
       });
       setShowOpeningModal(false);
       
@@ -146,7 +180,7 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
   const handleSaveInternalWall = async () => {
     try {
       setStatus('loading');
-      const res: any = await apiPost(`/proyectos/${id}/internal-walls`, internalWallData);
+      const res: any = await apiPost(`/proyectos/${id}/internal-walls`, internalWallDraft);
       setShowInternalWallModal(false);
       
       if (res.renderScene) {
@@ -236,7 +270,7 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
           <div className="modal-overlay">
             <div className="modal-content">
               <h3>Insertar Abertura</h3>
-              <p>Muro: {modalData?.wallId}</p>
+              <p>Muro: {openingDraft?.displayWallName || openingDraft?.wallId}</p>
               
               <div className="form-group">
                 <label>Tipo</label>
@@ -264,7 +298,6 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
                 <div className="form-group">
                   <label>Posición (m)</label>
                   <input type="number" step="0.01" value={newOpening.posicion} onChange={e => setNewOpening({...newOpening, posicion: parseFloat(e.target.value)})} />
-                  <small>Max: {modalData?.wallLength?.toFixed(2)}m</small>
                 </div>
                 {newOpening.tipo === 'ventana' && (
                   <div className="form-group">
@@ -281,64 +314,210 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
             </div>
           </div>
         )}
+
+        {showInternalWallModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>Agregar Pared Interna</h3>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Inicio X</label>
+                  <input type="number" step="0.1" value={internalWallDraft.startX} onChange={e => setInternalWallDraft({...internalWallDraft, startX: parseFloat(e.target.value)})} />
+                </div>
+                <div className="form-group">
+                  <label>Inicio Z</label>
+                  <input type="number" step="0.1" value={internalWallDraft.startZ} onChange={e => setInternalWallDraft({...internalWallDraft, startZ: parseFloat(e.target.value)})} />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Fin X</label>
+                  <input type="number" step="0.1" value={internalWallDraft.endX} onChange={e => setInternalWallDraft({...internalWallDraft, endX: parseFloat(e.target.value)})} />
+                </div>
+                <div className="form-group">
+                  <label>Fin Z</label>
+                  <input type="number" step="0.1" value={internalWallDraft.endZ} onChange={e => setInternalWallDraft({...internalWallDraft, endZ: parseFloat(e.target.value)})} />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Altura (m)</label>
+                  <input type="number" step="0.1" value={internalWallDraft.height} onChange={e => setInternalWallDraft({...internalWallDraft, height: parseFloat(e.target.value)})} />
+                </div>
+                <div className="form-group">
+                  <label>Espesor (m)</label>
+                  <input type="number" step="0.01" value={internalWallDraft.thickness} onChange={e => setInternalWallDraft({...internalWallDraft, thickness: parseFloat(e.target.value)})} />
+                </div>
+              </div>
+              <div className="modal-actions">
+                <button className="btn-secondary" onClick={() => setShowInternalWallModal(false)}>Cancelar</button>
+                <button className="btn-primary" onClick={handleSaveInternalWall}>Guardar Pared</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showOpeningEditModal && (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <h3>Editar Abertura</h3>
+                    <p>ID: {openingEditDraft?.openingId}</p>
+                    <div className="modal-actions">
+                        <button className="btn-secondary" onClick={() => setShowOpeningEditModal(false)}>Cerrar</button>
+                        <button className="btn-primary" disabled>Próximamente: Editar</button>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {showInternalWallActionModal && (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <h3>Acción Pared Interna</h3>
+                    <p>ID: {internalWallActionDraft?.internalWallId}</p>
+                    <div className="modal-actions">
+                        <button className="btn-secondary" onClick={() => setShowInternalWallActionModal(false)}>Cerrar</button>
+                        <button className="btn-primary" disabled>Próximamente: Acciones</button>
+                    </div>
+                </div>
+            </div>
+        )}
       </main>
 
       <style jsx>{`
         .viewer-notification {
           position: absolute;
-          top: 10px;
+          top: 20px;
           left: 50%;
           transform: translateX(-50%);
-          z-index: 100;
-          padding: 8px 16px;
-          border-radius: 4px;
+          z-index: 1000;
+          padding: 12px 24px;
+          border-radius: 12px;
           font-size: 14px;
-          font-weight: 500;
-          animation: slideDown 0.3s ease-out;
+          font-weight: 600;
+          backdrop-filter: blur(12px);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+          animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .viewer-notification.timeout {
-          background: #ffeb3b;
-          color: #000;
-          border: 1px solid #fbc02d;
+          background: rgba(255, 235, 59, 0.9);
+          color: #2c2c2c;
+          border: 1px solid rgba(251, 192, 45, 0.5);
         }
         @keyframes slideDown {
-          from { transform: translate(-50%, -100%); }
-          to { transform: translate(-50%, 0); }
+          from { transform: translate(-50%, -40px); opacity: 0; }
+          to { transform: translate(-50%, 0); opacity: 1; }
         }
         .modal-overlay {
           position: absolute;
           inset: 0;
-          background: rgba(0,0,0,0.7);
+          background: rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(8px);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 1000;
+          z-index: 2000;
+          animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
         .modal-content {
-          background: var(--surface);
-          padding: 32px;
-          border-radius: 12px;
-          width: 400px;
-          border: 1px solid var(--border);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+          background: rgba(28, 28, 30, 0.95);
+          padding: 40px;
+          border-radius: 24px;
+          width: 440px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+          position: relative;
+          overflow: hidden;
         }
-        .modal-content h3 { margin-bottom: 8px; color: var(--accent); }
-        .modal-content p { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+        .modal-content::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, var(--accent), #64ffda);
+        }
+        .modal-content h3 { 
+          margin-bottom: 12px; 
+          color: #fff; 
+          font-size: 24px; 
+          font-weight: 700;
+          letter-spacing: -0.5px;
+        }
+        .modal-content p { 
+          font-size: 14px; 
+          color: rgba(255, 255, 255, 0.5); 
+          margin-bottom: 32px; 
+          line-height: 1.6;
+        }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { 
+          display: block; 
+          font-size: 11px; 
+          text-transform: uppercase; 
+          letter-spacing: 1px;
+          color: rgba(255, 255, 255, 0.4); 
+          margin-bottom: 8px; 
+          font-weight: 700;
+        }
         .form-group input, .form-group select { 
           width: 100%; 
-          padding: 10px; 
-          background: var(--bg); 
-          border: 1px solid var(--border); 
-          border-radius: 6px; 
+          padding: 14px 18px; 
+          background: rgba(255, 255, 255, 0.05); 
+          border: 1px solid rgba(255, 255, 255, 0.1); 
+          border-radius: 12px; 
           color: white; 
+          font-size: 16px;
+          transition: all 0.2s;
+          outline: none;
         }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
-        .btn-primary { background: var(--accent); color: white; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; }
-        .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 10px 20px; border-radius: 6px; cursor: pointer; }
-        .btn-primary:hover { background: var(--accent-hover); }
+        .form-group input:focus, .form-group select:focus {
+          border-color: var(--accent);
+          background: rgba(255, 255, 255, 0.1);
+          box-shadow: 0 0 0 4px rgba(0, 204, 255, 0.1);
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .modal-actions { 
+          display: flex; 
+          justify-content: flex-end; 
+          gap: 16px; 
+          margin-top: 40px; 
+        }
+        .btn-primary { 
+          background: var(--accent); 
+          color: white; 
+          padding: 14px 28px; 
+          border-radius: 12px; 
+          font-weight: 700; 
+          cursor: pointer; 
+          border: none;
+          box-shadow: 0 8px 20px rgba(0, 204, 255, 0.3);
+          transition: all 0.2s;
+        }
+        .btn-secondary { 
+          background: rgba(255, 255, 255, 0.05); 
+          border: 1px solid rgba(255, 255, 255, 0.1); 
+          color: rgba(255, 255, 255, 0.7); 
+          padding: 14px 28px; 
+          border-radius: 12px; 
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.2s;
+        }
+        .btn-primary:hover { 
+          transform: translateY(-2px);
+          box-shadow: 0 12px 24px rgba(0, 204, 255, 0.4);
+        }
+        .btn-secondary:hover {
+          background: rgba(255, 255, 255, 0.1);
+          color: #fff;
+        }
+        .btn-primary:active { transform: translateY(0); }
 
         .viewer-layout {
           display: flex;

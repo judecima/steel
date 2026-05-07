@@ -15,6 +15,116 @@ let debugMode = false;
 let currentMode = 'estandar';
 let fullIndustrialDTO = null;
 
+function normalizeWallId(value) {
+  if (!value || typeof value !== "string") return null;
+
+  const raw = value.trim();
+  const key = raw.toLowerCase();
+
+  const aliases = {
+    wall_north: "wall_north",
+    wall_south: "wall_south",
+    wall_east: "wall_east",
+    wall_west: "wall_west",
+
+    "muro norte": "wall_north",
+    norte: "wall_north",
+    north: "wall_north",
+
+    "muro sur": "wall_south",
+    sur: "wall_south",
+    south: "wall_south",
+
+    "muro este": "wall_east",
+    este: "wall_east",
+    east: "wall_east",
+
+    "muro oeste": "wall_west",
+    oeste: "wall_west",
+    west: "wall_west",
+  };
+
+  return aliases[raw] || aliases[key] || null;
+}
+
+function normalizeWallIdFromViewerData(data) {
+  const candidates = [
+    data?.wallId,
+    data?.sourceId,
+    data?.metadata?.wallId,
+    data?.metadata?.WallId,
+    data?.metadata?.["Wall ID"],
+    data?.metadata?.["MuroId"],
+    data?.metadata?.["Muro"],
+    data?.metadata?.["ID interno de muro"],
+  ].filter(Boolean);
+
+  for (const value of candidates) {
+    const normalized = normalizeWallId(value);
+    if (normalized) return normalized;
+  }
+
+  return null;
+}
+
+function classifySceneObject(obj) {
+  const type = String(obj.type || "").toLowerCase();
+  const role = String(obj.role || obj.metadata?.role || "").toLowerCase();
+  const kind = String(obj.kind || obj.metadata?.kind || "").toLowerCase();
+  const category = String(obj.category || obj.metadata?.category || "").toLowerCase();
+
+  const isOpening =
+    type === "opening" ||
+    type === "abertura" ||
+    role === "opening" ||
+    role === "abertura";
+
+  const isInternalWall =
+    type === "internal_wall" ||
+    type === "pared_interna" ||
+    role === "internal_wall" ||
+    role === "pared_interna" ||
+    obj.metadata?.Role === 'internal_partition';
+
+  const isExternalWall =
+    (type === "muro" || type === "wall") && !isInternalWall;
+
+  const isInteriorPanel =
+    type === "panel" &&
+    (
+      role === "interior" ||
+      role === "internal" ||
+      kind === "interior" ||
+      category === "interior" ||
+      role === "internal_partition" ||
+      role === "tabique"
+    );
+
+  const isExternalPanel = type === "panel" && !isInteriorPanel;
+
+  const isFloor =
+    type === "floor" ||
+    type === "piso" ||
+    role === "floor" ||
+    role === "piso";
+
+  return {
+    isOpening,
+    isInternalWall,
+    isExternalWall,
+    isInteriorPanel,
+    isExternalPanel,
+    isFloor,
+  };
+}
+
+// Grupos de raycasting prioritizados
+const openingMeshes = [];
+const externalWallMeshes = [];
+const internalWallMeshes = [];
+const interiorPanelMeshes = [];
+const floorMeshes = [];
+
 function createSelectionLabel() {
     if (selectionLabelSprite) return;
     const canvas = document.createElement('canvas');
@@ -209,65 +319,96 @@ async function init() {
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('pointerdown', onPointerDown);
     
-    // Doble Click para insertar aberturas / muros internos (Fase 9F)
+    // Doble Click con Prioridad Industrial (Phase 9F)
     window.addEventListener('dblclick', (event) => {
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
-        
-        const visibleMeshes = objectMeshes.filter(m => {
-            let p = m;
-            while(p) {
-                if(!p.visible) return false;
-                p = p.parent;
-            }
-            return true;
-        });
 
-        const intersects = raycaster.intersectObjects(visibleMeshes, false);
-        
-        // 1. Check for hits on existing objects
-        if (intersects.length > 0) {
-            const hit = intersects[0].object;
-            const data = hit.userData;
-            const point = intersects[0].point;
-
-            if (data.type === 'abertura' || data.type === 'opening') {
-                window.parent.postMessage({
-                    type: 'VIEWER_OPENING_CLICK',
-                    openingId: data.sourceId,
-                    wallId: data.wallId,
-                    metadata: data.metadata
-                }, '*');
-                return;
-            }
-            
-            if (data.type === 'muro' || data.type === 'panel' || data.type === 'wall') {
-                window.parent.postMessage({
-                    type: 'VIEWER_WALL_CLICK',
-                    entityType: data.type,
-                    wallId: data.wallId || (data.type === 'muro' ? data.sourceId : null),
-                    panelId: data.type === 'panel' ? data.sourceId : null,
-                    point: point,
-                    metadata: data.metadata
-                }, '*');
-                return;
-            }
+        // 1. Aberturas existentes
+        const openingHit = raycaster.intersectObjects(openingMeshes, true)[0];
+        if (openingHit) {
+            const data = findUserData(openingHit.object);
+            window.parent.postMessage({
+                type: 'VIEWER_OPENING_DBLCLICK',
+                openingId: data.id || data.sourceId,
+                wallId: data.wallId,
+                metadata: data.metadata || {}
+            }, '*');
+            return;
         }
 
-        // 2. Check for hits on floor (if no mesh was hit)
-        const gridHelper = scene.getObjectByName('gridHelper');
-        if (gridHelper) {
-            const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-            const floorIntersect = new THREE.Vector3();
-            if (raycaster.ray.intersectPlane(floorPlane, floorIntersect)) {
-                window.parent.postMessage({
-                    type: 'VIEWER_FLOOR_CLICK',
-                    point: floorIntersect
-                }, '*');
+        // 2. Paredes internas existentes
+        const internalWallHit = raycaster.intersectObjects(internalWallMeshes, true)[0];
+        if (internalWallHit) {
+            const data = findUserData(internalWallHit.object);
+            window.parent.postMessage({
+                type: 'VIEWER_INTERNAL_WALL_DBLCLICK',
+                internalWallId: data.id || data.sourceId,
+                point: toPlainPoint(internalWallHit.point),
+                metadata: data.metadata || {}
+            }, '*');
+            return;
+        }
+
+        // 3. Muros externos (para insertar aberturas)
+        const wallHit = raycaster.intersectObjects(externalWallMeshes, true)[0];
+        if (wallHit) {
+            const data = findUserData(wallHit.object);
+            const wallId = normalizeWallIdFromViewerData(data);
+            if (!wallId) {
+                console.warn("[VIEWER] External wall hit without canonical wallId", data);
+                return;
             }
+            window.parent.postMessage({
+                type: 'VIEWER_EXTERNAL_WALL_DBLCLICK',
+                wallId: wallId,
+                point: toPlainPoint(wallHit.point),
+                displayWallName: data.displayWallName,
+                metadata: data.metadata || {}
+            }, '*');
+            return;
+        }
+
+        // 4. Panel interior (para crear paredes internas)
+        const interiorPanelHit = raycaster.intersectObjects(interiorPanelMeshes, true)[0];
+        if (interiorPanelHit) {
+            const data = findUserData(interiorPanelHit.object);
+            window.parent.postMessage({
+                type: 'VIEWER_INTERIOR_PANEL_DBLCLICK',
+                panelId: data.id || data.sourceId,
+                point: toPlainPoint(interiorPanelHit.point),
+                metadata: data.metadata || {}
+            }, '*');
+            return;
+        }
+
+        // 5. Piso (para crear paredes internas)
+        const floorHit = raycaster.intersectObjects(floorMeshes, true)[0];
+        if (floorHit) {
+            window.parent.postMessage({
+                type: 'VIEWER_FLOOR_DBLCLICK',
+                point: toPlainPoint(floorHit.point)
+            }, '*');
         }
     });
+
+    function findUserData(object) {
+        let current = object;
+        while (current) {
+            if (current.userData && Object.keys(current.userData).length > 0) {
+                return current.userData;
+            }
+            current = current.parent;
+        }
+        return {};
+    }
+
+    function toPlainPoint(point) {
+        if (!point) return null;
+        return { x: point.x, y: point.y, z: point.z };
+    }
 
     setupUIControls();
 
@@ -434,14 +575,22 @@ function buildSceneFromDTO() {
         // Rotation
         mesh.rotation.set(obj.rotation.x, obj.rotation.y, obj.rotation.z);
         
-        // Data
+        // Data (Phase 9F Classification)
+        const classification = classifySceneObject(obj);
+
         mesh.userData = {
             ...obj,
-            wallId: obj.metadata?.['Muro'] || obj.metadata?.['WallId'] || (obj.type === 'muro' ? obj.sourceId : null),
-            isWall: obj.type === 'muro' || obj.type === 'wall',
-            isPanel: obj.type === 'panel',
-            isOpening: obj.type === 'abertura' || obj.type === 'opening'
+            ...classification,
+            wallId: normalizeWallIdFromViewerData(obj),
+            displayWallName: obj.metadata?.["Muro"] || obj.name || obj.sourceId,
         };
+
+        // Categorizar para raycasting (Phase 9F Enhanced)
+        if (classification.isOpening) openingMeshes.push(mesh);
+        else if (classification.isInternalWall) internalWallMeshes.push(mesh);
+        else if (classification.isExternalWall || classification.isExternalPanel) externalWallMeshes.push(mesh);
+        else if (classification.isInteriorPanel) interiorPanelMeshes.push(mesh);
+        else if (classification.isFloor) floorMeshes.push(mesh);
         
         // Edges
         const edges = new THREE.LineSegments(
@@ -730,6 +879,11 @@ function clearCurrentScene() {
         if (m.parent) m.parent.remove(m);
     });
     objectMeshes.length = 0;
+    openingMeshes.length = 0;
+    externalWallMeshes.length = 0;
+    internalWallMeshes.length = 0;
+    interiorPanelMeshes.length = 0;
+    floorMeshes.length = 0;
 
     // Eliminar etiquetas
     labelObjects.forEach(l => {

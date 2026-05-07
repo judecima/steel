@@ -3,6 +3,9 @@ import { PostgresStorageAdapter } from '../../../../../../../../src/modules/prod
 import { normalizarConfiguracionParametrica } from '../../../../../lib/parametric-config';
 import { ensureActiveVersion } from '../../../../../lib/project-repair';
 import { generateId } from '../../../../../../../../src/utils/ids';
+import { EngineFacade } from '../../../../../../../../src/modules/product/engine-facade';
+import { mapUIConfigToEngineInput } from '../../../../../../../../src/modules/product/map-ui-config-to-engine-input';
+import { ensureProjectPersistenceDefaults } from '../../../../../../../../src/modules/product/storage/storage-utils';
 
 const storage = new PostgresStorageAdapter();
 
@@ -23,10 +26,39 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const body = await request.json();
+  
+  function normalizeWallId(value: string) {
+    const aliases: Record<string, string> = {
+      wall_north: "wall_north",
+      wall_south: "wall_south",
+      wall_east: "wall_east",
+      wall_west: "wall_west",
+      "Muro Norte": "wall_north",
+      "Muro Sur": "wall_south",
+      "Muro Este": "wall_east",
+      "Muro Oeste": "wall_west",
+      norte: "wall_north",
+      sur: "wall_south",
+      este: "wall_east",
+      oeste: "wall_west",
+    };
+    const raw = value?.trim?.();
+    return aliases[raw] || aliases[value] || null;
+  }
+
+  const wallId = normalizeWallId(body.wallId);
+  if (!wallId) {
+    return NextResponse.json({
+      ok: false,
+      code: "INVALID_WALL_ID",
+      message: `Muro inválido para abertura: ${body.wallId}`,
+    }, { status: 200 });
+  }
+
   const project = await storage.getProject(params.id);
   if (!project) return NextResponse.json({ error: 'Proyecto no encontrado' }, { status: 404 });
 
-  const body = await request.json();
   const { project: repaired } = ensureActiveVersion(project);
   const activeVersionIndex = repaired.historialVersiones.findIndex(v => v.id === repaired.versionActual);
   
@@ -36,7 +68,7 @@ export async function POST(
   
   const nuevaAbertura = {
     id: generateId('op'),
-    wallId: body.wallId,
+    wallId,
     tipo: body.tipo,
     ancho: parseFloat(body.ancho),
     alto: parseFloat(body.alto),
@@ -45,50 +77,42 @@ export async function POST(
     createdAt: new Date().toISOString()
   };
 
-  if (!config.aberturas) config.aberturas = [];
-  config.aberturas.push(nuevaAbertura);
-  
-  repaired.historialVersiones[activeVersionIndex].configuracion = config;
-  repaired.fechaActualizacion = new Date().toISOString();
-  
-  await storage.saveProject(repaired);
-  
-  // Auto-Regenerar (Phase 9F)
-  const input = {
-      width: config.anchoVivienda,
-      length: config.largoVivienda,
-      minHeight: config.alturaMuro,
-      roofType: config.tipoCubierta,
-      roofSlope: config.pendienteTecho,
-      openings: config.aberturas?.map((a: any) => ({
-          wallId: a.wallId,
-          type: a.tipo === 'puerta' ? 'door' : 'window',
-          width: a.ancho,
-          height: a.alto,
-          position: a.posicion,
-          sillHeight: a.antepecho
-      })),
-      internalWalls: config.murosInternos?.map((mw: any) => ({
-          id: mw.id,
-          startXmm: mw.startX * 1000,
-          startZmm: mw.startZ * 1000,
-          endXmm: mw.endX * 1000,
-          endZmm: mw.endZ * 1000,
-          heightMm: mw.height * 1000,
-          thicknessMm: mw.thickness * 1000,
-          openings: []
-      }))
-  } as any;
+  // --- ATOMIC REGENERATION CHECK ---
+  // Clonar configuración para validar sin romper persistencia si falla
+  const tempConfig = JSON.parse(JSON.stringify(config));
+  if (!tempConfig.aberturas) tempConfig.aberturas = [];
+  tempConfig.aberturas.push(nuevaAbertura);
+
+  const input = mapUIConfigToEngineInput(tempConfig);
+
+  const activeVersion = repaired.historialVersiones[activeVersionIndex];
+  console.log("[FLOW_OPENING] activeVersion", activeVersion?.id);
+  console.log("[FLOW_OPENING] configBefore", config);
+  console.log("[FLOW_OPENING] openingsBefore", config.aberturas);
+  console.log("[FLOW_OPENING] engineInput", input);
+  console.log("[FLOW_OPENING] generate:start");
 
   try {
-      const { EngineFacade } = require('../../../../../../../../src/modules/product/engine-facade');
       const result = EngineFacade.generate(input);
+      
+      repaired.historialVersiones[activeVersionIndex].configuracion = tempConfig;
       repaired.historialVersiones[activeVersionIndex].resultadoMotor = result;
-      await storage.saveProject(repaired);
+      
+      const finalProject = ensureProjectPersistenceDefaults(repaired);
+      await storage.saveProject(finalProject);
+      
       return NextResponse.json({ ok: true, opening: nuevaAbertura, renderScene: result });
   } catch (regError: any) {
-      console.warn("[ABERTURA_REG] Falló regeneración automática:", regError.message);
-      return NextResponse.json({ ok: true, opening: nuevaAbertura, warning: 'Regeneración fallida' });
+      console.error("[FLOW_OPENING] failed", {
+          message: regError instanceof Error ? regError.message : String(regError),
+          stack: regError instanceof Error ? regError.stack : undefined,
+      });
+      // NO guardamos nada en la DB
+      return NextResponse.json({ 
+          ok: false, 
+          code: 'STRUCTURAL_VALIDATION_FAILED', 
+          message: regError.message 
+      }, { status: 200 });
   }
 }
 
@@ -112,8 +136,8 @@ export async function DELETE(
         config.aberturas = config.aberturas.filter(a => a.id !== openingId);
     }
 
-    repaired.fechaActualizacion = new Date().toISOString();
-    await storage.saveProject(repaired);
+    const finalProject = ensureProjectPersistenceDefaults(repaired);
+    await storage.saveProject(finalProject);
 
     return NextResponse.json({ success: true });
 }

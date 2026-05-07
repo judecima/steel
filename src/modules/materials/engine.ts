@@ -45,10 +45,20 @@ export function calculateBOM(panels: Panel[]): BillOfMaterials {
 
     // 2. Add tracks
     // Bottom track (Solera inferior - horizontal)
+    // Recorte PGU: Si hay puertas, descontar su ancho de la solera inferior
+    let bottomTrackLength = panel.width;
+    if (panel.aberturas) {
+        panel.aberturas.forEach(op => {
+            if (op.tipo === 'puerta' || op.tipo === 'door') {
+                bottomTrackLength -= op.width;
+            }
+        });
+    }
+
     cutList.push({ 
         profileType: trackProfile, 
         thickness: defaultThickness, 
-        length: round(panel.width), 
+        length: round(Math.max(0, bottomTrackLength)), 
         quantity: 1, 
         role: 'solera_inferior',
         sourceEntityId: panel.id

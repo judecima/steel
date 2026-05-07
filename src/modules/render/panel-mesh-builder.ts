@@ -36,6 +36,7 @@ export function buildPanelMeshes(projectResult: ProjectResult): RenderObject[] {
         [LOCALIZACION_DOMINIO.metadatos.wallId]: traducirIdMuro(panel.wallId), 
         [LOCALIZACION_DOMINIO.metadatos.panelId]: traducirIdPanel(panel.id),
         [LOCALIZACION_DOMINIO.metadatos.role]: t('varios', panel.role),
+        ['role']: panel.role,
         ['ID interno de muro']: panel.wallId,
         ['ID interno de panel']: panel.id
       }

@@ -39,7 +39,8 @@ export function buildOpeningMeshes(projectResult: ProjectResult): RenderObject[]
           [LOCALIZACION_DOMINIO.metadatos.panelId]: traducirIdPanel(panel.id),
           [LOCALIZACION_DOMINIO.metadatos.wallId]: traducirIdMuro(panel.wallId),
           ['ID interno de panel']: panel.id,
-          ['ID interno de muro']: panel.wallId
+          ['ID interno de muro']: panel.wallId,
+          ['role']: 'opening'
         }
       });
     }

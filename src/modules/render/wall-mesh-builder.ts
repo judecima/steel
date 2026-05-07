@@ -32,6 +32,7 @@ export function buildWallMeshes(projectResult: ProjectResult): RenderObject[] {
         ['ID Técnico']: muro.id,
         [LOCALIZACION_DOMINIO.metadatos.role]: t('varios', muro.role),
         ['Muro']: traducirIdMuro(muro.id),
+        ['role']: muro.role,
         ['startX']: muro.start.x,
         ['startY']: muro.start.y,
         ['endX']: muro.end.x,

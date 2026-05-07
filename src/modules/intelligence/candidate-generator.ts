@@ -41,10 +41,17 @@ function createCandidate(strategy: CandidateStrategy, splits: number[]): Paneliz
 
 function resolveBalancedSplits(wallLength: number, rules: any): number[] {
   const { maxWidth, preferredWidth } = rules;
+  console.log("[FLOW_DEBUG] resolveBalancedSplits", { wallLength, preferredWidth, maxWidth });
   
+  if (!Number.isFinite(wallLength) || wallLength < 0) {
+      console.error("[FLOW_DEBUG] Invalid wallLength", { wallLength });
+      return [0];
+  }
+
   if (wallLength <= maxWidth) return [round(wallLength)];
 
   const count = Math.ceil(wallLength / preferredWidth);
+  console.log("[FLOW_DEBUG] count calculated", { count });
   const ideal = round(wallLength / count);
   const finalIdeal = ideal > maxWidth ? maxWidth : ideal;
   
@@ -117,13 +124,53 @@ function resolveMinPanelsSplits(wallLength: number, rules: any): number[] {
 }
 
 function resolveOpeningAwareSplits(wallLength: number, aberturas: Abertura[], rules: any): number[] {
-    const { maxWidth, minWidth } = rules;
-    const firstOp = aberturas[0];
-    const center = round(firstOp.position + firstOp.width / 2);
+    const { maxWidth, minWidth, openingClearance } = rules;
     
-    if (center >= minWidth && center <= maxWidth && (wallLength - center) >= minWidth) {
-        return [center, ...resolveBalancedSplits(wallLength - center, rules)];
+    // 1. Identificar Zonas Prohibidas para Juntas
+    const forbiddenZones = aberturas.map(op => ({
+        start: op.position - openingClearance,
+        end: op.position + op.width + openingClearance
+    }));
+
+    // 2. Partir de una estrategia balanceada base
+    const baseSplits = resolveBalancedSplits(wallLength, rules);
+    const finalSplits: number[] = [];
+    let currentOffset = 0;
+
+    for (let i = 0; i < baseSplits.length; i++) {
+        let jointPos = currentOffset + baseSplits[i];
+        
+        // Si no es la última junta, validar/ajustar
+        if (i < baseSplits.length - 1) {
+            const conflict = forbiddenZones.find(z => jointPos > z.start && jointPos < z.end);
+            
+            if (conflict) {
+                // Intentar mover la junta fuera de la zona prohibida
+                // Probar moviendo a la derecha
+                let nudgedPos = round(conflict.end + 0.01);
+                let newWidth = nudgedPos - currentOffset;
+
+                // Validar si el nuevo ancho es legal
+                if (newWidth >= minWidth && newWidth <= maxWidth) {
+                    jointPos = nudgedPos;
+                } else {
+                    // Probar moviendo a la izquierda
+                    nudgedPos = round(conflict.start - 0.01);
+                    newWidth = nudgedPos - currentOffset;
+                    if (newWidth >= minWidth && newWidth <= maxWidth) {
+                        jointPos = nudgedPos;
+                    }
+                }
+            }
+        } else {
+            // Última pieza, debe cerrar en wallLength
+            jointPos = wallLength;
+        }
+
+        const actualWidth = round(jointPos - currentOffset);
+        finalSplits.push(actualWidth);
+        currentOffset = jointPos;
     }
-    
-    return resolveBalancedSplits(wallLength, rules); 
+
+    return finalSplits;
 }
