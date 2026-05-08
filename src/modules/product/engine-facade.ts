@@ -78,7 +78,7 @@ export class EngineFacade {
                 sillHeightMm: op.sillHeight * 1000,
                 wallHeightMm: muro.heightStart * 1000, // Simplificación: usa heightStart
                 positionMm: op.position * 1000,
-                studSpacingMm: 400 // Valor por defecto
+                studSpacingMm: ENGINE_CONFIG.rules.studs.defaultSpacing * 1000
             });
             openingFrames.push(frame);
         }
@@ -89,7 +89,7 @@ export class EngineFacade {
     constructionResult.metadata.openingFrames = openingFrames;
 
     // 6. Materiales & BOM
-    const bom = calculateBOM(constructionResult.panels);
+    const bom = calculateBOM(constructionResult.panels, house.trusses);
 
     // 7. Ensamblaje del Resultado Final
     return {

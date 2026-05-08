@@ -20,6 +20,9 @@ export function buildRoofMeshes(projectResult: ProjectResult): { objects: Render
     return { objects, warnings };
   }
 
+  const angleRad = (roof.slope * Math.PI) / 180;
+  const deltaHeight = projectResult.input.width * Math.tan(angleRad);
+
   // Representación simplificada del volumen del techo
   let maxX = projectResult.input.width;
   let maxZ = projectResult.input.length;
@@ -36,19 +39,19 @@ export function buildRoofMeshes(projectResult: ProjectResult): { objects: Render
       if (calcMaxZ > 0) maxZ = calcMaxZ;
   }
 
-  const thickness = 0.2;
+  const thickness = 0.05; // Thinner slab
   const overhang = 0.6; // 0.3m each side
 
   objects.push({
     id: `render_roof_volume`,
     type: 'techo',
     sourceId: 'house',
-    position: { x: maxX / 2, y: projectResult.input.minHeight + thickness / 2, z: maxZ / 2 },
-    rotation: { x: 0, y: 0, z: roof.slope > 0 ? 0.1 : 0 },
-    dimensions: { x: maxX + overhang, y: thickness, z: maxZ + overhang },
+    position: { x: maxX / 2, y: projectResult.input.minHeight + thickness / 2 + deltaHeight / 2, z: maxZ / 2 },
+    rotation: { x: 0, y: 0, z: angleRad },
+    dimensions: { x: (maxX + overhang) / Math.cos(angleRad), y: thickness, z: maxZ + overhang },
     material: RENDER_CONFIG.materials.roof.id,
     layer: 'layer_techo',
-    visible: RENDER_CONFIG.layers.find(ly => ly.id === 'layer_techo')?.visibleByDefault || true,
+    visible: true,
     metadata: { 
       [LOCALIZACION_DOMINIO.metadatos.type]: t('techos', roof.type), 
       'Pendiente': roof.slope 

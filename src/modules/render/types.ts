@@ -16,6 +16,10 @@ export type RenderMaterial = {
 export type RenderObjectType = 
   | 'casa' | 'house'
   | 'muro' | 'wall'
+  | 'piso'
+  | 'cercha'
+
+
   | 'panel'
   | 'montante' | 'stud'
   | 'solera' | 'track'
@@ -50,6 +54,7 @@ export type RenderObject = {
   material: string;
   layer: string;
   visible: boolean;
+  color?: string; // Hex color code (e.g. "#FF0000") for visual distinction
   metadata: Record<string, any>;
 };
 

@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPool } from '../../../../../../../../src/modules/product/storage/db-config';
+import { exportService } from '../../../../../../../../src/application/export-service';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const pool = getPool();
   try {
-    const res = await pool.query(
-      'SELECT * FROM exportaciones WHERE proyecto_id = $1 ORDER BY fecha_creacion DESC',
-      [params.id]
-    );
-    return NextResponse.json(res.rows);
+    const exports = await exportService.getProjectExports(params.id);
+    return NextResponse.json({
+        ok: true,
+        exportaciones: exports
+    });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("[API-EXPORT-LIST] Error:", error);
+    return NextResponse.json({ 
+      ok: false, 
+      error: error.message 
+    }, { status: 500 });
   }
 }

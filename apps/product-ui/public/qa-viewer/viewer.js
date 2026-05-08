@@ -14,6 +14,8 @@ let selectionLabelSprite = null;
 let debugMode = false;
 let currentMode = 'estandar';
 let fullIndustrialDTO = null;
+let sceneBounds = { width: 0, length: 0 };
+
 
 function normalizeWallId(value) {
   if (!value || typeof value !== "string") return null;
@@ -26,23 +28,8 @@ function normalizeWallId(value) {
     wall_south: "wall_south",
     wall_east: "wall_east",
     wall_west: "wall_west",
-
-    "muro norte": "wall_north",
-    norte: "wall_north",
-    north: "wall_north",
-
-    "muro sur": "wall_south",
-    sur: "wall_south",
-    south: "wall_south",
-
-    "muro este": "wall_east",
-    este: "wall_east",
-    east: "wall_east",
-
-    "muro oeste": "wall_west",
-    oeste: "wall_west",
-    west: "wall_west",
   };
+
 
   return aliases[raw] || aliases[key] || null;
 }
@@ -51,31 +38,37 @@ function normalizeWallIdFromViewerData(data) {
   const candidates = [
     data?.wallId,
     data?.sourceId,
+    data?.id,
     data?.metadata?.wallId,
     data?.metadata?.WallId,
     data?.metadata?.["Wall ID"],
     data?.metadata?.["MuroId"],
-    data?.metadata?.["Muro"],
     data?.metadata?.["ID interno de muro"],
+    data?.metadata?.["Muro"],
   ].filter(Boolean);
 
-  for (const value of candidates) {
-    const normalized = normalizeWallId(value);
+  for (const candidate of candidates) {
+    const normalized = normalizeWallId(candidate);
     if (normalized) return normalized;
   }
 
   return null;
 }
 
+
 function classifySceneObject(obj) {
-  const type = String(obj.type || "").toLowerCase();
-  const role = String(obj.role || obj.metadata?.role || "").toLowerCase();
-  const kind = String(obj.kind || obj.metadata?.kind || "").toLowerCase();
-  const category = String(obj.category || obj.metadata?.category || "").toLowerCase();
+  const type = String(obj?.type || "").toLowerCase();
+  const role = String(obj?.role || obj?.metadata?.role || "").toLowerCase();
+  const kind = String(obj?.kind || obj?.metadata?.kind || "").toLowerCase();
+  const category = String(obj?.category || obj?.metadata?.category || "").toLowerCase();
+
+  const wallId = normalizeWallIdFromViewerData(obj);
 
   const isOpening =
     type === "opening" ||
     type === "abertura" ||
+    type === "puerta" ||
+    type === "ventana" ||
     role === "opening" ||
     role === "abertura";
 
@@ -84,23 +77,21 @@ function classifySceneObject(obj) {
     type === "pared_interna" ||
     role === "internal_wall" ||
     role === "pared_interna" ||
-    obj.metadata?.Role === 'internal_partition';
+    kind === "internal_wall" ||
+    (obj.metadata && obj.metadata.Role === 'internal_partition');
 
   const isExternalWall =
-    (type === "muro" || type === "wall") && !isInternalWall;
-
-  const isInteriorPanel =
-    type === "panel" &&
+    !!wallId &&
     (
-      role === "interior" ||
-      role === "internal" ||
-      kind === "interior" ||
-      category === "interior" ||
-      role === "internal_partition" ||
-      role === "tabique"
+      type === "muro" ||
+      type === "wall" ||
+      type === "panel" ||
+      type === "montante" ||
+      type === "solera" ||
+      role === "external_wall" ||
+      role === "muro_exterior" ||
+      kind === "external_wall"
     );
-
-  const isExternalPanel = type === "panel" && !isInteriorPanel;
 
   const isFloor =
     type === "floor" ||
@@ -112,18 +103,105 @@ function classifySceneObject(obj) {
     isOpening,
     isInternalWall,
     isExternalWall,
-    isInteriorPanel,
-    isExternalPanel,
     isFloor,
+    wallId,
   };
 }
 
-// Grupos de raycasting prioritizados
+function shouldRenderByMode(layerName, mode) {
+    const layer = String(layerName || "").toLowerCase();
+    const rawMode = String(mode || "cliente").toLowerCase();
+    
+    // Normalización: 'estandar' es el modo para el cliente final
+    const currentModeLower = (rawMode === "estandar") ? "cliente" : rawMode;
+
+    if (currentModeLower === "cliente") {
+        // [FIX] Las cerchas DEBEN ser visibles para el cliente.
+        // Lo que satura son las líneas de eje (Overlay) y el entramado interno.
+        
+        if (layer.includes("overlay") || layer.includes("axial") || layer.includes("axis")) return false;
+        if (layer.includes("centerline")) return false;
+        
+        // Entramados y montantes individuales (ruido excesivo)
+        if (layer.includes("entramado") || layer.includes("framing")) return false;
+        if (layer.includes("montante") || layer.includes("stud")) return false;
+        if (layer.includes("solera") || layer.includes("track") || layer.includes("sill")) return false;
+
+        // Marcadores técnicos
+        if (layer.includes("inspeccion") || layer.includes("inspection")) return false;
+        if (layer.includes("advertencia") || layer.includes("warning")) return false;
+        
+        return true; // Las cerchas (truss) ahora pasan este filtro
+    }
+
+
+    if (currentModeLower === "taller") {
+        // Excluir solo overlays de diagnóstico
+        if (layer.includes("overlay")) return false;
+        if (layer.includes("inspeccion") || layer.includes("inspection")) return false;
+        return true;
+    }
+
+    return true; // "ingenieria" o default
+}
+
+
+
+
+function findUserData(object) {
+  let current = object;
+
+  while (current) {
+    if (current.userData && Object.keys(current.userData).length > 0) {
+      return current.userData;
+    }
+
+    current = current.parent;
+  }
+
+  return {};
+}
+
+function toPlainPoint(point) {
+  if (!point) return null;
+  return {
+    x: point.x,
+    y: point.y,
+    z: point.z,
+  };
+}
+
 const openingMeshes = [];
 const externalWallMeshes = [];
 const internalWallMeshes = [];
 const interiorPanelMeshes = [];
 const floorMeshes = [];
+
+
+function ensureInteractiveCollections() {
+    if (!Array.isArray(objectMeshes)) throw new Error("objectMeshes not initialized");
+    if (!Array.isArray(openingMeshes)) throw new Error("openingMeshes not initialized");
+    if (!Array.isArray(externalWallMeshes)) throw new Error("externalWallMeshes not initialized");
+    if (!Array.isArray(internalWallMeshes)) throw new Error("internalWallMeshes not initialized");
+    if (!Array.isArray(interiorPanelMeshes)) throw new Error("interiorPanelMeshes not initialized");
+    if (!Array.isArray(floorMeshes)) throw new Error("floorMeshes not initialized");
+}
+
+function resetInteractiveCollections() {
+    objectMeshes.length = 0;
+    openingMeshes.length = 0;
+    externalWallMeshes.length = 0;
+    internalWallMeshes.length = 0;
+    interiorPanelMeshes.length = 0;
+    floorMeshes.length = 0;
+}
+
+function safeIntersect(collection) {
+    if (!Array.isArray(collection) || collection.length === 0) return [];
+    return raycaster.intersectObjects(collection, true);
+}
+
+
 
 function createSelectionLabel() {
     if (selectionLabelSprite) return;
@@ -210,10 +288,12 @@ async function init() {
     const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
     gridHelper.position.y = -0.01; // Slightly below zero to avoid z-fighting with tracks
     gridHelper.name = 'gridHelper';
+    gridHelper.visible = false; // Hidden by default
     scene.add(gridHelper);
 
     const axisHelper = new THREE.AxesHelper(5);
     axisHelper.name = 'axisHelper';
+    axisHelper.visible = false; // Hidden by default
     scene.add(axisHelper);
 
     // Camera
@@ -319,96 +399,103 @@ async function init() {
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('pointerdown', onPointerDown);
     
-    // Doble Click con Prioridad Industrial (Phase 9F)
-    window.addEventListener('dblclick', (event) => {
+    function handleViewerDoubleClick(event) {
+        if (!renderer || !camera || !raycaster || !mouse) return;
+        
+        ensureInteractiveCollections();
+
         const rect = renderer.domElement.getBoundingClientRect();
+
         mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
         raycaster.setFromCamera(mouse, camera);
 
-        // 1. Aberturas existentes
-        const openingHit = raycaster.intersectObjects(openingMeshes, true)[0];
+        const openingHit = safeIntersect(openingMeshes)[0];
         if (openingHit) {
             const data = findUserData(openingHit.object);
+
             window.parent.postMessage({
-                type: 'VIEWER_OPENING_DBLCLICK',
+                type: "VIEWER_OPENING_DBLCLICK",
                 openingId: data.id || data.sourceId,
                 wallId: data.wallId,
-                metadata: data.metadata || {}
-            }, '*');
+                point: toPlainPoint(openingHit.point),
+                metadata: data.metadata || {},
+            }, "*");
+
             return;
         }
 
-        // 2. Paredes internas existentes
-        const internalWallHit = raycaster.intersectObjects(internalWallMeshes, true)[0];
-        if (internalWallHit) {
-            const data = findUserData(internalWallHit.object);
+        const internalHit = safeIntersect(internalWallMeshes)[0];
+        if (internalHit) {
+            const data = findUserData(internalHit.object);
+
             window.parent.postMessage({
-                type: 'VIEWER_INTERNAL_WALL_DBLCLICK',
+                type: "VIEWER_INTERNAL_WALL_DBLCLICK",
                 internalWallId: data.id || data.sourceId,
-                point: toPlainPoint(internalWallHit.point),
-                metadata: data.metadata || {}
-            }, '*');
+                point: toPlainPoint(internalHit.point),
+                metadata: data.metadata || {},
+            }, "*");
+
             return;
         }
 
-        // 3. Muros externos (para insertar aberturas)
-        const wallHit = raycaster.intersectObjects(externalWallMeshes, true)[0];
-        if (wallHit) {
-            const data = findUserData(wallHit.object);
+        const externalHit = safeIntersect(externalWallMeshes)[0];
+        if (externalHit) {
+            const data = findUserData(externalHit.object);
             const wallId = normalizeWallIdFromViewerData(data);
+
             if (!wallId) {
-                console.warn("[VIEWER] External wall hit without canonical wallId", data);
+                console.warn("[VIEWER] external element without wallId", data);
                 return;
             }
+
             window.parent.postMessage({
-                type: 'VIEWER_EXTERNAL_WALL_DBLCLICK',
-                wallId: wallId,
-                point: toPlainPoint(wallHit.point),
+                type: "VIEWER_EXTERNAL_WALL_DBLCLICK",
+                wallId,
+                point: toPlainPoint(externalHit.point),
+                wallLocalPosition: calculateWallLocalPosition(wallId, externalHit.point),
                 displayWallName: data.displayWallName,
-                metadata: data.metadata || {}
-            }, '*');
+                metadata: data.metadata || {},
+            }, "*");
+
             return;
         }
 
-        // 4. Panel interior (para crear paredes internas)
-        const interiorPanelHit = raycaster.intersectObjects(interiorPanelMeshes, true)[0];
-        if (interiorPanelHit) {
-            const data = findUserData(interiorPanelHit.object);
-            window.parent.postMessage({
-                type: 'VIEWER_INTERIOR_PANEL_DBLCLICK',
-                panelId: data.id || data.sourceId,
-                point: toPlainPoint(interiorPanelHit.point),
-                metadata: data.metadata || {}
-            }, '*');
-            return;
-        }
-
-        // 5. Piso (para crear paredes internas)
-        const floorHit = raycaster.intersectObjects(floorMeshes, true)[0];
+        const floorHit = safeIntersect(floorMeshes)[0];
         if (floorHit) {
             window.parent.postMessage({
-                type: 'VIEWER_FLOOR_DBLCLICK',
-                point: toPlainPoint(floorHit.point)
-            }, '*');
+                type: "VIEWER_FLOOR_DBLCLICK",
+                point: toPlainPoint(floorHit.point),
+            }, "*");
         }
-    });
-
-    function findUserData(object) {
-        let current = object;
-        while (current) {
-            if (current.userData && Object.keys(current.userData).length > 0) {
-                return current.userData;
-            }
-            current = current.parent;
-        }
-        return {};
     }
 
-    function toPlainPoint(point) {
-        if (!point) return null;
-        return { x: point.x, y: point.y, z: point.z };
+
+    function calculateWallLocalPosition(wallId, point) {
+        const x = Number(point.x) || 0;
+        const z = Number(point.z) || 0;
+
+        switch (wallId) {
+            case "wall_north":
+                return Math.max(0, x);
+
+            case "wall_east":
+                return Math.max(0, z);
+
+            case "wall_south":
+                return Math.max(0, sceneBounds.length - z);
+
+            case "wall_west":
+                return Math.max(0, sceneBounds.width - x);
+
+            default:
+                return 0;
+        }
     }
+
+
+    renderer.domElement.addEventListener("dblclick", handleViewerDoubleClick);
 
     setupUIControls();
 
@@ -417,12 +504,37 @@ async function init() {
 }
 
 function buildSceneFromDTO() {
+    ensureInteractiveCollections();
     const modeData = fullIndustrialDTO.modos[currentMode] || { objects: [], labels: [], overlays: {}, metadata: {} };
+    
+    // Calcular límites de la escena para el posicionamiento local de muros
+    sceneBounds = {
+        width: Number(sceneDTO?.dimensions?.width || sceneDTO?.width || sceneDTO?.ancho || 0),
+        length: Number(sceneDTO?.dimensions?.length || sceneDTO?.length || sceneDTO?.largo || 0),
+    };
+
+    // Si los límites están en mm (frecuente en DTO), pasar a metros
+    if (sceneBounds.width > 50) sceneBounds.width /= 1000;
+    if (sceneBounds.length > 50) sceneBounds.length /= 1000;
+
+    console.log("[VIEWER_BOOT] Scene Stats:", {
+        objectMeshes: objectMeshes.length,
+        openingMeshes: openingMeshes.length,
+        externalWallMeshes: externalWallMeshes.length,
+        internalWallMeshes: internalWallMeshes.length,
+        interiorPanelMeshes: interiorPanelMeshes.length,
+        floorMeshes: floorMeshes.length,
+        sceneBounds
+    });
+
     console.log(`[QA-Viewer] Building scene for mode: ${currentMode}`, {
         base_objects: sceneDTO.objects.length,
         mode_objects: modeData.objects.length,
-        mode_labels: modeData.labels.length
+        mode_labels: modeData.labels.length,
+        sceneBounds
     });
+
+
 
     // Limpiar escena anterior si existe
     clearCurrentScene();
@@ -433,12 +545,17 @@ function buildSceneFromDTO() {
         stats[l.id] = { objects: 0, labels: 0, warnings: 0 };
     });
     
-    const allObjects = [...sceneDTO.objects, ...modeData.objects];
-    const allLabels = [...sceneDTO.labels, ...modeData.labels];
+    const allObjects = [...sceneDTO.objects, ...modeData.objects].filter(obj => shouldRenderByMode(obj.layer, currentMode));
+    const allLabels = [...sceneDTO.labels, ...modeData.labels].filter(lbl => shouldRenderByMode(lbl.layer, currentMode));
 
     allObjects.forEach(obj => { if(stats[obj.layer]) stats[obj.layer].objects++; });
     allLabels.forEach(lbl => { if(stats[lbl.layer]) stats[lbl.layer].labels++; });
-    sceneDTO.warnings.forEach(w => { if(stats[w.layer]) stats[w.layer].warnings++; });
+    
+    // Warnings solo si el modo no es cliente
+    if (currentMode !== 'cliente') {
+        sceneDTO.warnings.forEach(w => { if(stats[w.layer]) stats[w.layer].warnings++; });
+    }
+
 
     // We map DTO layers to THREE.Group
     sceneDTO.layers.forEach(layer => {
@@ -556,6 +673,8 @@ function buildSceneFromDTO() {
 
     allObjects.forEach(obj => {
         const mat = getMaterial(obj.material).clone();
+
+
         let geometry;
         let scale = new THREE.Vector3(1, 1, 1);
 
@@ -569,6 +688,10 @@ function buildSceneFromDTO() {
         const mesh = new THREE.Mesh(geometry, mat);
         mesh.scale.copy(scale);
         
+        if (obj.color) {
+            mat.color.set(obj.color);
+        }
+        
         // Position
         mesh.position.set(obj.position.x, obj.position.y, obj.position.z);
         
@@ -581,16 +704,21 @@ function buildSceneFromDTO() {
         mesh.userData = {
             ...obj,
             ...classification,
-            wallId: normalizeWallIdFromViewerData(obj),
-            displayWallName: obj.metadata?.["Muro"] || obj.name || obj.sourceId,
+            wallId: classification.wallId,
+            displayWallName: obj?.metadata?.["Muro"] || obj?.name || obj?.sourceId || obj?.id,
         };
 
         // Categorizar para raycasting (Phase 9F Enhanced)
-        if (classification.isOpening) openingMeshes.push(mesh);
-        else if (classification.isInternalWall) internalWallMeshes.push(mesh);
-        else if (classification.isExternalWall || classification.isExternalPanel) externalWallMeshes.push(mesh);
-        else if (classification.isInteriorPanel) interiorPanelMeshes.push(mesh);
-        else if (classification.isFloor) floorMeshes.push(mesh);
+        if (classification.isOpening) {
+            openingMeshes.push(mesh);
+        } else if (classification.isInternalWall) {
+            internalWallMeshes.push(mesh);
+        } else if (classification.isExternalWall) {
+            externalWallMeshes.push(mesh);
+        } else if (classification.isFloor) {
+            floorMeshes.push(mesh);
+        }
+
         
         // Edges
         const edges = new THREE.LineSegments(
@@ -878,12 +1006,8 @@ function clearCurrentScene() {
     objectMeshes.forEach(m => {
         if (m.parent) m.parent.remove(m);
     });
-    objectMeshes.length = 0;
-    openingMeshes.length = 0;
-    externalWallMeshes.length = 0;
-    internalWallMeshes.length = 0;
-    interiorPanelMeshes.length = 0;
-    floorMeshes.length = 0;
+    resetInteractiveCollections();
+
 
     // Eliminar etiquetas
     labelObjects.forEach(l => {

@@ -10,16 +10,14 @@ async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T
       'Content-Type': 'application/json',
       ...options.headers,
     },
-    cache: 'no-store', // Always fresh data for this phase
+    cache: 'no-store',
   });
 
   if (!response.ok) {
     let errorData = {};
     try {
       errorData = await response.json();
-    } catch (e) {
-      // Ignorar fallo de parseo
-    }
+    } catch (e) { }
     const error = new Error((errorData as any).error || `API Error: ${response.status}`);
     (error as any).status = response.status;
     throw error;
@@ -29,36 +27,60 @@ async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T
   return response.json();
 }
 
-/**
- * Generic API Helpers (Phase 9F)
- */
-export async function apiGet<T>(path: string): Promise<T> {
-  return apiRequest<T>(path, { method: 'GET' });
-}
-
-export async function apiPost<T>(path: string, body?: any): Promise<T> {
-  return apiRequest<T>(path, {
-    method: 'POST',
-    body: body ? JSON.stringify(body) : undefined,
+export async function apiGet<T>(url: string): Promise<T> {
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    cache: 'no-store'
   });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(data?.message || data?.code || `API Error: ${response.status}`);
+  if (data?.ok === false) throw new Error(`${data.code}: ${data.message}`);
+  return data as T;
 }
 
-export async function apiPut<T>(path: string, body?: any): Promise<T> {
-  return apiRequest<T>(path, {
-    method: 'PUT',
-    body: body ? JSON.stringify(body) : undefined,
+export async function apiPost<T>(url: string, body?: unknown): Promise<T> {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
   });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(data?.message || data?.code || `API Error: ${response.status}`);
+  if (data?.ok === false) throw new Error(`${data.code}: ${data.message}`);
+  return data as T;
 }
 
-export async function apiPatch<T>(path: string, body?: any): Promise<T> {
-  return apiRequest<T>(path, {
-    method: 'PATCH',
-    body: body ? JSON.stringify(body) : undefined,
+export async function apiPut<T>(url: string, body?: unknown): Promise<T> {
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
   });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(data?.message || data?.code || `API Error: ${response.status}`);
+  if (data?.ok === false) throw new Error(`${data.code}: ${data.message}`);
+  return data as T;
 }
 
-export async function apiDelete<T>(path: string): Promise<T> {
-  return apiRequest<T>(path, { method: 'DELETE' });
+export async function apiPatch<T>(url: string, body?: unknown): Promise<T> {
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(data?.message || data?.code || `API Error: ${response.status}`);
+  if (data?.ok === false) throw new Error(`${data.code}: ${data.message}`);
+  return data as T;
+}
+
+export async function apiDelete<T>(url: string): Promise<T> {
+  const response = await fetch(url, { method: "DELETE" });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(data?.message || data?.code || `API Error: ${response.status}`);
+  if (data?.ok === false) throw new Error(`${data.code}: ${data.message}`);
+  return data as T;
 }
 
 export const ApiClient = {
@@ -68,53 +90,25 @@ export const ApiClient = {
   patch: apiPatch,
   delete: apiDelete,
 
-  async getHealth(): Promise<ApiHealth> {
-    return apiRequest<ApiHealth>('/health');
-  },
-
-  async getProjects(): Promise<Project[]> {
-    return apiRequest<Project[]>('/proyectos');
-  },
-
-  async getProject(id: string): Promise<Project> {
-    return apiRequest<Project>(`/proyectos/${id}`);
-  },
-
+  async getHealth(): Promise<ApiHealth> { return apiRequest<ApiHealth>('/health'); },
+  async getProjects(): Promise<Project[]> { return apiRequest<Project[]>('/proyectos'); },
+  async getProject(id: string): Promise<Project> { return apiRequest<Project>(`/proyectos/${id}`); },
   async createProject(payload: Partial<Project>): Promise<Project> {
-    return apiRequest<Project>('/proyectos', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+    return apiRequest<Project>('/proyectos', { method: 'POST', body: JSON.stringify(payload) });
   },
-
   async updateProject(id: string, payload: Partial<Project>): Promise<Project> {
-    return apiRequest<Project>(`/proyectos/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    });
+    return apiRequest<Project>(`/proyectos/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
   },
-
   async createVersion(projectId: string, payload: any): Promise<any> {
-    return apiRequest<any>(`/proyectos/${projectId}/versiones`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+    return apiRequest<any>(`/proyectos/${projectId}/versiones`, { method: 'POST', body: JSON.stringify(payload) });
   },
-
   async exportPlanos(projectId: string): Promise<any> {
-    return apiRequest<any>(`/proyectos/${projectId}/planos/exportar`, {
-      method: 'POST',
-    });
+    return apiRequest<any>(`/proyectos/${projectId}/planos/exportar`, { method: 'POST' });
   },
-
   async regenerarProyecto(projectId: string): Promise<any> {
-    return apiRequest<any>(`/proyectos/${projectId}/regenerar`, {
-      method: 'POST',
-    });
+    return apiRequest<any>(`/proyectos/${projectId}/regenerar`, { method: 'POST' });
   },
-
   async getIndustrialExports(projectId: string): Promise<any> {
-    // Note: For 9D, these are the standard secure download paths
     return {
       bom: '/api/exports/BOM.csv',
       cutlist: '/api/exports/CUTLIST.csv',
@@ -124,51 +118,21 @@ export const ApiClient = {
       package: '/api/exports/planos-package.json'
     };
   },
-
-  async getProduction(projectId: string): Promise<any> {
-    return apiRequest<any>(`/proyectos/${projectId}/produccion`);
-  },
-
+  async getProduction(projectId: string): Promise<any> { return apiRequest<any>(`/proyectos/${projectId}/produccion`); },
   async updateProduction(projectId: string, payload: any): Promise<any> {
-    return apiRequest<any>(`/proyectos/${projectId}/produccion`, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    });
+    return apiRequest<any>(`/proyectos/${projectId}/produccion`, { method: 'PUT', body: JSON.stringify(payload) });
   },
-
-  async getCatalog(): Promise<any[]> {
-    return apiRequest<any[]>('/costos/catalogo');
-  },
-
+  async getCatalog(): Promise<any[]> { return apiRequest<any[]>('/costos/catalogo'); },
   async updateCatalog(payload: any[]): Promise<any> {
-    return apiRequest<any>('/costos/catalogo', {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    });
+    return apiRequest<any>('/costos/catalogo', { method: 'PUT', body: JSON.stringify(payload) });
   },
-
-  async getBudget(projectId: string): Promise<any> {
-    return apiRequest<any>(`/proyectos/${projectId}/presupuesto`);
-  },
-
+  async getBudget(projectId: string): Promise<any> { return apiRequest<any>(`/proyectos/${projectId}/presupuesto`); },
   async saveBudget(projectId: string, payload: any): Promise<any> {
-    return apiRequest<any>(`/proyectos/${projectId}/presupuesto`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+    return apiRequest<any>(`/proyectos/${projectId}/presupuesto`, { method: 'POST', body: JSON.stringify(payload) });
   },
-
-  async getExportHistory(projectId: string): Promise<any[]> {
-    return apiRequest<any[]>(`/proyectos/${projectId}/exportaciones`);
-  },
-
+  async getExportHistory(projectId: string): Promise<any[]> { return apiRequest<any[]>(`/proyectos/${projectId}/exportaciones`); },
   async generateAllExports(projectId: string): Promise<any> {
-    return apiRequest<any>(`/proyectos/${projectId}/exportaciones/generar`, {
-      method: 'POST',
-    });
+    return apiRequest<any>(`/proyectos/${projectId}/exportaciones/generar`, { method: 'POST' });
   },
-
-  async getFilesStatus(projectId: string): Promise<any> {
-    return apiRequest<any>(`/exports?projectId=${projectId}`);
-  }
+  async getFilesStatus(projectId: string): Promise<any> { return apiRequest<any>(`/exports?projectId=${projectId}`); }
 };

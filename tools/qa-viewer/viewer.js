@@ -100,11 +100,14 @@ async function init() {
     const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
     gridHelper.position.y = -0.01; // Slightly below zero to avoid z-fighting with tracks
     gridHelper.name = 'gridHelper';
+    gridHelper.visible = false;
     scene.add(gridHelper);
 
     const axisHelper = new THREE.AxesHelper(5);
     axisHelper.name = 'axisHelper';
+    axisHelper.visible = false;
     scene.add(axisHelper);
+
 
     // Camera
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);

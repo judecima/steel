@@ -13,9 +13,12 @@ export function buildPanelMeshes(projectResult: ProjectResult): RenderObject[] {
     if (!muro) continue;
 
     const tPanel = getWallTransform(muro, projectResult.house);
-    
     const w = panel.width;
     const hAvg = (panel.heightStart + panel.heightEnd) / 2;
+
+    const colors = ['#32CD32', '#FFD700', '#FF69B4', '#00CED1', '#FFA500', '#9370DB'];
+    const panelColor = colors[panel.id.length % colors.length];
+
     const pos = applyTransform(panel.offset + w / 2, hAvg / 2, 0, tPanel);
     
     objects.push({
@@ -30,6 +33,7 @@ export function buildPanelMeshes(projectResult: ProjectResult): RenderObject[] {
       material: RENDER_CONFIG.materials.panel_volume.id,
       layer: 'layer_paneles',
       visible: RENDER_CONFIG.layers.find(l => l.id === 'layer_paneles')?.visibleByDefault || false,
+      color: panelColor,
       metadata: { 
         ['Etiqueta']: crearEtiquetaPanel(panel.id),
         ['ID Técnico']: panel.id,

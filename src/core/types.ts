@@ -232,6 +232,25 @@ export type HouseModel = {
   muros: Muro[]; // Renamed from walls
   murosInternos?: InternalWall[];
   roof: RoofMetadata;
+  trusses?: Truss[];
+};
+
+export type Truss = {
+  id: string;
+  positionZ: number; // position along length
+  span: number; // width of house
+  heightStart: number;
+  heightEnd: number;
+  profiles: TrussProfile[];
+};
+
+export type TrussProfile = {
+  id: string;
+  type: 'bottom_chord' | 'top_chord' | 'vertical_web' | 'diagonal_web';
+  length: number;
+  profileType: string;
+  start: { x: number; y: number }; // Relative to truss bottom-left
+  end: { x: number; y: number };
 };
 
 export type RoofMetadata = {

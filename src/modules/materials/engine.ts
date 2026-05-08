@@ -15,14 +15,18 @@ const ROLE_TRANSLATIONS: Record<string, string> = {
     'solera_inferior': 'Solera inferior',
     'solera_superior': 'Solera superior',
     'provisional_boxed_header': 'Dintel (Boxed)',
-    'track': 'Solera'
+    'track': 'Solera',
+    'cercha_bottom_chord': 'Cercha - Cordón inferior',
+    'cercha_top_chord': 'Cercha - Cordón superior',
+    'cercha_vertical_web': 'Cercha - Montante',
+    'cercha_diagonal_web': 'Cercha - Diagonal'
 };
 
 function translateRole(role: string): string {
     return ROLE_TRANSLATIONS[role] || role;
 }
 
-export function calculateBOM(panels: Panel[]): BillOfMaterials {
+export function calculateBOM(panels: Panel[], trusses: import('../../core/types').Truss[] = []): BillOfMaterials {
   const cutList: BOMItem[] = [];
   const trackProfile = getDefaultTrack();
   const studProfile = getDefaultProfile();
@@ -93,6 +97,20 @@ export function calculateBOM(panels: Panel[]): BillOfMaterials {
           }
       });
     }
+  });
+
+  // 4. Add Trusses
+  trusses.forEach(truss => {
+      truss.profiles.forEach(profile => {
+          cutList.push({
+              profileType: profile.profileType,
+              thickness: defaultThickness,
+              length: round(profile.length),
+              quantity: 1,
+              role: `cercha_${profile.type}`,
+              sourceEntityId: truss.id
+          });
+      });
   });
 
   // Aggregation

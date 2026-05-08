@@ -2,6 +2,7 @@ import { HouseInput, Muro, WallRole, HouseModel } from '../../core/types';
 import { generateId } from '../../utils/ids';
 import { logger } from '../../utils/logger';
 import { resolveRoofMetadata } from '../roof/engine';
+import { generateTrusses } from '../roof/truss-generator';
 
 export function generateGeometry(input: HouseInput): HouseModel {
   logger.log('HOUSE_GENERATION_STARTED', 'system', 'Generando geometría inicial de la casa');
@@ -15,17 +16,17 @@ export function generateGeometry(input: HouseInput): HouseModel {
 
   const muros: Muro[] = [];
 
-  // Muro 1: Norte (Ancho) - TRAMO PENDIENTE
-  muros.push(createWall('wall_north', input.width, roof.lowSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: 0}, {x: input.width, y: 0}));
+  // Muro 1: Norte (Ancho) - ALTURA UNIFORME
+  muros.push(createWall('wall_north', input.width, input.minHeight, input.minHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: 0}, {x: input.width, y: 0}));
   
-  // Muro 2: Este (Largo) - LADO ALTO
-  muros.push(createWall('wall_east', input.length, roof.highSideHeight, roof.highSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: 0}, {x: input.width, y: input.length}));
+  // Muro 2: Este (Largo) - ALTURA UNIFORME
+  muros.push(createWall('wall_east', input.length, input.minHeight, input.minHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: 0}, {x: input.width, y: input.length}));
   
-  // Muro 3: Sur (Ancho) - TRAMO PENDIENTE (Retorno)
-  muros.push(createWall('wall_south', input.width, roof.highSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: input.length}, {x: 0, y: input.length}));
+  // Muro 3: Sur (Ancho) - ALTURA UNIFORME
+  muros.push(createWall('wall_south', input.width, input.minHeight, input.minHeight, WallRole.EXTERNAL_LOADBEARING, {x: input.width, y: input.length}, {x: 0, y: input.length}));
   
-  // Muro 4: Oeste (Largo) - LADO BAJO
-  muros.push(createWall('wall_west', input.length, roof.lowSideHeight, roof.lowSideHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: input.length}, {x: 0, y: 0}));
+  // Muro 4: Oeste (Largo) - ALTURA UNIFORME
+  muros.push(createWall('wall_west', input.length, input.minHeight, input.minHeight, WallRole.EXTERNAL_LOADBEARING, {x: 0, y: input.length}, {x: 0, y: 0}));
 
   // Mapear aberturas a los muros
   if (input.openings) {
@@ -44,11 +45,17 @@ export function generateGeometry(input: HouseInput): HouseModel {
     });
   }
 
-  logger.log('HOUSE_GENERATED', 'house', 'Geometría de fundación completa', { wallCount: muros.length });
+  const trusses = generateTrusses(input);
+
+  logger.log('HOUSE_GENERATED', 'house', 'Geometría de fundación y cerchas completa', { 
+    wallCount: muros.length,
+    trussCount: trusses.length 
+  });
 
   return {
     muros,
-    roof
+    roof,
+    trusses
   };
 }
 

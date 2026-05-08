@@ -151,4 +151,23 @@ export class PostgresStorageAdapter implements ProjectStorage {
 
         return { estadoGlobal: avancePorcentaje === 100 ? 'cerrado' : avancePorcentaje > 0 ? 'en_fabricacion' : 'pendiente', avancePorcentaje, estadosPorPanel, estadosPorMuro };
     }
+
+    async logExport(proyectoId: string, tipo: string, ruta: string, metadata: any): Promise<void> {
+        const pool = getPool();
+        await pool.query(
+            `INSERT INTO exportaciones (proyecto_id, tipo, ruta_archivo, metadata_json, fecha_creacion)
+             VALUES ($1, $2, $3, $4, NOW())`,
+            [proyectoId, tipo, ruta, JSON.stringify(metadata)]
+        );
+    }
+
+    async getExports(proyectoId: string): Promise<any[]> {
+        const pool = getPool();
+        const r = await pool.query(
+            `SELECT * FROM exportaciones WHERE proyecto_id = $1 ORDER BY fecha_creacion DESC`,
+            [proyectoId]
+        );
+        return r.rows;
+    }
 }
+

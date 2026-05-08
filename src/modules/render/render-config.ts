@@ -11,14 +11,17 @@ export const RENDER_CONFIG = {
     { id: 'layer_estructura', name: 'Entramado', visibleByDefault: true, description: 'Montantes y soleras' },
     { id: 'layer_aberturas', name: 'Aberturas', visibleByDefault: true, description: 'Vacios transparentes de puertas y ventanas' },
     { id: 'layer_dinteles', name: 'Dinteles', visibleByDefault: true, description: 'Marcadores de dinteles sobre aberturas' },
-    { id: 'layer_techo', name: 'Techo', visibleByDefault: true, description: 'Geometria del techo' },
+    { id: 'layer_cerchas', name: 'Cerchas', visibleByDefault: true, description: 'Estructura de cerchas de techo' },
+    { id: 'layer_techo', name: 'Techo', visibleByDefault: true, description: 'Geometría del techo' },
     { id: 'layer_anclajes', name: 'Anclajes', visibleByDefault: true, description: 'Marcadores de anclajes de fundacion' },
     { id: 'layer_etiquetas', name: 'Etiquetas', visibleByDefault: true, description: 'Textos y etiquetas' },
     { id: 'layer_advertencias', name: 'Advertencias', visibleByDefault: true, description: 'Advertencias estructurales' },
     { id: 'layer_panel_joints', name: 'Juntas de Paneles', visibleByDefault: true, description: 'Líneas divisorias entre paneles' },
     { id: 'layer_estructural_overlays', name: 'Overlays Estructurales', visibleByDefault: true, description: 'Indicadores de estado structural' },
     { id: 'layer_shop_labels', name: 'Etiquetas de Taller', visibleByDefault: true, description: 'IDs de piezas y longitudes' },
-    { id: 'layer_inspeccion', name: 'Capa de Inspección', visibleByDefault: true, description: 'Bounding boxes y diagnósticos' }
+    { id: 'layer_inspeccion', name: 'Capa de Inspección', visibleByDefault: true, description: 'Bounding boxes y diagnósticos' },
+    { id: 'layer_floor_interaction', name: 'Interacción Piso', visibleByDefault: true, description: 'Plano para detección de clics en el suelo' }
+
   ] as RenderLayer[],
 
   materials: {
@@ -41,7 +44,9 @@ export const RENDER_CONFIG = {
     mat_struct_preliminary_fail: { id: 'mat_struct_fail', name: 'Fallo Preliminar', color: '#e74c3c', opacity: 0.9, metalness: 0.5, roughness: 0.5 },
     mat_struct_insufficient_data: { id: 'mat_struct_none', name: 'Datos Insuficientes', color: '#808080', opacity: 0.9, metalness: 0.5, roughness: 0.5 },
     mat_external_beam_warning: { id: 'mat_ext_beam', name: 'Viga Externa', color: '#8e44ad', opacity: 0.7, metalness: 0.5, roughness: 0.5 },
-    mat_inspection_bbox: { id: 'mat_inspect_bbox', name: 'Caja Inspección', color: '#ffffff', opacity: 0.1, metalness: 0, roughness: 1 }
+    mat_inspection_bbox: { id: 'mat_inspect_bbox', name: 'Caja Inspección', color: '#ffffff', opacity: 0.1, metalness: 0, roughness: 1 },
+    mat_floor_interaction: { id: 'mat_floor_interaction', name: 'Interacción Piso', color: '#94a3b8', opacity: 0.08, metalness: 0, roughness: 1 }
+
   } as Record<string, RenderMaterial>,
 
   camera: {

@@ -76,21 +76,41 @@ function resolveGreedySplits(wallLength: number, direction: 'left' | 'right', ru
   
   while (remaining > 0) {
     if (remaining <= preferredWidth) {
+      // Si el sobrante es muy pequeño (ej: 1m) y sumado al anterior no supera el max (4m)
+      if (remaining < minWidth && splits.length > 0) {
+          const last = splits.pop()!;
+          const total = round(last + remaining);
+          if (total <= maxWidth) {
+              splits.push(total);
+              remaining = 0;
+              continue;
+          } else {
+              // Si supera el max, repartir equitativamente
+              splits.push(round(total / 2));
+              splits.push(round(total / 2));
+              remaining = 0;
+              continue;
+          }
+      }
       splits.push(round(remaining));
       remaining = 0;
     } else {
       splits.push(preferredWidth);
       remaining = round(remaining - preferredWidth);
+      
+      // Lógica de "sobrante de un metro": si queda < minWidth (2m), intentar absorberlo
       if (remaining < minWidth && remaining > 0) {
           const last = splits.pop()!;
           const total = round(last + remaining);
           if (total <= maxWidth) {
               splits.push(total);
+              remaining = 0;
           } else {
+              // Repartir en dos paneles legales (> 2m)
               splits.push(round(total / 2));
               splits.push(round(total / 2));
+              remaining = 0;
           }
-          remaining = 0;
       }
     }
   }

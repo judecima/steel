@@ -21,6 +21,9 @@ import { buildPanelCutLabels } from './panel-cutlist-builder';
 import { buildSequenceScene } from './sequence-builder';
 import { buildInspectionOverlays } from './inspection-overlay-builder';
 import { buildJointMeshes } from './joint-mesh-builder';
+import { buildTrussMeshes } from './truss-mesh-builder';
+
+import { buildFloorMesh } from './floor-mesh-builder';
 
 export class SceneBuilder {
   /**
@@ -40,14 +43,17 @@ export class SceneBuilder {
     const objects = [
       ...foundationData.objects,
       ...anchorData.objects,
+      buildFloorMesh({ width: projectResult.input.width, length: projectResult.input.length }),
       ...buildWallMeshes(projectResult),
       ...buildPanelMeshes(projectResult),
       ...buildStudMeshes(projectResult),
       ...buildOpeningMeshes(projectResult),
       ...buildHeaderMeshes(projectResult),
       ...buildJointMeshes(projectResult),
+      ...buildTrussMeshes(projectResult),
       ...buildRoofMeshes(projectResult).objects
     ];
+
 
     const warnings = [
       ...foundationData.warnings,

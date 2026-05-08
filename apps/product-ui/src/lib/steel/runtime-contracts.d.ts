@@ -1,0 +1,10 @@
+export type CanonicalWallId = "wall_north" | "wall_south" | "wall_east" | "wall_west";
+export declare const CANONICAL_WALL_IDS: CanonicalWallId[];
+export declare function isCanonicalWallId(value: unknown): value is CanonicalWallId;
+export declare function normalizeWallId(value: unknown): CanonicalWallId | null;
+export declare function assertCanonicalWallId(value: unknown): asserts value is CanonicalWallId;
+export declare function toFiniteNumber(value: unknown, fieldName: string): number;
+export declare function normalizeCoordToMeters(value: unknown, fieldName: string): number;
+export declare function ensureProjectPersistenceDefaults<T extends Record<string, any>>(project: T): T;
+export declare function safeErrorMessage(error: unknown): string;
+export declare function safeErrorStack(error: unknown): string | undefined;

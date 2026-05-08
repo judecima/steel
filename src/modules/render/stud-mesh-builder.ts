@@ -12,6 +12,9 @@ export function buildStudMeshes(projectResult: ProjectResult): RenderObject[] {
     const muro = projectResult.house.muros.find(w => w.id === panel.wallId);
     if (!muro) continue;
     const tWall = getWallTransform(muro, projectResult.house);
+    
+    const colors = ['#32CD32', '#FFD700', '#FF69B4', '#00CED1', '#FFA500', '#9370DB'];
+    const panelColor = colors[panel.id.length % colors.length];
 
     for (const stud of panel.studs) {
       let materialId = RENDER_CONFIG.materials.stud_common.id;
@@ -34,7 +37,8 @@ export function buildStudMeshes(projectResult: ProjectResult): RenderObject[] {
           dimensions: { x: stud.height, y: 0.04, z: RENDER_CONFIG.depth },
           material: materialId,
           layer: 'layer_estructura',
-          visible: RENDER_CONFIG.layers.find(l => l.id === 'layer_estructura')?.visibleByDefault || true,
+          visible: true,
+          color: panelColor,
           metadata: { 
             ['Etiqueta']: crearEtiquetaMontante(stud.role),
             ['ID Técnico']: stud.id,
@@ -57,7 +61,8 @@ export function buildStudMeshes(projectResult: ProjectResult): RenderObject[] {
           dimensions: { x: 0.04, y: stud.height, z: RENDER_CONFIG.depth },
           material: materialId,
           layer: 'layer_estructura',
-          visible: RENDER_CONFIG.layers.find(l => l.id === 'layer_estructura')?.visibleByDefault || true,
+          visible: true,
+          color: panelColor,
           metadata: { 
             ['Etiqueta']: crearEtiquetaMontante(stud.role),
             ['ID Técnico']: stud.id,
@@ -84,7 +89,8 @@ export function buildStudMeshes(projectResult: ProjectResult): RenderObject[] {
       dimensions: { x: trackWidth, y: 0.04, z: RENDER_CONFIG.depth },
       material: RENDER_CONFIG.materials.track.id,
       layer: 'layer_estructura',
-      visible: RENDER_CONFIG.layers.find(l => l.id === 'layer_estructura')?.visibleByDefault || true,
+      visible: true,
+      color: panelColor,
       metadata: { 
         ['Etiqueta']: 'Solera Inferior',
         ['ID Técnico']: `track_bottom_${panel.id}`,
@@ -105,7 +111,8 @@ export function buildStudMeshes(projectResult: ProjectResult): RenderObject[] {
       dimensions: { x: trackWidth, y: 0.04, z: RENDER_CONFIG.depth },
       material: RENDER_CONFIG.materials.track.id,
       layer: 'layer_estructura',
-      visible: RENDER_CONFIG.layers.find(l => l.id === 'layer_estructura')?.visibleByDefault || true,
+      visible: true,
+      color: panelColor,
       metadata: { 
         ['Etiqueta']: 'Solera Superior',
         ['ID Técnico']: `track_top_${panel.id}`,

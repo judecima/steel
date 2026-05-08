@@ -17,19 +17,17 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
   const [error, setError] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const timeoutRef = useRef<any>(null);
-  const [showOpeningModal, setShowOpeningModal] = useState(false);
-  const [openingDraft, setOpeningDraft] = useState<any>(null);
-  const [newOpening, setNewOpening] = useState({
-    tipo: 'ventana',
-    ancho: 1.2,
-    alto: 1.0,
-    antepecho: 0.9,
-    posicion: 0
-  });
+  type ViewerPoint = {
+    x: number;
+    y: number;
+    z: number;
+  };
 
-  const [showInternalWallModal, setShowInternalWallModal] = useState(false);
+  const [openingModalOpen, setOpeningModalOpen] = useState(false);
+  const [internalWallModalOpen, setInternalWallModalOpen] = useState(false);
+  const [openingDraft, setOpeningDraft] = useState<any>(null);
   const [internalWallDraft, setInternalWallDraft] = useState<any>(null);
-  
+
   const [showOpeningEditModal, setShowOpeningEditModal] = useState(false);
   const [openingEditDraft, setOpeningEditDraft] = useState<any>(null);
 
@@ -81,125 +79,160 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
   };
 
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      const { type, data } = event.data;
-      
-      switch (event.data?.type) {
+    function handleViewerMessage(event: MessageEvent) {
+      const data = event.data;
+
+      if (!data || typeof data.type !== "string") return;
+
+      console.log("[VIEWER_PAGE] message", data);
+
+      switch (data.type) {
         case "VIEWER_EXTERNAL_WALL_DBLCLICK":
-          // Calcular posición relativa si es posible
           setOpeningDraft({
-            wallId: event.data.wallId,
-            point: event.data.point,
-            displayWallName: event.data.displayWallName,
-            metadata: event.data.metadata
+            wallId: data.wallId,
+            point: data.point,
+            wallLocalPosition: data.wallLocalPosition,
+            displayWallName: data.displayWallName,
+            tipo: "ventana",
+            ancho: 1.2,
+            alto: 1.2,
+            antepecho: 0.9,
           });
-          
-          // Tanteo de posición relativa
-          const meta = event.data.metadata;
-          if (meta && meta.startX !== undefined) {
-              const dx = meta.endX - meta.startX;
-              const dy = meta.endZ - meta.startZ;
-              const len = Math.sqrt(dx*dx + dy*dy);
-              const dpx = event.data.point.x - meta.startX;
-              const dpy = event.data.point.z - meta.startZ;
-              let posRel = (dpx * dx + dpy * dy) / len;
-              if (posRel < 0) posRel = 0;
-              if (posRel > len) posRel = len;
-              setNewOpening(prev => ({ ...prev, posicion: Math.round(posRel * 100) / 100 }));
-          }
-          
-          setShowOpeningModal(true);
+          setOpeningModalOpen(true);
           break;
 
-        case "VIEWER_INTERIOR_PANEL_DBLCLICK":
         case "VIEWER_FLOOR_DBLCLICK":
           setInternalWallDraft({
-            startX: Math.round(event.data.point.x * 10) / 10,
-            startZ: Math.round(event.data.point.z * 10) / 10,
-            endX: Math.round((event.data.point.x + 3) * 10) / 10,
-            endZ: Math.round(event.data.point.z * 10) / 10,
-            height: project?.historialVersiones?.[0]?.configuracion?.alturaMuro || 2.6,
-            thickness: 0.1
+            startPoint: data.point,
+            length: 2.4,
+            orientation: "x",
+            height: project?.configuracion?.alturaMuro ?? 2.6,
+            thickness: 0.1,
           });
-          setShowInternalWallModal(true);
-          break;
-
-        case "VIEWER_INTERNAL_WALL_DBLCLICK":
-          setInternalWallActionDraft({
-            internalWallId: event.data.internalWallId,
-            point: event.data.point,
-          });
-          setShowInternalWallActionModal(true);
+          setInternalWallModalOpen(true);
           break;
 
         case "VIEWER_OPENING_DBLCLICK":
           setOpeningEditDraft({
-            openingId: event.data.openingId,
-            wallId: event.data.wallId,
-            metadata: event.data.metadata
+            openingId: data.openingId,
+            wallId: data.wallId,
+            metadata: data.metadata || {}
           });
           setShowOpeningEditModal(true);
           break;
+
+        case "VIEWER_INTERNAL_WALL_DBLCLICK":
+          setInternalWallActionDraft({
+            internalWallId: data.internalWallId,
+            point: data.point,
+          });
+          setShowInternalWallActionModal(true);
+          break;
+
+        default:
+          return;
       }
-    };
 
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
+    }
 
-  const handleSaveOpening = async () => {
+    window.addEventListener("message", handleViewerMessage);
+    return () => window.removeEventListener("message", handleViewerMessage);
+  }, [project]);
+
+  async function saveOpening() {
+    if (!openingDraft) return;
+
     try {
       setStatus('loading');
-      const canonicalWallId = normalizeWallId(openingDraft.wallId);
-      
-      if (!canonicalWallId || !["wall_north", "wall_south", "wall_east", "wall_west"].includes(canonicalWallId)) {
-        throw new Error(`Identificador de muro no reconocido: ${openingDraft.wallId}`);
+      const payload = {
+        wallId: openingDraft.wallId,
+        tipo: openingDraft.tipo,
+        ancho: Number(openingDraft.ancho),
+        alto: Number(openingDraft.alto),
+        antepecho: openingDraft.tipo === "puerta" ? 0 : Number(openingDraft.antepecho),
+        posicion: calculateOpeningPosition(openingDraft),
+      };
+
+      const response = await apiPost<any>(`/api/proyectos/${id}/aberturas`, payload);
+
+      if (response?.ok === false) {
+        throw new Error(`${response.code}: ${response.message}`);
       }
 
-      const res: any = await apiPost(`/proyectos/${id}/aberturas`, {
-        ...newOpening,
-        wallId: canonicalWallId
-      });
-      setShowOpeningModal(false);
-      
-      if (res.renderScene) {
-          const updated = await ApiClient.getProject(id);
-          setProject(updated);
-          reloadIframe();
-      } else {
-          alert('Abertura guardada. Debe regenerar el proyecto para ver los cambios estructurales.');
-      }
-      
+      setOpeningModalOpen(false);
+      setOpeningDraft(null);
+      await reloadProjectAndViewer();
       setStatus('ready');
     } catch (e: any) {
       alert('Error al guardar: ' + e.message);
       setStatus('ready');
     }
-  };
+  }
 
-  const handleSaveInternalWall = async () => {
+  async function saveInternalWall() {
+    if (!internalWallDraft?.startPoint) return;
+
     try {
       setStatus('loading');
-      const res: any = await apiPost(`/proyectos/${id}/internal-walls`, internalWallDraft);
-      setShowInternalWallModal(false);
-      
-      if (res.renderScene) {
-          // La API ya regeneró la escena
-          const updated = await ApiClient.getProject(id);
-          setProject(updated);
-          reloadIframe();
+      const start = internalWallDraft.startPoint as ViewerPoint;
+      const length = Number(internalWallDraft.length ?? 2.4);
+      const orientation = internalWallDraft.orientation ?? "x";
+
+      const endX = orientation === "x" ? start.x + length : start.x;
+      const endZ = orientation === "z" ? start.z + length : start.z;
+
+      const payload = {
+        startX: start.x,
+        startZ: start.z,
+        endX,
+        endZ,
+        height: Number(internalWallDraft.height ?? 2.6),
+        thickness: Number(internalWallDraft.thickness ?? 0.1),
+      };
+
+      const response = await apiPost<any>(`/api/proyectos/${id}/internal-walls`, payload);
+
+      if (response?.ok === false) {
+        throw new Error(`${response.code}: ${response.message}`);
       }
-      
+
+      setInternalWallModalOpen(false);
+      setInternalWallDraft(null);
+      await reloadProjectAndViewer();
       setStatus('ready');
     } catch (e: any) {
       alert('Error al guardar muro: ' + e.message);
       setStatus('ready');
     }
-  };
+  }
 
-  const handleModeChange = (newMode: string) => {
-    setMode(newMode);
-  };
+  async function reloadProjectAndViewer() {
+    const updated = await ApiClient.getProject(id);
+    setProject(updated);
+    reloadIframe();
+  }
+
+  function calculateOpeningPosition(draft: any): number {
+    const local = Number(draft?.wallLocalPosition);
+
+    if (Number.isFinite(local)) {
+      return Math.max(0.3, local);
+    }
+
+    const point = draft?.point;
+    if (!point) return 1;
+
+    if (draft.wallId === "wall_north" || draft.wallId === "wall_south") {
+      return Math.max(0.3, Math.abs(Number(point.x) || 1));
+    }
+
+    if (draft.wallId === "wall_east" || draft.wallId === "wall_west") {
+      return Math.max(0.3, Math.abs(Number(point.z) || 1));
+    }
+
+    return 1;
+  }
+
 
   const reloadIframe = () => {
     if (iframeRef.current) {
@@ -231,7 +264,7 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
             <p>{project.nombre} — Modo {mode.toUpperCase()}</p>
           </div>
           <div className="header-actions">
-            <ModeTabs activeMode={mode} onModeChange={handleModeChange} />
+            <ModeTabs activeMode={mode} onModeChange={setMode} />
             <button onClick={reloadIframe} className="btn-icon" title="Recargar">
               <RefreshCw size={18} />
             </button>
@@ -266,7 +299,7 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
           )}
         </div>
 
-        {showOpeningModal && (
+        {openingModalOpen && (
           <div className="modal-overlay">
             <div className="modal-content">
               <h3>Insertar Abertura</h3>
@@ -275,8 +308,8 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
               <div className="form-group">
                 <label>Tipo</label>
                 <select 
-                  value={newOpening.tipo} 
-                  onChange={e => setNewOpening({...newOpening, tipo: e.target.value as any, antepecho: e.target.value === 'puerta' ? 0 : 0.9})}
+                  value={openingDraft.tipo} 
+                  onChange={e => setOpeningDraft({...openingDraft, tipo: e.target.value as any, antepecho: e.target.value === 'puerta' ? 0 : 0.9})}
                 >
                   <option value="ventana">Ventana</option>
                   <option value="puerta">Puerta</option>
@@ -286,72 +319,66 @@ export default function ViewerPage({ params }: { params: { id: string } }) {
               <div className="form-row">
                 <div className="form-group">
                   <label>Ancho (m)</label>
-                  <input type="number" step="0.1" value={newOpening.ancho} onChange={e => setNewOpening({...newOpening, ancho: parseFloat(e.target.value)})} />
+                  <input type="number" step="0.1" value={openingDraft.ancho} onChange={e => setOpeningDraft({...openingDraft, ancho: parseFloat(e.target.value)})} />
                 </div>
                 <div className="form-group">
                   <label>Alto (m)</label>
-                  <input type="number" step="0.1" value={newOpening.alto} onChange={e => setNewOpening({...newOpening, alto: parseFloat(e.target.value)})} />
+                  <input type="number" step="0.1" value={openingDraft.alto} onChange={e => setOpeningDraft({...openingDraft, alto: parseFloat(e.target.value)})} />
                 </div>
               </div>
 
               <div className="form-row">
-                <div className="form-group">
-                  <label>Posición (m)</label>
-                  <input type="number" step="0.01" value={newOpening.posicion} onChange={e => setNewOpening({...newOpening, posicion: parseFloat(e.target.value)})} />
-                </div>
-                {newOpening.tipo === 'ventana' && (
+                {openingDraft.tipo === 'ventana' && (
                   <div className="form-group">
                     <label>Antepecho (m)</label>
-                    <input type="number" step="0.1" value={newOpening.antepecho} onChange={e => setNewOpening({...newOpening, antepecho: parseFloat(e.target.value)})} />
+                    <input type="number" step="0.1" value={openingDraft.antepecho} onChange={e => setOpeningDraft({...openingDraft, antepecho: parseFloat(e.target.value)})} />
                   </div>
                 )}
               </div>
 
               <div className="modal-actions">
-                <button className="btn-secondary" onClick={() => setShowOpeningModal(false)}>Cancelar</button>
-                <button className="btn-primary" onClick={handleSaveOpening}>Guardar Abertura</button>
+                <button className="btn-secondary" onClick={() => setOpeningModalOpen(false)}>Cancelar</button>
+                <button className="btn-primary" onClick={saveOpening}>Guardar Abertura</button>
               </div>
             </div>
           </div>
         )}
 
-        {showInternalWallModal && (
+        {internalWallModalOpen && (
           <div className="modal-overlay">
             <div className="modal-content">
               <h3>Agregar Pared Interna</h3>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Inicio X</label>
-                  <input type="number" step="0.1" value={internalWallDraft.startX} onChange={e => setInternalWallDraft({...internalWallDraft, startX: parseFloat(e.target.value)})} />
-                </div>
-                <div className="form-group">
-                  <label>Inicio Z</label>
-                  <input type="number" step="0.1" value={internalWallDraft.startZ} onChange={e => setInternalWallDraft({...internalWallDraft, startZ: parseFloat(e.target.value)})} />
-                </div>
+              
+              <div className="form-group">
+                <label>Orientación</label>
+                <select 
+                  value={internalWallDraft.orientation} 
+                  onChange={e => setInternalWallDraft({...internalWallDraft, orientation: e.target.value})}
+                >
+                  <option value="x">Horizontal (Eje X)</option>
+                  <option value="z">Vertical (Eje Z)</option>
+                </select>
               </div>
+
               <div className="form-row">
                 <div className="form-group">
-                  <label>Fin X</label>
-                  <input type="number" step="0.1" value={internalWallDraft.endX} onChange={e => setInternalWallDraft({...internalWallDraft, endX: parseFloat(e.target.value)})} />
+                  <label>Largo (m)</label>
+                  <input type="number" step="0.1" value={internalWallDraft.length} onChange={e => setInternalWallDraft({...internalWallDraft, length: parseFloat(e.target.value)})} />
                 </div>
-                <div className="form-group">
-                  <label>Fin Z</label>
-                  <input type="number" step="0.1" value={internalWallDraft.endZ} onChange={e => setInternalWallDraft({...internalWallDraft, endZ: parseFloat(e.target.value)})} />
-                </div>
-              </div>
-              <div className="form-row">
                 <div className="form-group">
                   <label>Altura (m)</label>
                   <input type="number" step="0.1" value={internalWallDraft.height} onChange={e => setInternalWallDraft({...internalWallDraft, height: parseFloat(e.target.value)})} />
                 </div>
-                <div className="form-group">
-                  <label>Espesor (m)</label>
-                  <input type="number" step="0.01" value={internalWallDraft.thickness} onChange={e => setInternalWallDraft({...internalWallDraft, thickness: parseFloat(e.target.value)})} />
-                </div>
               </div>
+              
+              <div className="form-group">
+                <label>Espesor (m)</label>
+                <input type="number" step="0.01" value={internalWallDraft.thickness} onChange={e => setInternalWallDraft({...internalWallDraft, thickness: parseFloat(e.target.value)})} />
+              </div>
+
               <div className="modal-actions">
-                <button className="btn-secondary" onClick={() => setShowInternalWallModal(false)}>Cancelar</button>
-                <button className="btn-primary" onClick={handleSaveInternalWall}>Guardar Pared</button>
+                <button className="btn-secondary" onClick={() => setInternalWallModalOpen(false)}>Cancelar</button>
+                <button className="btn-primary" onClick={saveInternalWall}>Guardar Pared</button>
               </div>
             </div>
           </div>

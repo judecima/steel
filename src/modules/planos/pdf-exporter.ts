@@ -2,7 +2,7 @@ import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { PlanoSheetDTO, PlanoEntityDTO, PlanosPackageDTO } from './types';
 import { PLANO_CONFIG } from './plano-config';
 import { validatePdfScene } from './validate-pdf-scene';
-import { normalizePanelGeometry } from './pdf-scene-adapter';
+import { readPdfLine, readPdfPoint } from './pdf-scene-adapter';
 
 export class PdfExporter {
     static async export(pkg: PlanosPackageDTO): Promise<Uint8Array> {
@@ -95,16 +95,12 @@ export class PdfExporter {
                         font
                     });
                 }
-                if (entity.type === 'line' && entity.points && entity.points.length >= 2) {
-                    const geometry = normalizePanelGeometry(entity);
-                    if (geometry.start && geometry.end) {
-                        console.log("[FLOW_PDF] drawing line", { 
-                            start: geometry.start, 
-                            end: geometry.end 
-                        });
+                if (entity.type === 'line') {
+                    const line = readPdfLine(entity);
+                    if (line) {
                         page.drawLine({
-                            start: { x: 300 + geometry.start.x * 20, y: 300 + geometry.start.y * 20 },
-                            end: { x: 300 + geometry.end.x * 20, y: 300 + geometry.end.y * 20 },
+                            start: { x: 300 + line.start.x * 20, y: 300 + line.start.y * 20 },
+                            end: { x: 300 + line.end.x * 20, y: 300 + line.end.y * 20 },
                             color: rgb(0, 0, 0),
                             thickness: 1
                         });
@@ -133,17 +129,12 @@ export class PdfExporter {
 
             // Draw Dimensions
             for (const dim of sheet.dimensions || []) {
-                const geometry = normalizePanelGeometry(dim);
-                if (geometry.start && geometry.end) {
-                    const x1 = geometry.start.x;
-                    const y1 = geometry.start.y;
-                    const x2 = geometry.end.x;
-                    const y2 = geometry.end.y;
-
-                    if (Number.isNaN(x1) || Number.isNaN(x2)) {
-                        console.warn("[PDF_EXPORT] skipping invalid dimension coords");
-                        continue;
-                    }
+                const line = readPdfLine(dim);
+                if (line) {
+                    const x1 = line.start.x;
+                    const y1 = line.start.y;
+                    const x2 = line.end.x;
+                    const y2 = line.end.y;
 
                     page.drawLine({
                         start: { x: x1, y: y1 },
